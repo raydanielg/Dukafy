@@ -12,42 +12,50 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:25', 'unique:users,phone'],
-            'password' => ['required', 'string', 'min:6'],
-        ]);
-
-        $user = User::create([
-            'name' => $data['name'],
-            'phone' => $data['phone'],
-            'password' => Hash::make($data['password']),
-            'is_approved' => false,
-        ]);
-
-        // Auto-assign Manager role to new users
-        $managerRoleId = DB::table('roles')->where('slug', 'manager')->value('id');
-        if ($managerRoleId) {
-            DB::table('role_user')->insert([
-                'role_id' => $managerRoleId,
-                'user_id' => $user->id,
-                'created_at' => now(),
-                'updated_at' => now(),
+        try {
+            $data = $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'phone' => ['required', 'string', 'max:25', 'unique:users,phone'],
+                'password' => ['required', 'string', 'min:6'],
             ]);
+
+            $user = User::create([
+                'name' => $data['name'],
+                'phone' => $data['phone'],
+                'password' => Hash::make($data['password']),
+                'is_approved' => false,
+            ]);
+
+            // Auto-assign Manager role to new users
+            $managerRoleId = DB::table('roles')->where('slug', 'manager')->value('id');
+            if ($managerRoleId) {
+                DB::table('role_user')->insert([
+                    'role_id' => $managerRoleId,
+                    'user_id' => $user->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            $token = $user->createToken('mobile')->plainTextToken;
+
+            return response()->json([
+                'token_type' => 'Bearer',
+                'access_token' => $token,
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'phone' => $user->phone,
+                    'is_approved' => (bool) $user->is_approved,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('API Register Error: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Internal Server Error',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $token = $user->createToken('mobile')->plainTextToken;
-
-        return response()->json([
-            'token_type' => 'Bearer',
-            'access_token' => $token,
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'phone' => $user->phone,
-                'is_approved' => (bool) $user->is_approved,
-            ],
-        ]);
     }
 
     public function login(Request $request)
