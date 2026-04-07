@@ -15,12 +15,14 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         $user = User::query()->updateOrCreate(
-            ['email' => 'admin@dukafy.co.tz'],
+            ['phone' => '0743606700'],
             [
                 'name' => 'Dukafy Admin',
+                'email' => 'admin@dukafy.co.tz',
                 'password' => Hash::make('Admin@12345'),
                 'email_verified_at' => now(),
                 'approved_at' => now(),
+                'is_approved' => true,
                 'is_admin' => true,
             ]
         );

@@ -23,8 +23,13 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" value="{{ old('email', $user->email) }}" class="form-control" required>
+                        <label class="form-label">Email (Optional)</label>
+                        <input type="email" name="email" value="{{ old('email', $user->email) }}" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="form-control" required>
                     </div>
 
                     <div class="col-md-6">
