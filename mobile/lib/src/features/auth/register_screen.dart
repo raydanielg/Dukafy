@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'auth_repository.dart';
 import 'login_screen.dart';
 import 'widgets/auth_background.dart';
+import 'widgets/thank_you_dialog.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -242,12 +243,22 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                             .register(name: name, phone: phone, password: password)
                                             .then((_) {
                                           if (!mounted) return;
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(
-                                              content: Text('Account created (demo).'),
-                                            ),
+                                          showDialog<void>(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (context) {
+                                              return ThankYouDialog(
+                                                title: 'Thank you',
+                                                message:
+                                                    'Your account has been created successfully. You can now continue to sign in.',
+                                                primaryButtonText: 'Continue',
+                                                onPrimaryPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  context.go(LoginScreen.routePath);
+                                                },
+                                              );
+                                            },
                                           );
-                                          context.go(LoginScreen.routePath);
                                         }).catchError((e) {
                                           if (!mounted) return;
                                           ScaffoldMessenger.of(context).showSnackBar(
