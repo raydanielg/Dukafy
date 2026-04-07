@@ -5,10 +5,10 @@
     <div class="auth-card">
         <div class="auth-left">
             <div class="auth-left-inner">
-                <div class="auth-brand">Malkia Konnect</div>
-                <h1 class="auth-title">Create your account</h1>
-                <p class="auth-subtitle">Join Malkia Konnect to manage your services, requests, and activities securely.</p>
-                <p class="auth-tagline">Secure. Reliable. Built for your business.</p>
+                <div class="auth-brand">Dukafy</div>
+                <h1 class="auth-title">Fungua akaunti</h1>
+                <p class="auth-subtitle">Tengeneza akaunti ili kuanza kusimamia mauzo, bidhaa, wateja, na ripoti.</p>
+                <p class="auth-tagline">Haraka. Salama. Kisasa.</p>
             </div>
         </div>
 
@@ -18,8 +18,8 @@
             </div>
 
             <div class="auth-form-wrap">
-                <div class="auth-form-brand">MALKIA KONNECT</div>
-                <h2 class="auth-form-title">Register</h2>
+                <div class="auth-form-brand">DUKAFY</div>
+                <h2 class="auth-form-title">Sajili</h2>
 
                 <form method="POST" action="{{ route('register') }}" class="auth-form">
                     @csrf
@@ -66,11 +66,11 @@
 
                     @if (Route::has('login'))
                         <div class="text-center mt-3">
-                            <a class="auth-link" href="{{ route('login') }}">Already have an account? Login</a>
+                            <a class="auth-link" href="{{ route('login') }}">Tayari una akaunti? Ingia</a>
                         </div>
                     @endif
 
-                    <div class="auth-footer">© {{ date('Y') }} Malkia Konnect LTD. All Rights Reserved.</div>
+                    <div class="auth-footer">© {{ date('Y') }} Dukafy. All Rights Reserved.</div>
                 </form>
             </div>
         </div>

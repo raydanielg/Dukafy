@@ -2,14 +2,14 @@
     <div class="landing-container landing-split">
         <div class="landing-split-left animate__animated animate__fadeInUp">
             <div class="landing-chip">OUR PURPOSE</div>
-            <h2 class="landing-h2">Every mother supported at every stage</h2>
-            <p class="landing-p">Our purpose is simple yet powerful: to ensure every mother feels supported, informed, and confident at every stage of her journey — from pregnancy to postpartum and beyond.</p>
-            <p class="landing-p">We exist to turn care into clarity and community into strength, so mothers can make informed decisions and feel seen, heard, and empowered.</p>
+            <h2 class="landing-h2">Kila biashara iwe na mfumo unaoeleweka</h2>
+            <p class="landing-p">Lengo letu ni kufanya usimamizi wa biashara kuwa rahisi: mauzo, bidhaa, wateja, na ripoti zote ziwe sehemu moja.</p>
+            <p class="landing-p">Tunakusaidia kupunguza makosa ya kuandika, kufuatilia stock kwa usahihi, na kufanya maamuzi kwa kutumia takwimu.</p>
         </div>
 
         <div class="landing-split-right animate__animated animate__fadeInUp animate__delay-1s">
             <div class="landing-panel">
-                <p class="landing-p">We believe no woman should go through motherhood feeling alone or uncertain. Through Malkia Konnect, we provide:</p>
+                <p class="landing-p">Dukafy inakupa msingi wa kuendesha biashara kwa ufanisi:</p>
                 <div class="landing-list-card">
                     <div class="landing-list-item">
                         <div class="landing-bullet" aria-hidden="true">
@@ -18,8 +18,8 @@
                             </svg>
                         </div>
                         <div>
-                            <div class="landing-list-title">Reliable guidance</div>
-                            <div class="landing-list-sub">Trusted information you can act on.</div>
+                            <div class="landing-list-title">Mauzo ya haraka (POS)</div>
+                            <div class="landing-list-sub">Tafuta bidhaa, weka idadi, maliza kuuza.</div>
                         </div>
                     </div>
                     <div class="landing-list-item">
@@ -29,8 +29,8 @@
                             </svg>
                         </div>
                         <div>
-                            <div class="landing-list-title">Practical tools</div>
-                            <div class="landing-list-sub">Simple steps for everyday motherhood.</div>
+                            <div class="landing-list-title">Usimamizi wa bidhaa</div>
+                            <div class="landing-list-sub">Bei ya kununua/kuuza, units, na onyo la stock.</div>
                         </div>
                     </div>
                     <div class="landing-list-item">
@@ -40,8 +40,8 @@
                             </svg>
                         </div>
                         <div>
-                            <div class="landing-list-title">A strong support system</div>
-                            <div class="landing-list-sub">Community, connection, and encouragement.</div>
+                            <div class="landing-list-title">Ripoti & faida</div>
+                            <div class="landing-list-sub">Muhtasari wa mauzo, faida, na bidhaa zinazouzwa sana.</div>
                         </div>
                     </div>
                 </div>

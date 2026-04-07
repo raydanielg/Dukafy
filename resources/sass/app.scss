@@ -13,9 +13,9 @@
     align-items: center;
     justify-content: center;
     padding: 24px;
-    background: radial-gradient(1000px 600px at 30% 30%, rgba(43, 80, 60, 0.14), transparent 70%),
-        radial-gradient(900px 500px at 70% 60%, rgba(120, 80, 40, 0.16), transparent 65%),
-        #e9e6df;
+    background: radial-gradient(1000px 600px at 30% 30%, rgba(255, 107, 0, 0.12), transparent 70%),
+        radial-gradient(900px 500px at 70% 60%, rgba(26, 26, 26, 0.10), transparent 65%),
+        #F9FAFB;
     position: relative;
     overflow: hidden;
 }
@@ -41,7 +41,7 @@
 }
 
 .auth-left {
-    background: linear-gradient(135deg, #5b3a22 0%, #6a4428 45%, #4a2c18 100%);
+    background: linear-gradient(135deg, #1A1A1A 0%, #2a2a2a 45%, #FF6B00 130%);
     color: #fff;
     display: flex;
     align-items: center;
@@ -85,7 +85,7 @@
 }
 
 .auth-right {
-    background: rgba(216, 216, 210, 0.92);
+    background: rgba(255, 255, 255, 0.92);
     padding: 18px 22px 22px;
     border-radius: 16px;
     width: 38%;
@@ -112,13 +112,13 @@
     text-decoration: none;
     font-weight: 600;
     font-size: 12px;
-    background: #2f2a36;
+    background: #1A1A1A;
     color: #fff;
 }
 
 .auth-back:hover {
     color: #fff;
-    background: #241f2b;
+    background: #111111;
 }
 
 .auth-form-wrap {
@@ -153,19 +153,19 @@
 .auth-input {
     border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.10);
-    background: rgba(238, 238, 236, 0.95);
+    background: rgba(249, 250, 251, 0.95);
     padding: 12px 12px;
 }
 
 .auth-input:focus {
     background: #fff;
-    border-color: rgba(47, 42, 54, 0.30);
-    box-shadow: 0 0 0 0.25rem rgba(47, 42, 54, 0.12);
+    border-color: rgba(255, 107, 0, 0.55);
+    box-shadow: 0 0 0 0.25rem rgba(255, 107, 0, 0.18);
 }
 
 .auth-submit {
-    background: #2f2a36;
-    border-color: #2f2a36;
+    background: #FF6B00;
+    border-color: #FF6B00;
     border-radius: 10px;
     padding: 12px 14px;
     font-weight: 700;
@@ -175,8 +175,8 @@
 }
 
 .auth-submit:hover {
-    background: #241f2b;
-    border-color: #241f2b;
+    background: #e65f00;
+    border-color: #e65f00;
 }
 
 .auth-submit:disabled {
@@ -221,11 +221,11 @@
 .auth-link {
     text-decoration: none;
     font-weight: 600;
-    color: #2f2a36;
+    color: #FF6B00;
 }
 
 .auth-link:hover {
-    color: #241f2b;
+    color: #e65f00;
     text-decoration: underline;
 }
 
@@ -279,7 +279,7 @@
 }
 
 .landing-topbar {
-    background: linear-gradient(90deg, #4c1d95 0%, #5b21b6 40%, #6d28d9 100%);
+    background: linear-gradient(90deg, #166534 0%, #16a34a 45%, #22c55e 100%);
     color: rgba(255, 255, 255, 0.92);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -409,14 +409,14 @@
     font-weight: 800;
     font-size: 13px;
     color: #fff;
-    background: #2f2a36;
+    background: #16a34a;
     border: 1px solid rgba(0, 0, 0, 0.12);
     padding: 9px 12px;
     border-radius: 12px;
 }
 
 .landing-nav-cta:hover {
-    background: #241f2b;
+    background: #15803d;
     color: #fff;
 }
 
@@ -498,7 +498,7 @@
 }
 
 .landing-hero .landing-btn {
-    background: linear-gradient(90deg, #4c1d95 0%, #5b21b6 55%, #6d28d9 100%);
+    background: linear-gradient(90deg, #166534 0%, #16a34a 55%, #22c55e 100%);
     border: 1px solid rgba(0, 0, 0, 0.10);
 }
 
@@ -923,7 +923,7 @@
 }
 
 .landing-footer-social-link:hover {
-    background: #4c1d95;
+    background: #16a34a;
     color: #fff;
     transform: translateY(-2px);
 }

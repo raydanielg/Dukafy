@@ -5,10 +5,10 @@
     <div class="auth-card">
         <div class="auth-left">
             <div class="auth-left-inner">
-                <div class="auth-brand">Malkia Konnect</div>
-                <h1 class="auth-title">Welcome to Malkia Konnect</h1>
-                <p class="auth-subtitle">Sign in to manage your services, requests, and activities securely.</p>
-                <p class="auth-tagline">Secure. Reliable. Built for your business.</p>
+                <div class="auth-brand">Dukafy</div>
+                <h1 class="auth-title">Simamia Biashara Yako</h1>
+                <p class="auth-subtitle">Mfumo wa mauzo, bidhaa, wateja, na ripoti kwa biashara ndogo na ya kati.</p>
+                <p class="auth-tagline">Haraka. Salama. Kisasa.</p>
             </div>
         </div>
 
@@ -18,14 +18,14 @@
             </div>
 
             <div class="auth-form-wrap">
-                <div class="auth-form-brand">MALKIA KONNECT</div>
-                <h2 class="auth-form-title">Login</h2>
+                <div class="auth-form-brand">DUKAFY</div>
+                <h2 class="auth-form-title">Ingia</h2>
 
                 <form method="POST" action="{{ route('login') }}" class="auth-form">
                     @csrf
 
                     <div class="mb-3">
-                        <label for="email" class="form-label">{{ __('Email Address') }}</label>
+                        <label for="email" class="form-label">Jina la mtumiaji / Barua pepe</label>
                         <input id="email" type="email" class="form-control auth-input @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                         @error('email')
                             <span class="invalid-feedback" role="alert">
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="password" class="form-label">{{ __('Password') }}</label>
+                        <label for="password" class="form-label">Nenosiri</label>
                         <input id="password" type="password" class="form-control auth-input @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
                         @error('password')
                             <span class="invalid-feedback" role="alert">
@@ -54,17 +54,22 @@
                     </div>
 
                     <button type="submit" class="btn auth-submit w-100">
-                        <span class="btn-text">{{ __('Login') }}</span>
+                        <span class="btn-text">Ingia</span>
                         <span class="btn-spinner" aria-hidden="true"></span>
                     </button>
 
                     @if (Route::has('password.request'))
                         <div class="text-center mt-3">
-                            <a class="auth-link" href="{{ route('password.request') }}">{{ __('Forgot Your Password?') }}</a>
+                            <a class="auth-link" href="{{ route('password.request') }}">Umesahau nenosiri?</a>
                         </div>
                     @endif
 
-                    <div class="auth-footer">© {{ date('Y') }} Malkia Konnect LTD. All Rights Reserved.</div>
+                    <div class="text-center mt-3">
+                        <span class="text-muted">Bado hujisajili? </span>
+                        <a class="auth-link" href="{{ url('/') }}">Wasiliana nasi</a>
+                    </div>
+
+                    <div class="auth-footer">© {{ date('Y') }} Dukafy. All Rights Reserved.</div>
                 </form>
             </div>
         </div>
