@@ -15,5 +15,9 @@ Route::prefix('auth')->group(function () {
         Route::post('/update-profile', [App\Http\Controllers\Api\AuthController::class, 'updateProfile']);
         Route::post('/update-business-logo', [App\Http\Controllers\Api\AuthController::class, 'updateBusinessLogo']);
         Route::post('/logout', [App\Http\Controllers\Api\AuthController::class, 'logout']);
+
+        // Articles
+        Route::get('/articles', [App\Http\Controllers\Api\ArticleController::class, 'index']);
+        Route::get('/articles/{id}', [App\Http\Controllers\Api\ArticleController::class, 'show']);
     });
 });
