@@ -138,19 +138,21 @@ class AuthController extends Controller
 
     public function searchManagers(Request $request)
     {
-        $q = $request->get('q');
+        $q = trim((string) $request->get('q', ''));
         if (strlen($q) < 2) {
             return response()->json([]);
         }
 
+        // Search users who have 'manager' role via a simpler join
         $managers = User::query()
+            ->join('role_user', 'users.id', '=', 'role_user.user_id')
+            ->join('roles', 'role_user.role_id', '=', 'roles.id')
+            ->where('roles.slug', 'manager')
             ->where(function($query) use ($q) {
-                $query->where('name', 'like', "%{$q}%")
-                      ->orWhere('phone', 'like', "%{$q}%");
+                $query->where('users.name', 'like', "%{$q}%")
+                      ->orWhere('users.phone', 'like', "%{$q}%");
             })
-            ->whereHas('roles', function($query) {
-                $query->where('slug', 'manager');
-            })
+            ->select('users.*')
             ->with(['business'])
             ->limit(10)
             ->get()

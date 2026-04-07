@@ -28,6 +28,18 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_approved' => 'boolean',
+            'is_admin' => 'boolean',
         ];
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(\App\Models\Role::class, 'role_user');
+    }
+
+    public function business()
+    {
+        return $this->belongsTo(\App\Models\Business::class);
     }
 }
