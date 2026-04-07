@@ -50,6 +50,7 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
   @override
   void dispose() {
     _controller.dispose();
+    _managerSearchController.dispose();
     super.dispose();
   }
 
@@ -154,6 +155,43 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                     opacity: _fade,
                     child: ScaleTransition(
                       scale: _scale,
+                      child: Container(
+                        height: 84,
+                        width: 84,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: colorScheme.primary.withValues(alpha: 0.12),
+                          border: Border.all(
+                            color: colorScheme.primary.withValues(alpha: 0.25),
+                            width: 2,
+                          ),
+                        ),
+                        child: Icon(
+                          _approved ? Icons.verified_rounded : Icons.hourglass_top_rounded,
+                          size: 44,
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Thank you',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Your account has been created. Confirm to continue.',
+                    style: TextStyle(
+                      color: Colors.black.withValues(alpha: 0.60),
+                      height: 1.4,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 18),
                   if (!_approved) ...[
                     const Text(
                       'Choose your role',
@@ -286,43 +324,6 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                     ],
                     const SizedBox(height: 24),
                   ],
-                      child: Container(
-                        height: 84,
-                        width: 84,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: colorScheme.primary.withValues(alpha: 0.12),
-                          border: Border.all(
-                            color: colorScheme.primary.withValues(alpha: 0.25),
-                            width: 2,
-                          ),
-                        ),
-                        child: Icon(
-                          _approved ? Icons.verified_rounded : Icons.hourglass_top_rounded,
-                          size: 44,
-                          color: colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Thank you',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Your account has been created. Confirm to continue.',
-                    style: TextStyle(
-                      color: Colors.black.withValues(alpha: 0.60),
-                      height: 1.4,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 18),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
@@ -416,6 +417,67 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _RoleCard extends StatelessWidget {
+  const _RoleCard({
+    required this.title,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String title;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+        decoration: BoxDecoration(
+          color: selected ? colorScheme.primary : Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: selected ? colorScheme.primary : Colors.black.withValues(alpha: 0.1),
+            width: 2,
+          ),
+          boxShadow: [
+            if (selected)
+              BoxShadow(
+                color: colorScheme.primary.withValues(alpha: 0.3),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              size: 32,
+              color: selected ? Colors.white : Colors.black54,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w900,
+                color: selected ? Colors.white : Colors.black87,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
