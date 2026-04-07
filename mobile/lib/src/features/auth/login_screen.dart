@@ -151,9 +151,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    'Karibu Tena!',
-                    style: TextStyle(
+                  Text(
+                    isSw ? 'Karibu!' : 'Welcome!',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 32,
                       fontWeight: FontWeight.w900,
@@ -170,17 +170,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 18),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                  Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 520),
+                      child: Container(
+                        padding: const EdgeInsets.all(18),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(22),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.18),
+                              blurRadius: 24,
+                              offset: const Offset(0, 18),
+                            ),
+                          ],
+                        ),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                           const Text(
                             'Phone number',
                             style: TextStyle(fontWeight: FontWeight.w800),
@@ -264,9 +274,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 FocusScope.of(context).unfocus();
                                 // TODO: call API
                               },
-                              child: const Text(
-                                'LOGIN',
-                                style: TextStyle(
+                              child: Text(
+                                isSw ? 'INGIA' : 'LOGIN',
+                                style: const TextStyle(
                                   fontWeight: FontWeight.w900,
                                   fontSize: 16,
                                   letterSpacing: 1.1,
@@ -274,40 +284,63 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 12),
-                          Center(
-                            child: Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              spacing: 6,
-                              children: [
-                                const Text(
-                                  'Policies:',
-                                  style: TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                TextButton(
-                                  onPressed: () => _openPolicySheet(
-                                    title: 'Terms of Service',
-                                    body:
-                                        'Masharti ya kutumia Dukafy. (Demo content)\n\n- Usitumie vibaya mfumo\n- Linda taarifa zako\n- Malipo yanafuata plan yako',
-                                  ),
-                                  child: const Text('Terms'),
-                                ),
-                                TextButton(
-                                  onPressed: () => _openPolicySheet(
-                                    title: 'Privacy Policy',
-                                    body:
-                                        'Sera ya faragha ya Dukafy. (Demo content)\n\n- Tunatunza data salama\n- Hatutoi data bila ruhusa\n- Unaweza kuomba kufuta akaunti',
-                                  ),
-                                  child: const Text('Privacy'),
-                                ),
-                              ],
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.35),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.14),
+                        ),
+                      ),
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 6,
+                        children: [
+                          Text(
+                            isSw ? 'Sera:' : 'Policies:',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
                             ),
+                          ),
+                          TextButton(
+                            onPressed: () => _openPolicySheet(
+                              title: 'Terms of Service',
+                              body:
+                                  'Masharti ya kutumia Dukafy. (Demo content)\n\n- Usitumie vibaya mfumo\n- Linda taarifa zako\n- Malipo yanafuata plan yako',
+                            ),
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            ),
+                            child: const Text('Terms'),
+                          ),
+                          TextButton(
+                            onPressed: () => _openPolicySheet(
+                              title: 'Privacy Policy',
+                              body:
+                                  'Sera ya faragha ya Dukafy. (Demo content)\n\n- Tunatunza data salama\n- Hatutoi data bila ruhusa\n- Unaweza kuomba kufuta akaunti',
+                            ),
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            ),
+                            child: const Text('Privacy'),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 8),
                   Center(
                     child: TextButton(
                       onPressed: () => context.go(RegisterScreen.routePath),
@@ -320,6 +353,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 6),
                 ],
               ),
             ),
