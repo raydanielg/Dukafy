@@ -219,5 +219,28 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
 
             Route::get('/blacklisted-customers', [App\Http\Controllers\Admin\CustomerController::class, 'blacklisted'])->name('blacklisted_customers');
         });
+
+        Route::prefix('system-settings')->name('system_settings.')->group(function () {
+            Route::get('/general', [App\Http\Controllers\Admin\SystemSettingsController::class, 'general'])->name('general');
+            Route::post('/general', [App\Http\Controllers\Admin\SystemSettingsController::class, 'updateGeneral'])->name('general.update');
+
+            Route::get('/business-defaults', [App\Http\Controllers\Admin\SystemSettingsController::class, 'businessDefaults'])->name('business_defaults');
+            Route::post('/business-defaults', [App\Http\Controllers\Admin\SystemSettingsController::class, 'updateBusinessDefaults'])->name('business_defaults.update');
+
+            Route::get('/email', [App\Http\Controllers\Admin\SystemSettingsController::class, 'email'])->name('email');
+            Route::post('/email', [App\Http\Controllers\Admin\SystemSettingsController::class, 'updateEmail'])->name('email.update');
+
+            Route::get('/sms-whatsapp', [App\Http\Controllers\Admin\SystemSettingsController::class, 'smsWhatsapp'])->name('sms_whatsapp');
+            Route::post('/sms-whatsapp', [App\Http\Controllers\Admin\SystemSettingsController::class, 'updateSmsWhatsapp'])->name('sms_whatsapp.update');
+
+            Route::get('/backup', [App\Http\Controllers\Admin\SystemSettingsController::class, 'backup'])->name('backup');
+            Route::post('/backup', [App\Http\Controllers\Admin\SystemSettingsController::class, 'updateBackup'])->name('backup.update');
+
+            Route::get('/maintenance', [App\Http\Controllers\Admin\SystemSettingsController::class, 'maintenance'])->name('maintenance');
+            Route::post('/maintenance', [App\Http\Controllers\Admin\SystemSettingsController::class, 'updateMaintenance'])->name('maintenance.update');
+
+            Route::post('/clear-cache', [App\Http\Controllers\Admin\SystemSettingsController::class, 'clearCache'])->name('clear_cache');
+            Route::get('/health', [App\Http\Controllers\Admin\SystemSettingsController::class, 'health'])->name('health');
+        });
     });
 });
