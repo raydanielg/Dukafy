@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'login_screen.dart';
+
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
 
@@ -43,7 +45,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   IconButton(
-                    onPressed: () => context.pop(),
+                    onPressed: () {
+                      if (context.canPop()) {
+                        context.pop();
+                        return;
+                      }
+                      context.go(LoginScreen.routePath);
+                    },
                     icon: const Icon(Icons.arrow_back, color: Colors.white),
                   ),
                   const SizedBox(height: 10),
@@ -117,6 +125,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                         Text('Password reset request sent (demo).'),
                                   ),
                                 );
+                                context.go(LoginScreen.routePath);
                               },
                               child: const Text(
                                 'SEND CODE',
