@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -30,6 +31,15 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
+        DB::table('user_login_histories')->insert([
+            'user_id' => $user->id,
+            'ip_address' => $request->ip(),
+            'user_agent' => (string) $request->userAgent(),
+            'logged_in_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         if ($user->is_admin) {
             return redirect('/admin');
         }

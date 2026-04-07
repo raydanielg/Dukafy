@@ -70,6 +70,23 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
         Route::post('/users/{id}/ban', [App\Http\Controllers\Admin\UserController::class, 'ban'])->name('users.ban');
         Route::post('/users/{id}/unban', [App\Http\Controllers\Admin\UserController::class, 'unban'])->name('users.unban');
 
+        Route::get('/roles', [App\Http\Controllers\Admin\RoleController::class, 'index'])->name('roles.index');
+        Route::get('/roles/create', [App\Http\Controllers\Admin\RoleController::class, 'create'])->name('roles.create');
+        Route::post('/roles', [App\Http\Controllers\Admin\RoleController::class, 'store'])->name('roles.store');
+
+        Route::get('/permissions', [App\Http\Controllers\Admin\PermissionController::class, 'index'])->name('permissions.index');
+        Route::post('/permissions', [App\Http\Controllers\Admin\PermissionController::class, 'update'])->name('permissions.update');
+
+        Route::get('/groups', [App\Http\Controllers\Admin\UserGroupController::class, 'index'])->name('groups.index');
+        Route::get('/groups/create', [App\Http\Controllers\Admin\UserGroupController::class, 'create'])->name('groups.create');
+        Route::post('/groups', [App\Http\Controllers\Admin\UserGroupController::class, 'store'])->name('groups.store');
+
+        Route::get('/activity', [App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('activity.index');
+        Route::get('/login-history', [App\Http\Controllers\Admin\LoginHistoryController::class, 'index'])->name('login_history.index');
+
+        Route::get('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'index'])->name('profile.index');
+        Route::post('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
+
         Route::get('/articles', [App\Http\Controllers\Admin\ArticleController::class, 'index'])->name('articles.index');
         Route::get('/articles/create', [App\Http\Controllers\Admin\ArticleController::class, 'create'])->name('articles.create');
         Route::post('/articles', [App\Http\Controllers\Admin\ArticleController::class, 'store'])->name('articles.store');

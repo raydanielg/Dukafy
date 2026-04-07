@@ -33,14 +33,14 @@
                 <div class="admin-submenu" data-admin-submenu>
                     <a class="admin-sub-link {{ request()->routeIs('admin.users.index') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">All Users</a>
                     <a class="admin-sub-link {{ request()->routeIs('admin.users.create') ? 'active' : '' }}" href="{{ route('admin.users.create') }}">Add New User</a>
-                    <a class="admin-sub-link" href="#">User Roles</a>
-                    <a class="admin-sub-link" href="#">Role Permissions</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}" href="{{ route('admin.roles.index') }}">User Roles</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.permissions.*') ? 'active' : '' }}" href="{{ route('admin.permissions.index') }}">Role Permissions</a>
                     <a class="admin-sub-link {{ request()->routeIs('admin.users.banned') ? 'active' : '' }}" href="{{ route('admin.users.banned') }}">Banned Users</a>
                     <a class="admin-sub-link {{ request()->routeIs('admin.users.pending') ? 'active' : '' }}" href="{{ route('admin.users.pending') }}">Pending Approvals</a>
-                    <a class="admin-sub-link" href="#">User Activity Log</a>
-                    <a class="admin-sub-link" href="#">User Groups</a>
-                    <a class="admin-sub-link" href="#">Login History</a>
-                    <a class="admin-sub-link" href="#">Profile Management</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.activity.index') ? 'active' : '' }}" href="{{ route('admin.activity.index') }}">User Activity Log</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.groups.*') ? 'active' : '' }}" href="{{ route('admin.groups.index') }}">User Groups</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.login_history.index') ? 'active' : '' }}" href="{{ route('admin.login_history.index') }}">Login History</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.profile.*') ? 'active' : '' }}" href="{{ route('admin.profile.index') }}">Profile Management</a>
                 </div>
             </div>
         </div>
