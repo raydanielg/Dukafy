@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/api/api_client.dart';
+import '../invoices/invoices_screen.dart';
+import '../profile/profile_screen.dart';
 import '../auth/auth_repository.dart';
 import '../auth/login_screen.dart';
 import '../pos/pos_screen.dart';
