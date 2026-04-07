@@ -127,41 +127,50 @@ class AuthController extends Controller
 
     public function completeOnboarding(Request $request)
     {
-        $data = $request->validate([
-            'role' => ['required', 'string', 'in:owner,cashier'],
-            'manager_id' => ['nullable', 'required_if:role,cashier', 'exists:users,id'],
-        ]);
+        try {
+            $data = $request->validate([
+                'role' => ['required', 'string', 'in:owner,cashier'],
+                'manager_id' => ['nullable', 'required_if:role,cashier', 'exists:users,id'],
+            ]);
 
-        /** @var User|null $user */
-        $user = $request->user();
-        if (!$user) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
+            /** @var User|null $user */
+            $user = $request->user();
+            if (!$user) {
+                return response()->json(['message' => 'Unauthenticated'], 401);
+            }
+
+            $roleSlug = $data['role'] === 'owner' ? 'manager' : 'cashier';
+            $roleId = DB::table('roles')->where('slug', $roleSlug)->value('id');
+
+            $user->forceFill([
+                'manager_id' => $data['manager_id'] ?? null,
+            ])->save();
+
+            if ($roleId) {
+                // Ensure we update or insert the role for this user
+                DB::table('role_user')->updateOrInsert(
+                    ['user_id' => $user->id],
+                    ['role_id' => $roleId, 'updated_at' => now(), 'created_at' => now()]
+                );
+            }
+
+            return response()->json([
+                'message' => 'Onboarding completed',
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'phone' => $user->phone,
+                    'is_approved' => (bool) $user->is_approved,
+                    'role' => $roleSlug,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Onboarding Error: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Setup failed',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $roleSlug = $data['role'] === 'owner' ? 'manager' : 'cashier';
-        $roleId = DB::table('roles')->where('slug', $roleSlug)->value('id');
-
-        $user->forceFill([
-            'manager_id' => $data['manager_id'] ?? null,
-        ])->save();
-
-        if ($roleId) {
-            DB::table('role_user')->updateOrInsert(
-                ['user_id' => $user->id],
-                ['role_id' => $roleId, 'updated_at' => now(), 'created_at' => now()]
-            );
-        }
-
-        return response()->json([
-            'message' => 'Onboarding completed',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'phone' => $user->phone,
-                'is_approved' => (bool) $user->is_approved,
-                'role' => $roleSlug,
-            ],
-        ]);
     }
 
     public function searchManagers(Request $request)
