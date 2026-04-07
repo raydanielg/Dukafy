@@ -78,6 +78,50 @@ class SubscriptionController extends Controller
         return view('admin.subscription.trials.index', compact('requests'));
     }
 
+    public function approveTrial(int $id)
+    {
+        $req = DB::table('trial_requests')->where('id', $id)->first();
+        abort_if(!$req, 404);
+
+        DB::table('trial_requests')->where('id', $id)->update([
+            'status' => 'approved',
+            'updated_at' => now(),
+        ]);
+
+        $planId = DB::table('plans')->where('slug', 'pro')->value('id');
+
+        $subscriptionId = DB::table('subscriptions')->insertGetId([
+            'user_id' => $req->user_id,
+            'plan_id' => $planId,
+            'status' => 'trial',
+            'starts_at' => now()->toDateString(),
+            'ends_at' => now()->addDays((int) $req->requested_days)->toDateString(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('subscription_histories')->insert([
+            'subscription_id' => $subscriptionId,
+            'user_id' => $req->user_id,
+            'event' => 'trial_approved',
+            'meta' => json_encode(['trial_request_id' => $id, 'approved_by' => auth()->id()]),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function rejectTrial(int $id)
+    {
+        DB::table('trial_requests')->where('id', $id)->update([
+            'status' => 'rejected',
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->back();
+    }
+
     public function invoices()
     {
         $invoices = DB::table('invoices')
@@ -94,5 +138,37 @@ class SubscriptionController extends Controller
             ->paginate(15);
 
         return view('admin.subscription.billing.invoices_payments', compact('invoices', 'payments'));
+    }
+
+    public function addPayment(Request $request)
+    {
+        $data = $request->validate([
+            'invoice_id' => ['required', 'integer'],
+            'amount' => ['required', 'integer', 'min:1'],
+            'method' => ['nullable', 'string', 'max:50'],
+            'reference' => ['nullable', 'string', 'max:255'],
+            'paid_at' => ['nullable', 'date'],
+        ]);
+
+        $invoice = DB::table('invoices')->where('id', $data['invoice_id'])->first();
+        abort_if(!$invoice, 404);
+
+        DB::table('payments')->insert([
+            'invoice_id' => $data['invoice_id'],
+            'amount' => $data['amount'],
+            'method' => $data['method'] ?? null,
+            'reference' => $data['reference'] ?? null,
+            'paid_at' => $data['paid_at'] ?? now()->toDateString(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('invoices')->where('id', $data['invoice_id'])->update([
+            'status' => 'paid',
+            'paid_at' => $data['paid_at'] ?? now()->toDateString(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->back();
     }
 }
