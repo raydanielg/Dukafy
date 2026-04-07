@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'auth_repository.dart';
+import 'approval_screen.dart';
 import 'forgot_password_screen.dart';
 import 'register_screen.dart';
 import 'widgets/auth_background.dart';
@@ -201,8 +202,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         ref
                                             .read(authRepositoryProvider)
                                             .login(phone: phone, password: password)
-                                            .then((_) {
+                                            .then((result) {
                                           if (!mounted) return;
+
+                                          final isApproved = result.isApproved;
+                                          if (!isApproved) {
+                                            context.go(
+                                              ApprovalScreen.routePath,
+                                              extra: {
+                                                'name': result.name,
+                                                'phone': result.phone,
+                                              },
+                                            );
+                                            return;
+                                          }
+
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             const SnackBar(content: Text('Logged in (demo).')),
                                           );

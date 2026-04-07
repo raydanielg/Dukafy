@@ -7,6 +7,7 @@ import '../features/onboarding/onboarding_screen.dart';
 import '../features/auth/login_screen.dart';
 import '../features/auth/register_screen.dart';
 import '../features/auth/forgot_password_screen.dart';
+import '../features/auth/approval_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -36,6 +37,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: ForgotPasswordScreen.routePath,
         name: ForgotPasswordScreen.routeName,
         builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: ApprovalScreen.routePath,
+        name: ApprovalScreen.routeName,
+        builder: (context, state) {
+          final extra = state.extra;
+          final map = extra is Map ? extra : const <String, dynamic>{};
+
+          return ApprovalScreen(
+            name: (map['name'] as String?) ?? '',
+            phone: (map['phone'] as String?) ?? '',
+          );
+        },
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
