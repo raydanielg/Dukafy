@@ -50,7 +50,8 @@ class UserController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'phone' => ['required', 'string', 'max:25', 'unique:users,phone'],
             'password' => ['required', 'string', 'min:6'],
             'is_admin' => ['nullable'],
             'role_id' => ['nullable', 'integer'],
@@ -64,7 +65,8 @@ class UserController extends Controller
             'business_id' => $data['business_id'] ?? null,
             'branch_id' => $data['branch_id'] ?? null,
             'name' => $data['name'],
-            'email' => $data['email'],
+            'email' => $data['email'] ?? null,
+            'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
             'is_admin' => isset($data['is_admin']),
             'approved_at' => isset($data['approved']) ? now() : null,
@@ -109,7 +111,8 @@ class UserController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'phone' => ['required', 'string', 'max:25', 'unique:users,phone,' . $id],
             'password' => ['nullable', 'string', 'min:6'],
             'is_admin' => ['nullable'],
             'role_id' => ['nullable', 'integer'],
@@ -123,7 +126,8 @@ class UserController extends Controller
             'business_id' => $data['business_id'] ?? null,
             'branch_id' => $data['branch_id'] ?? null,
             'name' => $data['name'],
-            'email' => $data['email'],
+            'email' => $data['email'] ?? null,
+            'phone' => $data['phone'],
             'is_admin' => isset($data['is_admin']),
             'approved_at' => isset($data['approved']) ? now() : null,
             'updated_at' => now(),
