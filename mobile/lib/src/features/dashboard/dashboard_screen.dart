@@ -197,31 +197,32 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 3),
-                        boxShadow: [
-                          BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10),
-                        ],
-                      ),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        backgroundImage: avatarUrl != null ? NetworkImage(avatarUrl) : null,
-                        child: avatarUrl == null 
-                          ? Text(name[0].toUpperCase(), style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: primaryGreen))
-                          : null,
+                    GestureDetector(
+                      onTap: () => context.push(ProfileScreen.routePath),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 3),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10),
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          backgroundImage: avatarUrl != null ? NetworkImage(avatarUrl) : null,
+                          child: avatarUrl == null 
+                            ? Text(name[0].toUpperCase(), style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: primaryGreen))
+                            : null,
+                        ),
                       ),
                     ),
                     Positioned(
                       bottom: 0,
                       right: 0,
                       child: GestureDetector(
-                        onTap: () {
-                          // TODO: Implement image upload
-                        },
+                        onTap: () => context.push(ProfileScreen.routePath),
                         child: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, border: Border.all(color: primaryGreen, width: 1)),
@@ -390,7 +391,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               _NavButton(icon: Icons.point_of_sale_rounded, label: 'POS', color: primaryGreen, onTap: () => context.push(POSScreen.routePath)),
               _NavButton(icon: Icons.inventory_2_outlined, label: 'Product', color: primaryGreen, onTap: () => context.push(ProductsScreen.routePath)),
               _NavButton(icon: Icons.shopping_cart_outlined, label: 'Purchase', color: primaryGreen, onTap: () => context.push(PurchasesScreen.routePath)),
-              _NavButton(icon: Icons.receipt_long_outlined, label: 'Invoice', color: primaryGreen, onTap: () => context.push(InvoicesScreen.routePath)),
+              _NavButton(icon: Icons.person_rounded, label: 'Profile', color: primaryGreen, onTap: () => context.push(ProfileScreen.routePath)),
             ],
           ),
         ),
