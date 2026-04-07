@@ -81,9 +81,15 @@ class _ArticlesScreenState extends ConsumerState<ArticlesScreen> {
                     ),
                   ),
                 )
-              : ListView.builder(
+              : GridView.builder(
                   padding: const EdgeInsets.all(16),
-                  itemCount: _isLoading ? 5 : _articles.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 0.72,
+                  ),
+                  itemCount: _isLoading ? 6 : _articles.length,
                   itemBuilder: (context, index) {
                     final article = _isLoading ? null : _articles[index];
                     return _ArticleCard(article: article, primaryGreen: primaryGreen);
@@ -107,7 +113,6 @@ class _ArticleCard extends StatelessWidget {
     final excerpt = (article is Map) ? (article['excerpt']?.toString()) : null;
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -119,12 +124,22 @@ class _ArticleCard extends StatelessWidget {
               height: 180,
               width: double.infinity,
               color: Colors.grey.shade200,
-              child: article?['image_url'] != null
-                  ? Image.network(article['image_url'], fit: BoxFit.cover)
-                  : const Icon(Icons.article_outlined, size: 50, color: Colors.grey),
+              child: (article?['image_url'] != null)
+                  ? Image.network(
+                      article['image_url'],
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Center(
+                          child: Icon(Icons.broken_image_outlined, size: 40, color: Colors.grey),
+                        );
+                      },
+                    )
+                  : const Center(
+                      child: Icon(Icons.article_outlined, size: 40, color: Colors.grey),
+                    ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -143,8 +158,8 @@ class _ArticleCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     title ?? 'Loading article title...',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    maxLines: 2,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
+                    maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
@@ -152,8 +167,8 @@ class _ArticleCard extends StatelessWidget {
                     (excerpt != null && excerpt.isNotEmpty)
                         ? excerpt
                         : 'Loading article summary and content details...',
-                    style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-                    maxLines: 2,
+                    style: TextStyle(color: Colors.grey.shade600, fontSize: 12, height: 1.35),
+                    maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
