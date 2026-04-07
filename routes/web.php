@@ -123,6 +123,24 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
             Route::post('/security-alerts', [App\Http\Controllers\Admin\SecurityController::class, 'updateSecurityAlerts'])->name('security_alerts.update');
         });
 
+        Route::prefix('subscription')->name('subscription.')->group(function () {
+            Route::get('/subscriptions', [App\Http\Controllers\Admin\SubscriptionController::class, 'index'])->name('subscriptions');
+            Route::get('/history', [App\Http\Controllers\Admin\SubscriptionController::class, 'history'])->name('history');
+            Route::get('/expiring-soon', [App\Http\Controllers\Admin\SubscriptionController::class, 'expiringSoon'])->name('expiring');
+            Route::get('/cancelled', [App\Http\Controllers\Admin\SubscriptionController::class, 'cancelled'])->name('cancelled');
+            Route::get('/trial-requests', [App\Http\Controllers\Admin\SubscriptionController::class, 'trialRequests'])->name('trials');
+            Route::get('/invoices-payments', [App\Http\Controllers\Admin\SubscriptionController::class, 'invoices'])->name('billing');
+
+            Route::get('/plans', [App\Http\Controllers\Admin\PlanController::class, 'index'])->name('plans');
+            Route::get('/plans/create', [App\Http\Controllers\Admin\PlanController::class, 'create'])->name('plans.create');
+            Route::post('/plans', [App\Http\Controllers\Admin\PlanController::class, 'store'])->name('plans.store');
+            Route::get('/plans/{id}/edit', [App\Http\Controllers\Admin\PlanController::class, 'edit'])->name('plans.edit');
+            Route::post('/plans/{id}', [App\Http\Controllers\Admin\PlanController::class, 'update'])->name('plans.update');
+
+            Route::get('/assign', [App\Http\Controllers\Admin\SubscriptionAssignController::class, 'create'])->name('assign');
+            Route::post('/assign', [App\Http\Controllers\Admin\SubscriptionAssignController::class, 'store'])->name('assign.store');
+        });
+
         Route::get('/articles', [App\Http\Controllers\Admin\ArticleController::class, 'index'])->name('articles.index');
         Route::get('/articles/create', [App\Http\Controllers\Admin\ArticleController::class, 'create'])->name('articles.create');
         Route::post('/articles', [App\Http\Controllers\Admin\ArticleController::class, 'store'])->name('articles.store');
