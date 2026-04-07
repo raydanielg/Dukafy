@@ -14,6 +14,8 @@ import '../features/pos/pos_screen.dart';
 import '../features/products/products_screen.dart';
 import '../features/purchases/purchases_screen.dart';
 import '../features/invoices/invoices_screen.dart';
+import '../features/articles/articles_screen.dart';
+import '../features/articles/article_details_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -86,6 +88,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: InvoicesScreen.routePath,
         name: InvoicesScreen.routeName,
         builder: (context, state) => const InvoicesScreen(),
+      ),
+      GoRoute(
+        path: ArticlesScreen.routePath,
+        name: ArticlesScreen.routeName,
+        builder: (context, state) => const ArticlesScreen(),
+      ),
+      GoRoute(
+        path: ArticleDetailsScreen.routePath,
+        name: ArticleDetailsScreen.routeName,
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return ArticleDetailsScreen(id: id);
+        },
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
