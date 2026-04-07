@@ -242,5 +242,12 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
             Route::post('/clear-cache', [App\Http\Controllers\Admin\SystemSettingsController::class, 'clearCache'])->name('clear_cache');
             Route::get('/health', [App\Http\Controllers\Admin\SystemSettingsController::class, 'health'])->name('health');
         });
+
+        Route::prefix('logs')->name('logs.')->group(function () {
+            Route::get('/access', [App\Http\Controllers\Admin\LogsController::class, 'access'])->name('access');
+            Route::get('/errors', [App\Http\Controllers\Admin\LogsController::class, 'errors'])->name('errors');
+            Route::get('/payments', [App\Http\Controllers\Admin\LogsController::class, 'payments'])->name('payments');
+            Route::get('/emails', [App\Http\Controllers\Admin\LogsController::class, 'emails'])->name('emails');
+        });
     });
 });
