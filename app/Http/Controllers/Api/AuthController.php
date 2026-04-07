@@ -33,6 +33,7 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'phone' => $user->phone,
+                'is_approved' => (bool) $user->is_approved,
             ],
         ]);
     }
@@ -77,6 +78,29 @@ class AuthController extends Controller
     {
         return response()->json([
             'user' => $request->user(),
+        ]);
+    }
+
+    public function approve(Request $request)
+    {
+        /** @var User|null $user */
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        if (!$user->is_approved) {
+            $user->forceFill(['is_approved' => true])->save();
+        }
+
+        return response()->json([
+            'message' => 'Approved',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'phone' => $user->phone,
+                'is_approved' => (bool) $user->is_approved,
+            ],
         ]);
     }
 
