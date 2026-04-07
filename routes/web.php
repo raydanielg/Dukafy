@@ -274,5 +274,12 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
             Route::post('/cron-jobs/{id}', [App\Http\Controllers\Admin\ExtrasController::class, 'cronJobsUpdate'])->name('cron_jobs.update');
             Route::post('/cron-jobs/{id}/delete', [App\Http\Controllers\Admin\ExtrasController::class, 'cronJobsDestroy'])->name('cron_jobs.destroy');
         });
+
+        Route::prefix('reports')->name('reports.')->group(function () {
+            Route::get('/system-usage', [App\Http\Controllers\Admin\ReportController::class, 'systemUsage'])->name('system_usage');
+            Route::get('/business-performance', [App\Http\Controllers\Admin\ReportController::class, 'businessPerformance'])->name('business_performance');
+            Route::get('/subscription-revenue', [App\Http\Controllers\Admin\ReportController::class, 'subscriptionRevenue'])->name('subscription_revenue');
+            Route::get('/churn-report', [App\Http\Controllers\Admin\ReportController::class, 'churnReport'])->name('churn_report');
+        });
     });
 });
