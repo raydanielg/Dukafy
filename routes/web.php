@@ -90,6 +90,39 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
         Route::get('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'index'])->name('profile.index');
         Route::post('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
 
+        Route::prefix('security')->name('security.')->group(function () {
+            Route::get('/login-security', [App\Http\Controllers\Admin\SecurityController::class, 'loginSecurity'])->name('login_security');
+            Route::post('/login-security', [App\Http\Controllers\Admin\SecurityController::class, 'updateLoginSecurity'])->name('login_security.update');
+
+            Route::get('/password-policy', [App\Http\Controllers\Admin\SecurityController::class, 'passwordPolicy'])->name('password_policy');
+            Route::post('/password-policy', [App\Http\Controllers\Admin\SecurityController::class, 'updatePasswordPolicy'])->name('password_policy.update');
+
+            Route::get('/ip-whitelisting', [App\Http\Controllers\Admin\SecurityController::class, 'ipWhitelisting'])->name('ip_whitelisting');
+            Route::post('/ip-whitelisting', [App\Http\Controllers\Admin\SecurityController::class, 'addIpWhitelist'])->name('ip_whitelisting.add');
+
+            Route::get('/blocked-ips', [App\Http\Controllers\Admin\SecurityController::class, 'blockedIps'])->name('blocked_ips');
+            Route::post('/blocked-ips', [App\Http\Controllers\Admin\SecurityController::class, 'blockIp'])->name('blocked_ips.add');
+
+            Route::get('/database-encryption', [App\Http\Controllers\Admin\SecurityController::class, 'databaseEncryption'])->name('database_encryption');
+            Route::post('/database-encryption', [App\Http\Controllers\Admin\SecurityController::class, 'updateDatabaseEncryption'])->name('database_encryption.update');
+
+            Route::get('/backup-security', [App\Http\Controllers\Admin\SecurityController::class, 'backupSecurity'])->name('backup_security');
+            Route::post('/backup-security', [App\Http\Controllers\Admin\SecurityController::class, 'updateBackupSecurity'])->name('backup_security.update');
+
+            Route::get('/audit-log', [App\Http\Controllers\Admin\SecurityController::class, 'auditLog'])->name('audit_log');
+            Route::get('/session-management', [App\Http\Controllers\Admin\SecurityController::class, 'sessionManagement'])->name('session_management');
+
+            Route::get('/api-security', [App\Http\Controllers\Admin\SecurityController::class, 'apiSecurity'])->name('api_security');
+            Route::post('/api-security', [App\Http\Controllers\Admin\SecurityController::class, 'createApiKey'])->name('api_security.create');
+            Route::post('/api-security/{id}/revoke', [App\Http\Controllers\Admin\SecurityController::class, 'revokeApiKey'])->name('api_security.revoke');
+
+            Route::get('/data-retention', [App\Http\Controllers\Admin\SecurityController::class, 'dataRetentionPolicy'])->name('data_retention');
+            Route::post('/data-retention', [App\Http\Controllers\Admin\SecurityController::class, 'updateDataRetentionPolicy'])->name('data_retention.update');
+
+            Route::get('/security-alerts', [App\Http\Controllers\Admin\SecurityController::class, 'securityAlerts'])->name('security_alerts');
+            Route::post('/security-alerts', [App\Http\Controllers\Admin\SecurityController::class, 'updateSecurityAlerts'])->name('security_alerts.update');
+        });
+
         Route::get('/articles', [App\Http\Controllers\Admin\ArticleController::class, 'index'])->name('articles.index');
         Route::get('/articles/create', [App\Http\Controllers\Admin\ArticleController::class, 'create'])->name('articles.create');
         Route::post('/articles', [App\Http\Controllers\Admin\ArticleController::class, 'store'])->name('articles.store');
