@@ -23,6 +23,11 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
     with SingleTickerProviderStateMixin {
   bool _loading = false;
   bool _approved = false;
+  String? _selectedRole; // 'owner' or 'cashier'
+  Map<String, dynamic>? _selectedManager;
+  final _managerSearchController = TextEditingController();
+  List<dynamic> _managerSuggestions = [];
+  bool _searchingManager = false;
 
   late final AnimationController _controller;
   late final Animation<double> _scale;
@@ -48,13 +53,50 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
     super.dispose();
   }
 
+  Future<void> _searchManagers(String query) async {
+    if (query.length < 2) {
+      setState(() => _managerSuggestions = []);
+      return;
+    }
+
+    setState(() => _searchingManager = true);
+    try {
+      final dio = ref.read(apiClientProvider).dio;
+      final res = await dio.get('/auth/managers/search', queryParameters: {'q': query});
+      setState(() => _managerSuggestions = res.data as List);
+    } catch (_) {
+      // ignore
+    } finally {
+      setState(() => _searchingManager = false);
+    }
+  }
+
   Future<void> _approve() async {
     if (_loading) return;
+    if (_selectedRole == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select your role first')),
+      );
+      return;
+    }
+    if (_selectedRole == 'cashier' && _selectedManager == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select your manager')),
+      );
+      return;
+    }
+
     setState(() => _loading = true);
 
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.post('/auth/approve');
+      final res = await dio.post(
+        '/auth/approve',
+        data: {
+          'role': _selectedRole,
+          'manager_id': _selectedManager?['id'],
+        },
+      );
       final data = res.data;
       final user = (data is Map) ? data['user'] : null;
       final approved = (user is Map) ? user['is_approved'] : null;
@@ -112,6 +154,138 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                     opacity: _fade,
                     child: ScaleTransition(
                       scale: _scale,
+                  if (!_approved) ...[
+                    const Text(
+                      'Choose your role',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _RoleCard(
+                            title: 'Business Owner',
+                            icon: Icons.store_rounded,
+                            selected: _selectedRole == 'owner',
+                            onTap: () => setState(() {
+                              _selectedRole = 'owner';
+                              _selectedManager = null;
+                            }),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _RoleCard(
+                            title: 'Employee / Cashier',
+                            icon: Icons.person_pin_rounded,
+                            selected: _selectedRole == 'cashier',
+                            onTap: () => setState(() => _selectedRole = 'cashier'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (_selectedRole == 'cashier') ...[
+                      const SizedBox(height: 20),
+                      const Text(
+                        'Find your manager',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: _managerSearchController,
+                        onChanged: _searchManagers,
+                        decoration: InputDecoration(
+                          hintText: 'Type manager name...',
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: _searchingManager
+                              ? const Padding(
+                                  padding: EdgeInsets.all(12),
+                                  child: SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  ),
+                                )
+                              : null,
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black.withValues(alpha: 0.1)),
+                          ),
+                        ),
+                      ),
+                      if (_managerSuggestions.isNotEmpty && _selectedManager == null)
+                        Container(
+                          margin: const EdgeInsets.only(top: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 10,
+                              ),
+                            ],
+                          ),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: _managerSuggestions.length,
+                            itemBuilder: (context, index) {
+                              final m = _managerSuggestions[index];
+                              return ListTile(
+                                title: Text(m['name']),
+                                subtitle: Text("${m['business_name']} • ${m['phone']}"),
+                                onTap: () => setState(() {
+                                  _selectedManager = m;
+                                  _managerSearchController.text = m['name'];
+                                  _managerSuggestions = [];
+                                }),
+                              );
+                            },
+                          ),
+                        ),
+                      if (_selectedManager != null) ...[
+                        const SizedBox(height: 12),
+                        Container(
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: colorScheme.primary.withValues(alpha: 0.05),
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: colorScheme.primary.withValues(alpha: 0.2)),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(Icons.check_circle, color: Colors.green, size: 18),
+                                  const SizedBox(width: 8),
+                                  const Text('Selected Manager',
+                                      style: TextStyle(fontWeight: FontWeight.w800)),
+                                  const Spacer(),
+                                  TextButton(
+                                    onPressed: () => setState(() {
+                                      _selectedManager = null;
+                                      _managerSearchController.clear();
+                                    }),
+                                    child: const Text('Change'),
+                                  ),
+                                ],
+                              ),
+                              const Divider(),
+                              Text("Name: ${_selectedManager!['name']}",
+                                  style: const TextStyle(fontWeight: FontWeight.w700)),
+                              Text("Phone: ${_selectedManager!['phone']}"),
+                              Text("Business: ${_selectedManager!['business_name']}"),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ],
+                    const SizedBox(height: 24),
+                  ],
                       child: Container(
                         height: 84,
                         width: 84,
