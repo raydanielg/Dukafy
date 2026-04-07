@@ -70,6 +70,7 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'phone' => $user->phone,
+                'is_approved' => (bool) $user->is_approved,
             ],
         ]);
     }

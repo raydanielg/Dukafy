@@ -8,6 +8,7 @@ Route::prefix('auth')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/me', [App\Http\Controllers\Api\AuthController::class, 'me']);
+        Route::post('/approve', [App\Http\Controllers\Api\AuthController::class, 'approve']);
         Route::post('/logout', [App\Http\Controllers\Api\AuthController::class, 'logout']);
     });
 });
