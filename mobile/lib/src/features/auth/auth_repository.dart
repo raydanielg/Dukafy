@@ -4,6 +4,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/api/api_client.dart';
 import '../../core/storage/storage_providers.dart';
 
+class AuthResult {
+  const AuthResult({
+    required this.name,
+    required this.phone,
+    required this.isApproved,
+  });
+
+  final String name;
+  final String phone;
+  final bool isApproved;
+}
+
 class AuthRepository {
   AuthRepository(this._ref);
 
@@ -44,7 +56,7 @@ class AuthRepository {
     }
   }
 
-  Future<void> login({required String phone, required String password}) async {
+  Future<AuthResult> login({required String phone, required String password}) async {
     final dio = _ref.read(apiClientProvider).dio;
     try {
       final res = await dio.post(
@@ -55,7 +67,8 @@ class AuthRepository {
         },
       );
 
-      final token = (res.data as Map)['access_token'] as String?;
+      final data = res.data;
+      final token = (data as Map)['access_token'] as String?;
       if (token == null || token.isEmpty) {
         throw DioException(
           requestOptions: res.requestOptions,
@@ -65,12 +78,23 @@ class AuthRepository {
       }
 
       await _ref.read(secureStorageProvider).setAuthToken(token);
+
+      final user = (data)['user'];
+      if (user is Map) {
+        return AuthResult(
+          name: (user['name'] as String?) ?? '',
+          phone: (user['phone'] as String?) ?? '',
+          isApproved: (user['is_approved'] == true),
+        );
+      }
+
+      return const AuthResult(name: '', phone: '', isApproved: false);
     } catch (e) {
       throw Exception(_friendlyDioError(e));
     }
   }
 
-  Future<void> register({
+  Future<AuthResult> register({
     required String name,
     required String phone,
     required String password,
@@ -86,7 +110,8 @@ class AuthRepository {
         },
       );
 
-      final token = (res.data as Map)['access_token'] as String?;
+      final data = res.data;
+      final token = (data as Map)['access_token'] as String?;
       if (token == null || token.isEmpty) {
         throw DioException(
           requestOptions: res.requestOptions,
@@ -96,6 +121,21 @@ class AuthRepository {
       }
 
       await _ref.read(secureStorageProvider).setAuthToken(token);
+
+      final user = (data)['user'];
+      if (user is Map) {
+        return AuthResult(
+          name: (user['name'] as String?) ?? name,
+          phone: (user['phone'] as String?) ?? _normalizePhone(phone),
+          isApproved: (user['is_approved'] == true),
+        );
+      }
+
+      return AuthResult(
+        name: name,
+        phone: _normalizePhone(phone),
+        isApproved: false,
+      );
     } catch (e) {
       throw Exception(_friendlyDioError(e));
     }

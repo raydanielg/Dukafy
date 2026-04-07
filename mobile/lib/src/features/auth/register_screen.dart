@@ -241,13 +241,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                         ref
                                             .read(authRepositoryProvider)
                                             .register(name: name, phone: phone, password: password)
-                                            .then((_) {
+                                            .then((result) {
                                           if (!mounted) return;
                                           context.go(
                                             ApprovalScreen.routePath,
                                             extra: {
-                                              'name': name,
-                                              'phone': phone,
+                                              'name': result.name,
+                                              'phone': result.phone,
                                             },
                                           );
                                         }).catchError((e) {
