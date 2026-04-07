@@ -8,6 +8,7 @@ import '../features/auth/login_screen.dart';
 import '../features/auth/register_screen.dart';
 import '../features/auth/forgot_password_screen.dart';
 import '../features/auth/approval_screen.dart';
+import '../features/dashboard/dashboard_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -50,6 +51,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             phone: (map['phone'] as String?) ?? '',
           );
         },
+      ),
+      GoRoute(
+        path: DashboardScreen.routePath,
+        name: DashboardScreen.routeName,
+        builder: (context, state) => const DashboardScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
