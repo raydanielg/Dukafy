@@ -249,5 +249,30 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
             Route::get('/payments', [App\Http\Controllers\Admin\LogsController::class, 'payments'])->name('payments');
             Route::get('/emails', [App\Http\Controllers\Admin\LogsController::class, 'emails'])->name('emails');
         });
+
+        Route::prefix('extras')->name('extras.')->group(function () {
+            Route::get('/modules', [App\Http\Controllers\Admin\ExtrasController::class, 'modulesIndex'])->name('modules.index');
+            Route::get('/modules/create', [App\Http\Controllers\Admin\ExtrasController::class, 'modulesCreate'])->name('modules.create');
+            Route::post('/modules', [App\Http\Controllers\Admin\ExtrasController::class, 'modulesStore'])->name('modules.store');
+            Route::get('/modules/{id}/edit', [App\Http\Controllers\Admin\ExtrasController::class, 'modulesEdit'])->name('modules.edit');
+            Route::post('/modules/{id}', [App\Http\Controllers\Admin\ExtrasController::class, 'modulesUpdate'])->name('modules.update');
+            Route::post('/modules/{id}/delete', [App\Http\Controllers\Admin\ExtrasController::class, 'modulesDestroy'])->name('modules.destroy');
+
+            Route::get('/announcements', [App\Http\Controllers\Admin\ExtrasController::class, 'announcementsIndex'])->name('announcements.index');
+            Route::get('/announcements/create', [App\Http\Controllers\Admin\ExtrasController::class, 'announcementsCreate'])->name('announcements.create');
+            Route::post('/announcements', [App\Http\Controllers\Admin\ExtrasController::class, 'announcementsStore'])->name('announcements.store');
+            Route::get('/announcements/{id}/edit', [App\Http\Controllers\Admin\ExtrasController::class, 'announcementsEdit'])->name('announcements.edit');
+            Route::post('/announcements/{id}', [App\Http\Controllers\Admin\ExtrasController::class, 'announcementsUpdate'])->name('announcements.update');
+            Route::post('/announcements/{id}/delete', [App\Http\Controllers\Admin\ExtrasController::class, 'announcementsDestroy'])->name('announcements.destroy');
+
+            Route::get('/system-logs', [App\Http\Controllers\Admin\ExtrasController::class, 'systemLogs'])->name('system_logs');
+
+            Route::get('/cron-jobs', [App\Http\Controllers\Admin\ExtrasController::class, 'cronJobsIndex'])->name('cron_jobs.index');
+            Route::get('/cron-jobs/create', [App\Http\Controllers\Admin\ExtrasController::class, 'cronJobsCreate'])->name('cron_jobs.create');
+            Route::post('/cron-jobs', [App\Http\Controllers\Admin\ExtrasController::class, 'cronJobsStore'])->name('cron_jobs.store');
+            Route::get('/cron-jobs/{id}/edit', [App\Http\Controllers\Admin\ExtrasController::class, 'cronJobsEdit'])->name('cron_jobs.edit');
+            Route::post('/cron-jobs/{id}', [App\Http\Controllers\Admin\ExtrasController::class, 'cronJobsUpdate'])->name('cron_jobs.update');
+            Route::post('/cron-jobs/{id}/delete', [App\Http\Controllers\Admin\ExtrasController::class, 'cronJobsDestroy'])->name('cron_jobs.destroy');
+        });
     });
 });
