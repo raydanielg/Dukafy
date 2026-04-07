@@ -59,7 +59,28 @@ class _ArticlesScreenState extends ConsumerState<ArticlesScreen> {
           onRefresh: _fetchArticles,
           color: primaryGreen,
           child: _articles.isEmpty && !_isLoading
-              ? const Center(child: Text('No articles found.'))
+              ? Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.article_outlined, size: 56, color: primaryGreen.withOpacity(0.6)),
+                        const SizedBox(height: 12),
+                        const Text(
+                          'No articles yet',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Pull down to refresh, or check back later.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               : ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: _isLoading ? 5 : _articles.length,
@@ -82,6 +103,9 @@ class _ArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final title = (article is Map) ? (article['title']?.toString()) : null;
+    final excerpt = (article is Map) ? (article['excerpt']?.toString()) : null;
+
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -118,18 +142,16 @@ class _ArticleCard extends StatelessWidget {
                     ),
                   const SizedBox(height: 8),
                   Text(
-                    article?['title'] ?? 'Loading article title...',
+                    title ?? 'Loading article title...',
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    article?['content'] != null 
-                      ? (article['content'].toString().length > 100 
-                          ? '${article['content'].toString().substring(0, 100)}...' 
-                          : article['content'])
-                      : 'Loading article summary and content details...',
+                    (excerpt != null && excerpt.isNotEmpty)
+                        ? excerpt
+                        : 'Loading article summary and content details...',
                     style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
