@@ -1,29 +1,36 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/storage/storage_providers.dart';
+import '../onboarding/onboarding_screen.dart';
 import '../auth/login_screen.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   static const routeName = 'splash';
   static const routePath = '/';
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
 
-    Timer(const Duration(seconds: 2), () {
-      if (!mounted) return;
-      context.go(LoginScreen.routePath);
-    });
+    _bootstrap();
+  }
+
+  Future<void> _bootstrap() async {
+    await Future<void>.delayed(const Duration(milliseconds: 900));
+
+    final done = await ref.read(secureStorageProvider).isOnboardingDone();
+
+    if (!mounted) return;
+    context.go(done ? LoginScreen.routePath : OnboardingScreen.routePath);
   }
 
   @override
