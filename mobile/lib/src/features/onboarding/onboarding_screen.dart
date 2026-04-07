@@ -43,7 +43,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final overlayHeight =
-        (MediaQuery.sizeOf(context).height * 0.48).clamp(320.0, 440.0);
+        (MediaQuery.sizeOf(context).height * 0.62).clamp(420.0, 620.0);
 
     final pages = <_OnboardPageData>[
       const _OnboardPageData(
@@ -116,10 +116,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           colors: [
                             colorScheme.primary.withValues(alpha: 0.85),
                             Colors.black.withValues(alpha: 0.65),
-                            Colors.black.withValues(alpha: 0.28),
+                            Colors.black.withValues(alpha: 0.40),
+                            Colors.black.withValues(alpha: 0.18),
                             Colors.transparent,
                           ],
-                          stops: const [0.0, 0.35, 0.72, 1.0],
+                          stops: const [0.0, 0.28, 0.58, 0.80, 1.0],
                         ),
                       ),
                       child: SafeArea(
