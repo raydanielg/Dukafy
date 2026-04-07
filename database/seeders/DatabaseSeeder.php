@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             SecurityDefaultsSeeder::class,
             PlanSeeder::class,
+            FinanceDefaultsSeeder::class,
             SiteContactSeeder::class,
             TestimonialSeeder::class,
             ArticleCategorySeeder::class,
