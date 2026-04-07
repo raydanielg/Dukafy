@@ -163,29 +163,30 @@ class AuthController extends Controller
             return response()->json([]);
         }
 
-        // Search users who have 'manager' role via a simpler join
+        // Simplest possible query to avoid JOIN issues with SQLite/Eloquent
         $managers = User::query()
-            ->join('role_user', 'users.id', '=', 'role_user.user_id')
-            ->join('roles', 'role_user.role_id', '=', 'roles.id')
-            ->where('roles.slug', 'manager')
             ->where(function($query) use ($q) {
-                $query->where('users.name', 'like', "%{$q}%")
-                      ->orWhere('users.phone', 'like', "%{$q}%");
+                $query->where('name', 'like', "%{$q}%")
+                      ->orWhere('phone', 'like', "%{$q}%");
             })
-            ->select('users.*')
             ->with(['business'])
             ->limit(10)
             ->get()
+            ->filter(function($user) {
+                // Filter by role manually to ensure it works even if relationships are tricky
+                return $user->roles()->where('slug', 'manager')->exists() || $user->is_admin;
+            })
             ->map(function($m) {
                 return [
                     'id' => $m->id,
                     'name' => $m->name,
                     'phone' => $m->phone,
                     'email' => $m->email,
-                    'business_name' => $m->business?->name ?? 'No business assigned',
+                    'business_name' => $m->business?->name ?? 'Dukafy Business',
                     'business_address' => $m->business?->address ?? 'N/A',
                 ];
-            });
+            })
+            ->values();
 
         return response()->json($managers);
     }
