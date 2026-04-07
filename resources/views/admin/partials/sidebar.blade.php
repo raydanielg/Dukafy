@@ -159,10 +159,10 @@
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="admin-nav-caret"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <div class="admin-submenu" data-admin-submenu>
-                    <a class="admin-sub-link" href="#">System Usage</a>
-                    <a class="admin-sub-link" href="#">Business Performance</a>
-                    <a class="admin-sub-link" href="#">Subscription Revenue</a>
-                    <a class="admin-sub-link" href="#">Churn Report</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.reports.system_usage') ? 'active' : '' }}" href="{{ route('admin.reports.system_usage') }}">System Usage</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.reports.business_performance') ? 'active' : '' }}" href="{{ route('admin.reports.business_performance') }}">Business Performance</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.reports.subscription_revenue') ? 'active' : '' }}" href="{{ route('admin.reports.subscription_revenue') }}">Subscription Revenue</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.reports.churn_report') ? 'active' : '' }}" href="{{ route('admin.reports.churn_report') }}">Churn Report</a>
                 </div>
             </div>
         </div>
