@@ -144,19 +144,24 @@ class AuthController extends Controller
         }
 
         $managers = User::query()
-            ->where('name', 'like', "%{$q}%")
+            ->where(function($query) use ($q) {
+                $query->where('name', 'like', "%{$q}%")
+                      ->orWhere('phone', 'like', "%{$q}%");
+            })
             ->whereHas('roles', function($query) {
                 $query->where('slug', 'manager');
             })
             ->with(['business'])
-            ->limit(5)
+            ->limit(10)
             ->get()
             ->map(function($m) {
                 return [
                     'id' => $m->id,
                     'name' => $m->name,
                     'phone' => $m->phone,
+                    'email' => $m->email,
                     'business_name' => $m->business?->name ?? 'No business assigned',
+                    'business_address' => $m->business?->address ?? 'N/A',
                 ];
             });
 

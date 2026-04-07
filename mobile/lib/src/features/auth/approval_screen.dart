@@ -286,8 +286,21 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                             itemBuilder: (context, index) {
                               final m = _managerSuggestions[index];
                               return ListTile(
-                                title: Text(m['name']),
-                                subtitle: Text("${m['business_name']} • ${m['phone']}"),
+                                leading: CircleAvatar(
+                                  backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
+                                  child: Text(m['name'][0].toUpperCase(),
+                                      style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.bold)),
+                                ),
+                                title: Text(m['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("${m['business_name']} • ${m['phone']}"),
+                                    if (m['business_address'] != 'N/A')
+                                      Text(m['business_address'], style: const TextStyle(fontSize: 11)),
+                                  ],
+                                ),
+                                isThreeLine: m['business_address'] != 'N/A',
                                 onTap: () => setState(() {
                                   _selectedManager = m;
                                   _managerSearchController.text = m['name'];
