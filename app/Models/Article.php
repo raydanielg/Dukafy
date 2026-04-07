@@ -5,17 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['article_category_id', 'title', 'slug', 'content', 'image', 'is_published'])]
+#[Fillable(['title', 'slug', 'category_id', 'category', 'age_range', 'image', 'excerpt', 'content', 'published_at', 'is_featured'])]
 class Article extends Model
 {
+    protected $appends = ['image_url'];
+
     public function category()
     {
-        return $this->belongsTo(ArticleCategory::class, 'article_category_id');
-    }
-
-    protected function appends(): array
-    {
-        return ['image_url'];
+        return $this->belongsTo(ArticleCategory::class, 'category_id');
     }
 
     public function getImageUrlAttribute()
