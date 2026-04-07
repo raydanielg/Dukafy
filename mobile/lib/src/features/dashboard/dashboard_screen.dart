@@ -6,7 +6,6 @@ import '../pos/pos_screen.dart';
 import '../products/products_screen.dart';
 import '../purchases/purchases_screen.dart';
 import '../invoices/invoices_screen.dart';
-import 'widgets/auth_background.dart';
 import '../auth/login_screen.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
