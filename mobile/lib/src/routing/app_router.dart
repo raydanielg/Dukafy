@@ -9,6 +9,10 @@ import '../features/auth/register_screen.dart';
 import '../features/auth/forgot_password_screen.dart';
 import '../features/auth/approval_screen.dart';
 import '../features/dashboard/dashboard_screen.dart';
+import '../features/pos/pos_screen.dart';
+import '../features/products/products_screen.dart';
+import '../features/purchases/purchases_screen.dart';
+import '../features/invoices/invoices_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -56,6 +60,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: DashboardScreen.routePath,
         name: DashboardScreen.routeName,
         builder: (context, state) => const DashboardScreen(),
+      ),
+      GoRoute(
+        path: POSScreen.routePath,
+        name: POSScreen.routeName,
+        builder: (context, state) => const POSScreen(),
+      ),
+      GoRoute(
+        path: ProductsScreen.routePath,
+        name: ProductsScreen.routeName,
+        builder: (context, state) => const ProductsScreen(),
+      ),
+      GoRoute(
+        path: PurchasesScreen.routePath,
+        name: PurchasesScreen.routeName,
+        builder: (context, state) => const PurchasesScreen(),
+      ),
+      GoRoute(
+        path: InvoicesScreen.routePath,
+        name: InvoicesScreen.routeName,
+        builder: (context, state) => const InvoicesScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
