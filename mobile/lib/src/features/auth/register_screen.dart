@@ -113,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () => context.pop(),
+                        onPressed: () => context.go(LoginScreen.routePath),
                         icon: const Icon(Icons.arrow_back, color: Colors.white),
                       ),
                       const Spacer(),
@@ -294,6 +294,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     content: Text('Registration submitted (demo).'),
                                   ),
                                 );
+                                context.go(LoginScreen.routePath);
                               },
                               child: const Text(
                                 'JISAJILI',
