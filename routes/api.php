@@ -19,5 +19,9 @@ Route::prefix('auth')->group(function () {
         // Articles
         Route::get('/articles', [App\Http\Controllers\Api\ArticleController::class, 'index']);
         Route::get('/articles/{id}', [App\Http\Controllers\Api\ArticleController::class, 'show']);
+
+        // POS
+        Route::get('/products', [App\Http\Controllers\Api\ProductController::class, 'index']);
+        Route::get('/customers', [App\Http\Controllers\Api\CustomerController::class, 'index']);
     });
 });

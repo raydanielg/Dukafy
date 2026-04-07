@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -39,23 +40,33 @@ class ProductController extends Controller
             'category_id' => ['nullable', 'integer'],
             'name' => ['required', 'string', 'max:255'],
             'sku' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable', 'string', 'max:255'],
+            'image_file' => ['nullable', 'file', 'image', 'max:5120'],
             'price' => ['required', 'numeric', 'min:0'],
             'cost' => ['nullable', 'numeric', 'min:0'],
             'stock_qty' => ['required', 'integer'],
             'low_stock_threshold' => ['required', 'integer'],
             'is_active' => ['nullable'],
+            'is_bundle' => ['nullable'],
         ]);
+
+        $imagePath = $data['image'] ?? null;
+        if ($request->hasFile('image_file')) {
+            $imagePath = $request->file('image_file')->store('products', 'public');
+        }
 
         DB::table('products')->insert([
             'business_id' => $data['business_id'],
             'category_id' => $data['category_id'] ?? null,
             'name' => $data['name'],
             'sku' => $data['sku'] ?? null,
+            'image' => $imagePath,
             'price' => $data['price'],
             'cost' => $data['cost'] ?? null,
             'stock_qty' => $data['stock_qty'],
             'low_stock_threshold' => $data['low_stock_threshold'],
             'is_active' => isset($data['is_active']),
+            'is_bundle' => isset($data['is_bundle']),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -84,23 +95,33 @@ class ProductController extends Controller
             'category_id' => ['nullable', 'integer'],
             'name' => ['required', 'string', 'max:255'],
             'sku' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable', 'string', 'max:255'],
+            'image_file' => ['nullable', 'file', 'image', 'max:5120'],
             'price' => ['required', 'numeric', 'min:0'],
             'cost' => ['nullable', 'numeric', 'min:0'],
             'stock_qty' => ['required', 'integer'],
             'low_stock_threshold' => ['required', 'integer'],
             'is_active' => ['nullable'],
+            'is_bundle' => ['nullable'],
         ]);
+
+        $imagePath = $data['image'] ?? $product->image;
+        if ($request->hasFile('image_file')) {
+            $imagePath = $request->file('image_file')->store('products', 'public');
+        }
 
         DB::table('products')->where('id', $id)->update([
             'business_id' => $data['business_id'],
             'category_id' => $data['category_id'] ?? null,
             'name' => $data['name'],
             'sku' => $data['sku'] ?? null,
+            'image' => $imagePath,
             'price' => $data['price'],
             'cost' => $data['cost'] ?? null,
             'stock_qty' => $data['stock_qty'],
             'low_stock_threshold' => $data['low_stock_threshold'],
             'is_active' => isset($data['is_active']),
+            'is_bundle' => isset($data['is_bundle']),
             'updated_at' => now(),
         ]);
 
