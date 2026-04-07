@@ -243,8 +243,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                             .register(name: name, phone: phone, password: password)
                                             .then((result) {
                                           if (!mounted) return;
-                                          context.go(
-                                            ApprovalScreen.routePath,
+                                          context.goNamed(
+                                            ApprovalScreen.routeName,
                                             extra: {
                                               'name': result.name,
                                               'phone': result.phone,
