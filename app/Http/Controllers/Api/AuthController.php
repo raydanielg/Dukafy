@@ -1,0 +1,92 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+class AuthController extends Controller
+{
+    public function register(Request $request)
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:25', 'unique:users,phone'],
+            'password' => ['required', 'string', 'min:6'],
+        ]);
+
+        $user = User::create([
+            'name' => $data['name'],
+            'phone' => $data['phone'],
+            'password' => Hash::make($data['password']),
+        ]);
+
+        $token = $user->createToken('mobile')->plainTextToken;
+
+        return response()->json([
+            'token_type' => 'Bearer',
+            'access_token' => $token,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'phone' => $user->phone,
+            ],
+        ]);
+    }
+
+    public function login(Request $request)
+    {
+        $data = $request->validate([
+            'phone' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
+
+        if (!Auth::attempt(['phone' => $data['phone'], 'password' => $data['password']])) {
+            return response()->json([
+                'message' => 'Invalid credentials',
+            ], 422);
+        }
+
+        /** @var User $user */
+        $user = $request->user();
+        if (!$user) {
+            $user = User::where('phone', $data['phone'])->first();
+        }
+
+        if (!$user) {
+            return response()->json(['message' => 'Invalid credentials'], 422);
+        }
+
+        $token = $user->createToken('mobile')->plainTextToken;
+
+        return response()->json([
+            'token_type' => 'Bearer',
+            'access_token' => $token,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'phone' => $user->phone,
+            ],
+        ]);
+    }
+
+    public function me(Request $request)
+    {
+        return response()->json([
+            'user' => $request->user(),
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $user = $request->user();
+        if ($user) {
+            $user->currentAccessToken()?->delete();
+        }
+
+        return response()->json(['message' => 'Logged out']);
+    }
+}
