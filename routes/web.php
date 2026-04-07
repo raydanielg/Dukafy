@@ -172,5 +172,52 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
         Route::get('/article-categories/{id}/edit', [App\Http\Controllers\Admin\ArticleCategoryController::class, 'edit'])->name('article_categories.edit');
         Route::post('/article-categories/{id}', [App\Http\Controllers\Admin\ArticleCategoryController::class, 'update'])->name('article_categories.update');
         Route::post('/article-categories/{id}/delete', [App\Http\Controllers\Admin\ArticleCategoryController::class, 'destroy'])->name('article_categories.destroy');
+
+        Route::prefix('business-data')->name('business_data.')->group(function () {
+            Route::get('/products', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
+            Route::get('/products/create', [App\Http\Controllers\Admin\ProductController::class, 'create'])->name('products.create');
+            Route::post('/products', [App\Http\Controllers\Admin\ProductController::class, 'store'])->name('products.store');
+            Route::get('/products/{id}/edit', [App\Http\Controllers\Admin\ProductController::class, 'edit'])->name('products.edit');
+            Route::post('/products/{id}', [App\Http\Controllers\Admin\ProductController::class, 'update'])->name('products.update');
+            Route::post('/products/{id}/delete', [App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('products.destroy');
+
+            Route::get('/product-categories', [App\Http\Controllers\Admin\ProductCategoryController::class, 'index'])->name('product_categories.index');
+            Route::get('/product-categories/create', [App\Http\Controllers\Admin\ProductCategoryController::class, 'create'])->name('product_categories.create');
+            Route::post('/product-categories', [App\Http\Controllers\Admin\ProductCategoryController::class, 'store'])->name('product_categories.store');
+            Route::get('/product-categories/{id}/edit', [App\Http\Controllers\Admin\ProductCategoryController::class, 'edit'])->name('product_categories.edit');
+            Route::post('/product-categories/{id}', [App\Http\Controllers\Admin\ProductCategoryController::class, 'update'])->name('product_categories.update');
+            Route::post('/product-categories/{id}/delete', [App\Http\Controllers\Admin\ProductCategoryController::class, 'destroy'])->name('product_categories.destroy');
+
+            Route::get('/low-stock-alerts', [App\Http\Controllers\Admin\BusinessDataController::class, 'lowStockAlerts'])->name('low_stock_alerts');
+
+            Route::get('/bulk-import-export', [App\Http\Controllers\Admin\BusinessDataController::class, 'bulkImportExport'])->name('bulk_import_export');
+            Route::get('/bulk-import-export/products/export', [App\Http\Controllers\Admin\BusinessDataController::class, 'exportProductsCsv'])->name('bulk_import_export.products.export');
+            Route::post('/bulk-import-export/products/import', [App\Http\Controllers\Admin\BusinessDataController::class, 'importProductsCsv'])->name('bulk_import_export.products.import');
+
+            Route::get('/sales', [App\Http\Controllers\Admin\SaleController::class, 'index'])->name('sales.index');
+            Route::get('/sales/create', [App\Http\Controllers\Admin\SaleController::class, 'create'])->name('sales.create');
+            Route::post('/sales', [App\Http\Controllers\Admin\SaleController::class, 'store'])->name('sales.store');
+            Route::get('/sales/{id}', [App\Http\Controllers\Admin\SaleController::class, 'show'])->name('sales.show');
+            Route::post('/sales/{id}/delete', [App\Http\Controllers\Admin\SaleController::class, 'destroy'])->name('sales.destroy');
+
+            Route::get('/sales-by-business', [App\Http\Controllers\Admin\SaleController::class, 'salesByBusiness'])->name('sales_by_business');
+            Route::get('/sales-by-user', [App\Http\Controllers\Admin\SaleController::class, 'salesByUser'])->name('sales_by_user');
+
+            Route::get('/customers', [App\Http\Controllers\Admin\CustomerController::class, 'index'])->name('customers.index');
+            Route::get('/customers/create', [App\Http\Controllers\Admin\CustomerController::class, 'create'])->name('customers.create');
+            Route::post('/customers', [App\Http\Controllers\Admin\CustomerController::class, 'store'])->name('customers.store');
+            Route::get('/customers/{id}/edit', [App\Http\Controllers\Admin\CustomerController::class, 'edit'])->name('customers.edit');
+            Route::post('/customers/{id}', [App\Http\Controllers\Admin\CustomerController::class, 'update'])->name('customers.update');
+            Route::post('/customers/{id}/delete', [App\Http\Controllers\Admin\CustomerController::class, 'destroy'])->name('customers.destroy');
+
+            Route::get('/customer-groups', [App\Http\Controllers\Admin\CustomerGroupController::class, 'index'])->name('customer_groups.index');
+            Route::get('/customer-groups/create', [App\Http\Controllers\Admin\CustomerGroupController::class, 'create'])->name('customer_groups.create');
+            Route::post('/customer-groups', [App\Http\Controllers\Admin\CustomerGroupController::class, 'store'])->name('customer_groups.store');
+            Route::get('/customer-groups/{id}/edit', [App\Http\Controllers\Admin\CustomerGroupController::class, 'edit'])->name('customer_groups.edit');
+            Route::post('/customer-groups/{id}', [App\Http\Controllers\Admin\CustomerGroupController::class, 'update'])->name('customer_groups.update');
+            Route::post('/customer-groups/{id}/delete', [App\Http\Controllers\Admin\CustomerGroupController::class, 'destroy'])->name('customer_groups.destroy');
+
+            Route::get('/blacklisted-customers', [App\Http\Controllers\Admin\CustomerController::class, 'blacklisted'])->name('blacklisted_customers');
+        });
     });
 });
