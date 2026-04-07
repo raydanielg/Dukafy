@@ -11,7 +11,7 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
         $articles = Article::with('category')
-            ->where('is_published', true)
+            ->whereNotNull('published_at')
             ->latest()
             ->paginate($request->get('per_page', 10));
 
