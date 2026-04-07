@@ -45,19 +45,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
     final pages = <_OnboardPageData>[
       const _OnboardPageData(
-        title: 'Mauzo ya haraka (POS)',
-        subtitle: 'Uza kwa haraka, punguza makosa, na pata risiti kwa urahisi.',
+        title: 'Fast Checkout (POS)',
+        subtitle: 'Sell in seconds with a clean POS that reduces errors and saves time.',
         icon: Icons.point_of_sale,
+        backgroundAsset: 'assets/images/onboarding_1.jpg',
       ),
       const _OnboardPageData(
-        title: 'Bidhaa na stock',
-        subtitle: 'Fuatilia stock, bei, na arifa za bidhaa zinazoisha.',
+        title: 'Inventory & Stock Alerts',
+        subtitle: 'Track stock, prices, and get alerts before items run out.',
         icon: Icons.inventory_2,
+        backgroundAsset: 'assets/images/onboarding_2.jpg',
       ),
       const _OnboardPageData(
-        title: 'Ripoti za biashara',
-        subtitle: 'Ona mauzo, faida, na bidhaa zinazouzwa sana kwa muda wowote.',
+        title: 'Smart Reports',
+        subtitle: 'See sales performance, profit trends, and top products anytime.',
         icon: Icons.analytics,
+        backgroundAsset: 'assets/images/onboarding_3.jpg',
       ),
     ];
 
@@ -108,63 +111,133 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 },
                 itemBuilder: (context, index) {
                   final page = pages[index];
+
+                  final pageValue = _controller.hasClients
+                      ? (_controller.page ?? _index.toDouble())
+                      : _index.toDouble();
+                  final delta = (index - pageValue).abs();
+                  final t = (1 - delta).clamp(0.0, 1.0);
+
                   return Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    padding: EdgeInsets.zero,
+                    child: Stack(
+                      fit: StackFit.expand,
                       children: [
-                        Container(
-                          width: 126,
-                          height: 126,
+                        AnimatedOpacity(
+                          opacity: t,
+                          duration: const Duration(milliseconds: 180),
+                          child: Image(
+                            image: AssetImage(page.backgroundAsset),
+                            fit: BoxFit.cover,
+                            color: Colors.black.withValues(alpha: 0.20),
+                            colorBlendMode: BlendMode.darken,
+                          ),
+                        ),
+                        DecoratedBox(
                           decoration: BoxDecoration(
-                            color: colorScheme.primary.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(32),
-                          ),
-                          child: Icon(
-                            page.icon,
-                            size: 54,
-                            color: colorScheme.primary,
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.black.withValues(alpha: 0.55),
+                                colorScheme.primary.withValues(alpha: 0.18),
+                                Colors.black.withValues(alpha: 0.70),
+                              ],
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 22),
-                        Text(
-                          page.title,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w800,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          page.subtitle,
-                          style: TextStyle(
-                            fontSize: 14,
-                            height: 1.45,
-                            color: Colors.black.withValues(alpha: 0.62),
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 26),
-                        Container(
-                          width: 90,
-                          height: 90,
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(26),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.06),
-                                blurRadius: 18,
-                                offset: const Offset(0, 12),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 96),
+                            child: AnimatedOpacity(
+                              opacity: t,
+                              duration: const Duration(milliseconds: 220),
+                              child: Transform.translate(
+                                offset: Offset(0, (1 - t) * 14),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      width: 86,
+                                      height: 86,
+                                      padding: const EdgeInsets.all(14),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(26),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withValues(alpha: 0.18),
+                                            blurRadius: 22,
+                                            offset: const Offset(0, 14),
+                                          ),
+                                        ],
+                                      ),
+                                      child: const Image(
+                                        image: AssetImage('assets/images/logo.png'),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 14,
+                                        vertical: 8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withValues(alpha: 0.10),
+                                        borderRadius: BorderRadius.circular(999),
+                                        border: Border.all(
+                                          color: Colors.white.withValues(alpha: 0.18),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            page.icon,
+                                            size: 18,
+                                            color: Colors.white.withValues(alpha: 0.92),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            'DUKAFY',
+                                            style: TextStyle(
+                                              color: Colors.white.withValues(alpha: 0.92),
+                                              fontWeight: FontWeight.w800,
+                                              letterSpacing: 1.4,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 14),
+                                    Text(
+                                      page.title,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 26,
+                                        height: 1.1,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      page.subtitle,
+                                      style: TextStyle(
+                                        color: Colors.white.withValues(alpha: 0.86),
+                                        fontSize: 14,
+                                        height: 1.5,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
-                          child: const Image(
-                            image: AssetImage('assets/images/logo.png'),
-                            fit: BoxFit.contain,
+                            ),
                           ),
                         ),
                       ],
