@@ -45,13 +45,17 @@ final dioProvider = Provider<Dio>((ref) {
   dio.interceptors.add(
     InterceptorsWrapper(
       onRequest: (options, handler) async {
+        print('--- API REQUEST ---');
+        print('URL: ${options.baseUrl}${options.path}');
+        print('Method: ${options.method}');
+        print('Headers: ${options.headers}');
+        print('Data: ${options.data}');
+        
         final storage = ref.read(secureStorageProvider);
         final rawBaseUrl = await storage.getApiBaseUrl();
         if (rawBaseUrl != null && rawBaseUrl.trim().isNotEmpty) {
           final normalized = _normalizeBaseUrl(rawBaseUrl);
-          if (normalized.isNotEmpty) {
-            options.baseUrl = normalized;
-          }
+          if (normalized.isNotEmpty) options.baseUrl = normalized;
         }
 
         final token = await storage.getAuthToken();
@@ -60,6 +64,19 @@ final dioProvider = Provider<Dio>((ref) {
         }
 
         return handler.next(options);
+      },
+      onResponse: (response, handler) {
+        print('--- API RESPONSE ---');
+        print('Status: ${response.statusCode}');
+        print('Data: ${response.data}');
+        return handler.next(response);
+      },
+      onError: (e, handler) {
+        print('--- API ERROR ---');
+        print('Status: ${e.response?.statusCode}');
+        print('Message: ${e.message}');
+        print('Data: ${e.response?.data}');
+        return handler.next(e);
       },
     ),
   );
