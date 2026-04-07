@@ -11,12 +11,22 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'phone', 'password', 'is_approved', 'is_admin', 'business_id', 'branch_id', 'manager_id'])]
+#[Fillable(['name', 'email', 'phone', 'avatar', 'password', 'is_approved', 'is_admin', 'business_id', 'branch_id', 'manager_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
+
+    protected function appends(): array
+    {
+        return ['avatar_url'];
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar ? asset('storage/' . $this->avatar) : null;
+    }
 
     /**
      * Get the attributes that should be cast.
