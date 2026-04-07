@@ -15,7 +15,7 @@
         <div class="admin-panel-body">
             <form class="row g-2 mb-3" method="GET" action="{{ route('admin.users.index') }}">
                 <div class="col-md-6">
-                    <input type="text" name="q" value="{{ $q }}" class="form-control" placeholder="Search by name or email">
+                    <input type="text" name="q" value="{{ $q }}" class="form-control" placeholder="Search by name, email or phone">
                 </div>
                 <div class="col-md-2">
                     <select name="status" class="form-select">
@@ -35,6 +35,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Phone</th>
                             <th>Email</th>
                             <th>Status</th>
                             <th class="text-end">Actions</th>
@@ -44,7 +45,8 @@
                         @foreach($users as $user)
                             <tr class="animate__animated animate__fadeInUp">
                                 <td class="fw-semibold">{{ $user->name }}</td>
-                                <td class="text-muted">{{ $user->email }}</td>
+                                <td class="text-muted">{{ $user->phone }}</td>
+                                <td class="text-muted">{{ $user->email ?? '—' }}</td>
                                 <td>
                                     @if($user->banned_at)
                                         <span class="badge bg-danger">Banned</span>

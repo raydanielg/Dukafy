@@ -23,7 +23,8 @@ class UserController extends Controller
             ->when($q !== '', function ($query) use ($q) {
                 $query->where(function ($inner) use ($q) {
                     $inner->where('name', 'like', "%{$q}%")
-                        ->orWhere('email', 'like', "%{$q}%");
+                        ->orWhere('email', 'like', "%{$q}%")
+                        ->orWhere('phone', 'like', "%{$q}%");
                 });
             })
             ->when($status === 'approved', fn ($query) => $query->whereNotNull('approved_at')->whereNull('banned_at'))
