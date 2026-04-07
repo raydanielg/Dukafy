@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'auth_repository.dart';
 import 'forgot_password_screen.dart';
 import 'register_screen.dart';
 import 'widgets/auth_background.dart';
@@ -21,6 +22,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _loading = false;
 
   @override
   void dispose() {
@@ -186,11 +188,35 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   Expanded(
                                     child: FilledButton(
                                       onPressed: () {
-                                        if (!_formKey.currentState!.validate()) {
-                                          return;
-                                        }
+                                        if (_loading) return;
+                                        if (!_formKey.currentState!.validate()) return;
+
                                         FocusScope.of(context).unfocus();
-                                        // TODO: call API
+
+                                        final phone = _phoneController.text.trim();
+                                        final password = _passwordController.text;
+
+                                        setState(() => _loading = true);
+
+                                        ref
+                                            .read(authRepositoryProvider)
+                                            .login(phone: phone, password: password)
+                                            .then((_) {
+                                          if (!mounted) return;
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text('Logged in (demo).')),
+                                          );
+                                        }).catchError((e) {
+                                          if (!mounted) return;
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text(e.toString()),
+                                            ),
+                                          );
+                                        }).whenComplete(() {
+                                          if (!mounted) return;
+                                          setState(() => _loading = false);
+                                        });
                                       },
                                       style: FilledButton.styleFrom(
                                         backgroundColor: colorScheme.primary,
@@ -202,12 +228,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                               BorderRadius.circular(999),
                                         ),
                                       ),
-                                      child: const Text(
-                                        'Continue',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w900,
-                                        ),
-                                      ),
+                                      child: _loading
+                                          ? const SizedBox(
+                                              height: 18,
+                                              width: 18,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : const Text(
+                                              'Continue',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w900,
+                                              ),
+                                            ),
                                     ),
                                   ),
                                 ],
