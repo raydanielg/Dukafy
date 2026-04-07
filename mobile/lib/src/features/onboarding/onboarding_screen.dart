@@ -45,21 +45,21 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
     final pages = <_OnboardPageData>[
       const _OnboardPageData(
-        title: 'Fast Checkout (POS)',
-        subtitle: 'Sell in seconds with a clean POS that reduces errors and saves time.',
-        icon: Icons.point_of_sale,
+        title: 'Manage Your Shop Anywhere',
+        subtitle: 'Track sales, stock, and expenses in real-time from your phone.',
+        icon: Icons.storefront,
         backgroundAsset: 'assets/images/onboarding_1.jpg',
       ),
       const _OnboardPageData(
-        title: 'Inventory & Stock Alerts',
-        subtitle: 'Track stock, prices, and get alerts before items run out.',
-        icon: Icons.inventory_2,
+        title: 'Business Multi-tenancy',
+        subtitle: 'Grow your business with multiple branches and staff accounts.',
+        icon: Icons.business_center,
         backgroundAsset: 'assets/images/onboarding_2.jpg',
       ),
       const _OnboardPageData(
-        title: 'Smart Reports',
-        subtitle: 'See sales performance, profit trends, and top products anytime.',
-        icon: Icons.analytics,
+        title: 'Smarter Decisions',
+        subtitle: 'Get automated reports and insights to help you scale faster.',
+        icon: Icons.insights,
         backgroundAsset: 'assets/images/onboarding_3.jpg',
       ),
     ];
