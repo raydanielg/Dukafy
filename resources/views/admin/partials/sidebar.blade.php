@@ -136,16 +136,16 @@
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="admin-nav-caret"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <div class="admin-submenu" data-admin-submenu>
-                    <a class="admin-sub-link" href="#">Products</a>
-                    <a class="admin-sub-link" href="#">Product Categories</a>
-                    <a class="admin-sub-link" href="#">Low Stock Alerts</a>
-                    <a class="admin-sub-link" href="#">Bulk Import/Export</a>
-                    <a class="admin-sub-link" href="#">Sales</a>
-                    <a class="admin-sub-link" href="#">Sales by Business</a>
-                    <a class="admin-sub-link" href="#">Sales by User</a>
-                    <a class="admin-sub-link" href="#">Customers</a>
-                    <a class="admin-sub-link" href="#">Customer Groups</a>
-                    <a class="admin-sub-link" href="#">Blacklisted Customers</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.business_data.products.*') ? 'active' : '' }}" href="{{ route('admin.business_data.products.index') }}">Products</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.business_data.product_categories.*') ? 'active' : '' }}" href="{{ route('admin.business_data.product_categories.index') }}">Product Categories</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.business_data.low_stock_alerts') ? 'active' : '' }}" href="{{ route('admin.business_data.low_stock_alerts') }}">Low Stock Alerts</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.business_data.bulk_import_export*') ? 'active' : '' }}" href="{{ route('admin.business_data.bulk_import_export') }}">Bulk Import/Export</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.business_data.sales.*') ? 'active' : '' }}" href="{{ route('admin.business_data.sales.index') }}">Sales</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.business_data.sales_by_business') ? 'active' : '' }}" href="{{ route('admin.business_data.sales_by_business') }}">Sales by Business</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.business_data.sales_by_user') ? 'active' : '' }}" href="{{ route('admin.business_data.sales_by_user') }}">Sales by User</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.business_data.customers.*') ? 'active' : '' }}" href="{{ route('admin.business_data.customers.index') }}">Customers</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.business_data.customer_groups.*') ? 'active' : '' }}" href="{{ route('admin.business_data.customer_groups.index') }}">Customer Groups</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.business_data.blacklisted_customers') ? 'active' : '' }}" href="{{ route('admin.business_data.blacklisted_customers') }}">Blacklisted Customers</a>
                 </div>
             </div>
         </div>
