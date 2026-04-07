@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -67,224 +69,285 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final isLast = _index == pages.length - 1;
 
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          PageView.builder(
+            controller: _controller,
+            itemCount: pages.length,
+            onPageChanged: (value) {
+              setState(() {
+                _index = value;
+              });
+            },
+            itemBuilder: (context, index) {
+              final page = pages[index];
+
+              final pageValue = _controller.hasClients
+                  ? (_controller.page ?? _index.toDouble())
+                  : _index.toDouble();
+              final delta = (index - pageValue).abs();
+              final t = (1 - delta).clamp(0.0, 1.0);
+
+              return Stack(
+                fit: StackFit.expand,
                 children: [
-                  TextButton(
-                    onPressed: _saving ? null : () => context.go(LoginScreen.routePath),
-                    child: const Text('Skip'),
+                  AnimatedOpacity(
+                    opacity: t,
+                    duration: const Duration(milliseconds: 180),
+                    child: Image(
+                      image: AssetImage(page.backgroundAsset),
+                      fit: BoxFit.cover,
+                      color: Colors.black.withValues(alpha: 0.12),
+                      colorBlendMode: BlendMode.darken,
+                    ),
                   ),
-                  Row(
-                    children: List.generate(pages.length, (i) {
-                      final active = i == _index;
-                      return AnimatedContainer(
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withValues(alpha: 0.18),
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.30),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(22, 22, 22, 128),
+                      child: AnimatedOpacity(
+                        opacity: t,
                         duration: const Duration(milliseconds: 220),
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        height: 8,
-                        width: active ? 22 : 8,
-                        decoration: BoxDecoration(
-                          color: active
-                              ? colorScheme.primary
-                              : colorScheme.primary.withValues(alpha: 0.22),
-                          borderRadius: BorderRadius.circular(99),
-                        ),
-                      );
-                    }),
-                  ),
-                  const SizedBox(width: 52),
-                ],
-              ),
-            ),
-            Expanded(
-              child: PageView.builder(
-                controller: _controller,
-                itemCount: pages.length,
-                onPageChanged: (value) {
-                  setState(() {
-                    _index = value;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  final page = pages[index];
-
-                  final pageValue = _controller.hasClients
-                      ? (_controller.page ?? _index.toDouble())
-                      : _index.toDouble();
-                  final delta = (index - pageValue).abs();
-                  final t = (1 - delta).clamp(0.0, 1.0);
-
-                  return Padding(
-                    padding: EdgeInsets.zero,
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        AnimatedOpacity(
-                          opacity: t,
-                          duration: const Duration(milliseconds: 180),
-                          child: Image(
-                            image: AssetImage(page.backgroundAsset),
-                            fit: BoxFit.cover,
-                            color: Colors.black.withValues(alpha: 0.20),
-                            colorBlendMode: BlendMode.darken,
-                          ),
-                        ),
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.black.withValues(alpha: 0.55),
-                                colorScheme.primary.withValues(alpha: 0.18),
-                                Colors.black.withValues(alpha: 0.70),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 96),
-                            child: AnimatedOpacity(
-                              opacity: t,
-                              duration: const Duration(milliseconds: 220),
-                              child: Transform.translate(
-                                offset: Offset(0, (1 - t) * 14),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      width: 86,
-                                      height: 86,
-                                      padding: const EdgeInsets.all(14),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(26),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black.withValues(alpha: 0.18),
-                                            blurRadius: 22,
-                                            offset: const Offset(0, 14),
-                                          ),
-                                        ],
-                                      ),
-                                      child: const Image(
-                                        image: AssetImage('assets/images/logo.png'),
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 14,
-                                        vertical: 8,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.10),
-                                        borderRadius: BorderRadius.circular(999),
-                                        border: Border.all(
-                                          color: Colors.white.withValues(alpha: 0.18),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            page.icon,
-                                            size: 18,
-                                            color: Colors.white.withValues(alpha: 0.92),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            'DUKAFY',
-                                            style: TextStyle(
-                                              color: Colors.white.withValues(alpha: 0.92),
-                                              fontWeight: FontWeight.w800,
-                                              letterSpacing: 1.4,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 14),
-                                    Text(
-                                      page.title,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 26,
-                                        height: 1.1,
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      page.subtitle,
-                                      style: TextStyle(
-                                        color: Colors.white.withValues(alpha: 0.86),
-                                        fontSize: 14,
-                                        height: 1.5,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      textAlign: TextAlign.center,
+                        child: Transform.translate(
+                          offset: Offset(0, (1 - t) * 12),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 78,
+                                height: 78,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white.withValues(alpha: 0.92),
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.55),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.14),
+                                      blurRadius: 20,
+                                      offset: const Offset(0, 12),
                                     ),
                                   ],
                                 ),
+                                child: Icon(
+                                  page.icon,
+                                  size: 34,
+                                  color: colorScheme.primary,
+                                ),
                               ),
-                            ),
+                              const SizedBox(height: 14),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(999),
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.18),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'DUKAFY',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 2.2,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 14),
+                              Text(
+                                page.title,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 28,
+                                  height: 1.1,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                page.subtitle,
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.88),
+                                  fontSize: 14.5,
+                                  height: 1.55,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: FilledButton(
-                  onPressed: _saving
-                      ? null
-                      : () {
-                          if (isLast) {
-                            _finish();
-                            return;
-                          }
-
-                          _controller.nextPage(
-                            duration: const Duration(milliseconds: 260),
-                            curve: Curves.easeOut,
-                          );
-                        },
-                  style: FilledButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
-                  child: _saving
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : Text(
-                          isLast ? 'Get Started' : 'Continue',
-                          style: const TextStyle(fontWeight: FontWeight.w800),
+                ],
+              );
+            },
+          ),
+
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(999),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.14),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.18),
+                          ),
+                          borderRadius: BorderRadius.circular(999),
                         ),
+                        child: TextButton(
+                          onPressed:
+                              _saving ? null : () => context.go(LoginScreen.routePath),
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 10,
+                            ),
+                          ),
+                          child: const Text(
+                            'Skip',
+                            style: TextStyle(fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(999),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.14),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.18),
+                          ),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Row(
+                          children: List.generate(pages.length, (i) {
+                            final active = i == _index;
+                            return AnimatedContainer(
+                              duration: const Duration(milliseconds: 220),
+                              margin: const EdgeInsets.symmetric(horizontal: 4),
+                              height: 8,
+                              width: active ? 22 : 8,
+                              decoration: BoxDecoration(
+                                color: active
+                                    ? Colors.white
+                                    : Colors.white.withValues(alpha: 0.38),
+                                borderRadius: BorderRadius.circular(99),
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(18, 10, 18, 16),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(18),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.14),
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.18),
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: FilledButton(
+                          onPressed: _saving
+                              ? null
+                              : () {
+                                  if (isLast) {
+                                    _finish();
+                                    return;
+                                  }
+
+                                  _controller.nextPage(
+                                    duration: const Duration(milliseconds: 260),
+                                    curve: Curves.easeOut,
+                                  );
+                                },
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: colorScheme.primary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                          child: _saving
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                )
+                              : Text(
+                                  isLast ? 'Get Started' : 'Continue',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 0.3,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
