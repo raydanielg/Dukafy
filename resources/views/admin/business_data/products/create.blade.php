@@ -13,7 +13,7 @@
 
     <div class="admin-panel">
         <div class="admin-panel-body">
-            <form method="POST" action="{{ route('admin.business_data.products.store') }}">
+            <form method="POST" action="{{ route('admin.business_data.products.store') }}" enctype="multipart/form-data">
                 @csrf
 
                 <div class="row g-3">
@@ -47,6 +47,17 @@
                         <input name="sku" class="form-control" value="{{ old('sku') }}">
                     </div>
 
+                    <div class="col-md-6">
+                        <label class="form-label">Upload Image (optional)</label>
+                        <input type="file" name="image_file" class="form-control">
+                        <div class="form-text">Max 5MB. Stored in public disk.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Or Image Path / URL</label>
+                        <input type="text" name="image" value="{{ old('image') }}" class="form-control" placeholder="e.g. products/cover.png or https://...">
+                    </div>
+
                     <div class="col-md-4">
                         <label class="form-label">Price</label>
                         <input type="number" step="0.01" min="0" name="price" class="form-control" value="{{ old('price', 0) }}" required>
@@ -71,6 +82,11 @@
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="is_active" id="is_active" @checked(old('is_active', true))>
                             <label class="form-check-label" for="is_active">Active</label>
+                        </div>
+
+                        <div class="form-check ms-4">
+                            <input class="form-check-input" type="checkbox" name="is_bundle" id="is_bundle" @checked(old('is_bundle', false))>
+                            <label class="form-check-label" for="is_bundle">Bundle</label>
                         </div>
                     </div>
 
