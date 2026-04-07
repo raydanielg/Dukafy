@@ -207,8 +207,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                                           final isApproved = result.isApproved;
                                           if (!isApproved) {
-                                            context.go(
-                                              ApprovalScreen.routePath,
+                                            context.goNamed(
+                                              ApprovalScreen.routeName,
                                               extra: {
                                                 'name': result.name,
                                                 'phone': result.phone,
