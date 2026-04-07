@@ -27,6 +27,8 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
   String? _selectedRole; // 'owner' or 'cashier'
   Map<String, dynamic>? _selectedManager;
   final _managerSearchController = TextEditingController();
+  final _businessNameController = TextEditingController();
+  String? _selectedBusinessType;
   List<dynamic> _managerSuggestions = [];
   bool _searchingManager = false;
 
@@ -52,6 +54,7 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
   void dispose() {
     _controller.dispose();
     _managerSearchController.dispose();
+    _businessNameController.dispose();
     super.dispose();
   }
 
@@ -108,6 +111,12 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
       );
       return;
     }
+    if (_selectedRole == 'owner' && _businessNameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your business name')),
+      );
+      return;
+    }
     if (_selectedRole == 'cashier' && _selectedManager == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select your manager')),
@@ -124,6 +133,8 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
         data: {
           'role': _selectedRole,
           'manager_id': _selectedManager?['id'],
+          'business_name': _businessNameController.text.trim(),
+          'business_type': _selectedBusinessType,
         },
       );
       
@@ -307,6 +318,50 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                         ),
                       ],
                     ),
+                    if (_selectedRole == 'owner') ...[
+                      const SizedBox(height: 24),
+                      const Text('Business Setup',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: _businessNameController,
+                        decoration: InputDecoration(
+                          hintText: 'Business Name (e.g. Malkia Pharmacy)',
+                          prefixIcon: const Icon(Icons.storefront_rounded),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black.withValues(alpha: 0.1)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      const Text('Business Type',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: [
+                          'pharmacy',
+                          'restaurant',
+                          'retail',
+                          'wholesale'
+                        ].map((type) {
+                          final isSelected = _selectedBusinessType == type;
+                          return ChoiceChip(
+                            label: Text(type.substring(0, 1).toUpperCase() + type.substring(1)),
+                            selected: isSelected,
+                            onSelected: (val) => setState(() => _selectedBusinessType = val ? type : null),
+                            selectedColor: colorScheme.primary.withValues(alpha: 0.2),
+                            labelStyle: TextStyle(
+                              color: isSelected ? colorScheme.primary : Colors.black87,
+                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
                     if (_selectedRole == 'cashier') ...[
                       const SizedBox(height: 24),
                       const Text('Find your manager',
