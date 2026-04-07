@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../core/api/api_client.dart';
 
@@ -47,6 +48,9 @@ class _ArticleDetailsScreenState extends ConsumerState<ArticleDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final title = _article?['title']?.toString();
+    final contentHtml = _article?['content']?.toString();
+
     return Scaffold(
       body: Skeletonizer(
         enabled: _isLoading,
@@ -56,10 +60,41 @@ class _ArticleDetailsScreenState extends ConsumerState<ArticleDetailsScreen> {
               expandedHeight: 250,
               pinned: true,
               backgroundColor: primaryGreen,
+              foregroundColor: Colors.white,
               flexibleSpace: FlexibleSpaceBar(
-                background: _article?['image_url'] != null
-                    ? Image.network(_article['image_url'], fit: BoxFit.cover)
-                    : Container(color: Colors.grey.shade200),
+                title: Text(
+                  title ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
+                ),
+                background: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    if (_article?['image_url'] != null)
+                      Image.network(
+                        _article['image_url'],
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(color: Colors.grey.shade200);
+                        },
+                      )
+                    else
+                      Container(color: Colors.grey.shade200),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withOpacity(0.15),
+                            Colors.black.withOpacity(0.55),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             SliverToBoxAdapter(
@@ -69,20 +104,61 @@ class _ArticleDetailsScreenState extends ConsumerState<ArticleDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (_article?['category'] != null)
-                      Text(
-                        _article['category']['name'].toString().toUpperCase(),
-                        style: TextStyle(color: primaryGreen, fontWeight: FontWeight.bold, letterSpacing: 1.2),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: primaryGreen.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          _article['category']['name'].toString().toUpperCase(),
+                          style: TextStyle(
+                            color: primaryGreen,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 1.0,
+                            fontSize: 11,
+                          ),
+                        ),
                       ),
                     const SizedBox(height: 10),
                     Text(
-                      _article?['title'] ?? 'Loading article title...',
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+                      title ?? 'Loading article title...',
+                      style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, height: 1.15),
                     ),
                     const Divider(height: 40),
-                    Text(
-                      _article?['content'] ?? 'Loading content...',
-                      style: const TextStyle(fontSize: 16, height: 1.6, color: Colors.black87),
-                    ),
+                    if (contentHtml == null)
+                      const Text(
+                        'Loading content...',
+                        style: TextStyle(fontSize: 16, height: 1.6, color: Colors.black87),
+                      )
+                    else
+                      Html(
+                        data: contentHtml,
+                        style: {
+                          'body': Style(
+                            margin: Margins.zero,
+                            padding: HtmlPaddings.zero,
+                            fontSize: FontSize(16),
+                            lineHeight: const LineHeight(1.65),
+                            color: Colors.black87,
+                          ),
+                          'p': Style(margin: Margins.only(bottom: 14)),
+                          'h1': Style(fontSize: FontSize(24), fontWeight: FontWeight.w900, margin: Margins.only(bottom: 12, top: 8)),
+                          'h2': Style(fontSize: FontSize(22), fontWeight: FontWeight.w900, margin: Margins.only(bottom: 12, top: 8)),
+                          'h3': Style(fontSize: FontSize(18), fontWeight: FontWeight.w900, margin: Margins.only(bottom: 10, top: 6)),
+                          'ul': Style(margin: Margins.only(bottom: 14, left: 18)),
+                          'ol': Style(margin: Margins.only(bottom: 14, left: 18)),
+                          'li': Style(margin: Margins.only(bottom: 10)),
+                          'blockquote': Style(
+                            padding: HtmlPaddings.all(14),
+                            margin: Margins.only(bottom: 16),
+                            backgroundColor: primaryGreen.withOpacity(0.08),
+                            border: Border(left: BorderSide(color: primaryGreen, width: 4)),
+                            fontStyle: FontStyle.italic,
+                          ),
+                          'strong': Style(fontWeight: FontWeight.w900),
+                        },
+                      ),
                     const SizedBox(height: 50),
                   ],
                 ),
