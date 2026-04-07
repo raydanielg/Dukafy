@@ -54,16 +54,15 @@
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="admin-nav-caret"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <div class="admin-submenu" data-admin-submenu>
-                    <a class="admin-sub-link" href="#">All Subscriptions</a>
-                    <a class="admin-sub-link" href="#">Plans</a>
-                    <a class="admin-sub-link" href="#">Add New Plan</a>
-                    <a class="admin-sub-link" href="#">Edit Plan</a>
-                    <a class="admin-sub-link" href="#">Assign Plan to User</a>
-                    <a class="admin-sub-link" href="#">Subscription History</a>
-                    <a class="admin-sub-link" href="#">Expiring Soon</a>
-                    <a class="admin-sub-link" href="#">Cancelled Subscriptions</a>
-                    <a class="admin-sub-link" href="#">Trial Requests</a>
-                    <a class="admin-sub-link" href="#">Invoices & Payments</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.subscription.subscriptions') ? 'active' : '' }}" href="{{ route('admin.subscription.subscriptions') }}">All Subscriptions</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.subscription.plans') ? 'active' : '' }}" href="{{ route('admin.subscription.plans') }}">Plans</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.subscription.plans.create') ? 'active' : '' }}" href="{{ route('admin.subscription.plans.create') }}">Add New Plan</a>
+                    <a class="admin-sub-link" href="{{ route('admin.subscription.assign') }}">Assign Plan to User</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.subscription.history') ? 'active' : '' }}" href="{{ route('admin.subscription.history') }}">Subscription History</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.subscription.expiring') ? 'active' : '' }}" href="{{ route('admin.subscription.expiring') }}">Expiring Soon</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.subscription.cancelled') ? 'active' : '' }}" href="{{ route('admin.subscription.cancelled') }}">Cancelled Subscriptions</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.subscription.trials') ? 'active' : '' }}" href="{{ route('admin.subscription.trials') }}">Trial Requests</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.subscription.billing') ? 'active' : '' }}" href="{{ route('admin.subscription.billing') }}">Invoices & Payments</a>
                 </div>
             </div>
         </div>
