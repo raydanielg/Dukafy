@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             RolePermissionSeeder::class,
             SecurityDefaultsSeeder::class,
+            PlanSeeder::class,
             SiteContactSeeder::class,
             TestimonialSeeder::class,
             ArticleCategorySeeder::class,
