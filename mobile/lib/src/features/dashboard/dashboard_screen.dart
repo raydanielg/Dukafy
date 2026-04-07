@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/api/api_client.dart';
-import '../auth/auth_repository.dart';
+import '../pos/pos_screen.dart';
+import '../products/products_screen.dart';
+import '../purchases/purchases_screen.dart';
+import '../invoices/invoices_screen.dart';
+import 'widgets/auth_background.dart';
 import '../auth/login_screen.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -245,11 +249,31 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _NavButton(icon: Icons.point_of_sale_rounded, label: 'Sale', isSelected: true, color: primaryGreen),
-              _NavButton(icon: Icons.shopping_bag_outlined, label: 'Order', color: primaryGreen),
-              _NavButton(icon: Icons.inventory_2_outlined, label: 'Product', color: primaryGreen),
-              _NavButton(icon: Icons.shopping_cart_outlined, label: 'Purchase', color: primaryGreen),
-              _NavButton(icon: Icons.receipt_long_outlined, label: 'Invoice', color: primaryGreen),
+              _NavButton(
+                icon: Icons.point_of_sale_rounded,
+                label: 'POS',
+                isSelected: true,
+                color: primaryGreen,
+                onTap: () => context.push(POSScreen.routePath),
+              ),
+              _NavButton(
+                icon: Icons.inventory_2_outlined,
+                label: 'Product',
+                color: primaryGreen,
+                onTap: () => context.push(ProductsScreen.routePath),
+              ),
+              _NavButton(
+                icon: Icons.shopping_cart_outlined,
+                label: 'Purchase',
+                color: primaryGreen,
+                onTap: () => context.push(PurchasesScreen.routePath),
+              ),
+              _NavButton(
+                icon: Icons.receipt_long_outlined,
+                label: 'Invoice',
+                color: primaryGreen,
+                onTap: () => context.push(InvoicesScreen.routePath),
+              ),
             ],
           ),
         ),
@@ -359,34 +383,42 @@ class _NavButton extends StatelessWidget {
   final String label;
   final bool isSelected;
   final Color color;
+  final VoidCallback? onTap;
 
   const _NavButton({
-    required this.icon, 
-    required this.label, 
+    required this.icon,
+    required this.label,
     this.isSelected = false,
     required this.color,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: isSelected ? color : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: isSelected ? color : Colors.transparent,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon,
+                color: isSelected ? Colors.white : Colors.grey.shade600,
+                size: 24),
           ),
-          child: Icon(icon, color: isSelected ? Colors.white : Colors.grey.shade600, size: 24),
-        ),
-        const SizedBox(height: 4),
-        Text(label, style: TextStyle(
-          fontSize: 10, 
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          color: isSelected ? color : Colors.grey.shade600,
-        )),
-      ],
+          const SizedBox(height: 4),
+          Text(label,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected ? color : Colors.grey.shade600,
+              )),
+        ],
+      ),
     );
   }
 }
