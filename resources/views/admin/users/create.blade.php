@@ -42,6 +42,16 @@
                         </select>
                     </div>
 
+                    <div class="col-md-6">
+                        <label class="form-label">Group</label>
+                        <select name="group_id" class="form-select">
+                            <option value="">—</option>
+                            @foreach($groups as $group)
+                                <option value="{{ $group->id }}">{{ $group->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="col-md-12">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="1" id="approved" name="approved" checked>

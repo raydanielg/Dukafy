@@ -64,6 +64,9 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
         Route::get('/users', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [App\Http\Controllers\Admin\UserController::class, 'create'])->name('users.create');
         Route::post('/users', [App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
+        Route::get('/users/{id}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
+        Route::post('/users/{id}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
+        Route::post('/users/{id}/delete', [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
         Route::get('/users/pending', [App\Http\Controllers\Admin\UserController::class, 'pending'])->name('users.pending');
         Route::get('/users/banned', [App\Http\Controllers\Admin\UserController::class, 'banned'])->name('users.banned');
         Route::post('/users/{id}/approve', [App\Http\Controllers\Admin\UserController::class, 'approve'])->name('users.approve');

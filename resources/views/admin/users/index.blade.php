@@ -18,6 +18,14 @@
                     <input type="text" name="q" value="{{ $q }}" class="form-control" placeholder="Search by name or email">
                 </div>
                 <div class="col-md-2">
+                    <select name="status" class="form-select">
+                        <option value="" {{ $status === '' ? 'selected' : '' }}>All</option>
+                        <option value="approved" {{ $status === 'approved' ? 'selected' : '' }}>Approved</option>
+                        <option value="pending" {{ $status === 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="banned" {{ $status === 'banned' ? 'selected' : '' }}>Banned</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <button class="admin-action-btn" type="submit">Search</button>
                 </div>
             </form>
@@ -47,6 +55,8 @@
                                     @endif
                                 </td>
                                 <td class="text-end">
+                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+
                                     @if(!$user->approved_at && !$user->banned_at)
                                         <form method="POST" action="{{ route('admin.users.approve', $user->id) }}" class="d-inline">
                                             @csrf
