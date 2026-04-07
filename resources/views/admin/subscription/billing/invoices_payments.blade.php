@@ -52,6 +52,27 @@
                 <div class="admin-panel-title">Payments</div>
             </div>
             <div class="admin-panel-body">
+                <form method="POST" action="{{ route('admin.subscription.billing.payment') }}" class="mb-3">
+                    @csrf
+                    <div class="row g-2">
+                        <div class="col-md-3">
+                            <input type="number" name="invoice_id" class="form-control" placeholder="Invoice ID" required>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" name="amount" class="form-control" placeholder="Amount (TZS)" required>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="method" class="form-control" placeholder="Method (Mpesa/Bank/Cash)">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="reference" class="form-control" placeholder="Reference">
+                        </div>
+                        <div class="col-md-12">
+                            <button class="admin-action-btn" type="submit">Record Payment</button>
+                        </div>
+                    </div>
+                </form>
+
                 <div class="table-responsive">
                     <table class="table align-middle">
                         <thead>

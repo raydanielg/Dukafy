@@ -17,7 +17,7 @@
                             <th>User</th>
                             <th>Requested Days</th>
                             <th>Status</th>
-                            <th class="text-end">Created</th>
+                            <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -29,7 +29,20 @@
                                 </td>
                                 <td class="text-muted">{{ $req->requested_days }}</td>
                                 <td><span class="badge bg-secondary">{{ ucfirst($req->status) }}</span></td>
-                                <td class="text-end text-muted">{{ \Carbon\Carbon::parse($req->created_at)->format('M d, Y') }}</td>
+                                <td class="text-end">
+                                    @if($req->status === 'pending')
+                                        <form method="POST" action="{{ route('admin.subscription.trials.approve', $req->id) }}" class="d-inline">
+                                            @csrf
+                                            <button class="btn btn-sm btn-outline-success" type="submit">Approve</button>
+                                        </form>
+                                        <form method="POST" action="{{ route('admin.subscription.trials.reject', $req->id) }}" class="d-inline">
+                                            @csrf
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Reject</button>
+                                        </form>
+                                    @else
+                                        <span class="text-muted">{{ \Carbon\Carbon::parse($req->created_at)->format('M d, Y') }}</span>
+                                    @endif
+                                </td>
                             </tr>
                         @empty
                             <tr>
