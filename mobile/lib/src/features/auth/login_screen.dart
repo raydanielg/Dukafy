@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'forgot_password_screen.dart';
 import 'register_screen.dart';
+import '../../core/locale/locale_controller.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   static const routeName = 'login';
   static const routePath = '/login';
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -87,6 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final locale = ref.watch(localeControllerProvider);
+    final isSw = locale.languageCode == 'sw';
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -94,7 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
         fit: StackFit.expand,
         children: [
           const Image(
-            image: AssetImage('assets/images/onboarding_1.jpg'),
+            image: AssetImage(
+              'assets/images/front-view-woman-with-face-mask-market.jpg',
+            ),
             fit: BoxFit.cover,
             color: Colors.black54,
             colorBlendMode: BlendMode.darken,
@@ -105,18 +111,44 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => context.go(RegisterScreen.routePath),
-                      child: const Text(
-                        'Register',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
+                  Row(
+                    children: [
+                      SegmentedButton<String>(
+                        segments: const [
+                          ButtonSegment(value: 'en', label: Text('EN')),
+                          ButtonSegment(value: 'sw', label: Text('SW')),
+                        ],
+                        selected: {isSw ? 'sw' : 'en'},
+                        onSelectionChanged: (value) {
+                          final code = value.first;
+                          ref
+                              .read(localeControllerProvider.notifier)
+                              .setLocale(Locale(code));
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                            Colors.white.withValues(alpha: 0.14),
+                          ),
+                          foregroundColor: const WidgetStatePropertyAll(
+                            Colors.white,
+                          ),
+                          side: WidgetStatePropertyAll(
+                            BorderSide(color: Colors.white.withValues(alpha: 0.18)),
+                          ),
                         ),
                       ),
-                    ),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () => context.go(RegisterScreen.routePath),
+                        child: Text(
+                          isSw ? 'Jisajili' : 'Register',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 10),
                   const Text(
@@ -129,7 +161,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Ingia kwa namba ya simu na nenosiri.',
+                    isSw
+                        ? 'Ingia kwa namba ya simu na nenosiri.'
+                        : 'Login with your phone number and password.',
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.78),
                       fontWeight: FontWeight.w600,
@@ -148,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Namba ya simu',
+                            'Phone number',
                             style: TextStyle(fontWeight: FontWeight.w800),
                           ),
                           const SizedBox(height: 8),
@@ -156,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: _phoneController,
                             keyboardType: TextInputType.phone,
                             decoration: InputDecoration(
-                              hintText: 'Mfano: 07XXXXXXXX',
+                              hintText: isSw ? 'Mfano: 07XXXXXXXX' : 'e.g. 07XXXXXXXX',
                               prefixIcon: const Icon(Icons.phone_outlined),
                               filled: true,
                               fillColor: Colors.grey.withValues(alpha: 0.05),
@@ -166,12 +200,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             validator: (v) => (v == null || v.trim().length < 9)
-                                ? 'Weka namba sahihi'
+                                ? (isSw ? 'Weka namba sahihi' : 'Enter a valid phone number')
                                 : null,
                           ),
                           const SizedBox(height: 14),
                           const Text(
-                            'Nenosiri',
+                            'Password',
                             style: TextStyle(fontWeight: FontWeight.w800),
                           ),
                           const SizedBox(height: 8),
@@ -200,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Weka nenosiri';
+                                return isSw ? 'Weka nenosiri' : 'Enter your password';
                               }
                               return null;
                             },
@@ -211,7 +245,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: TextButton(
                               onPressed: () =>
                                   context.go(ForgotPasswordScreen.routePath),
-                              child: const Text('Umesahau nenosiri?'),
+                              child: Text(isSw ? 'Umesahau nenosiri?' : 'Forgot password?'),
                             ),
                           ),
                           const SizedBox(height: 14),
@@ -231,7 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 // TODO: call API
                               },
                               child: const Text(
-                                'INGIA',
+                                'LOGIN',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w900,
                                   fontSize: 16,
@@ -247,7 +281,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               spacing: 6,
                               children: [
                                 const Text(
-                                  'Sera:',
+                                  'Policies:',
                                   style: TextStyle(fontWeight: FontWeight.w700),
                                 ),
                                 TextButton(
@@ -277,9 +311,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   Center(
                     child: TextButton(
                       onPressed: () => context.go(RegisterScreen.routePath),
-                      child: const Text(
-                        'Huna akaunti? Jisajili',
-                        style: TextStyle(
+                      child: Text(
+                        isSw ? 'Huna akaunti? Jisajili' : "Don't have an account? Register",
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w800,
                         ),
