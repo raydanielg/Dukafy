@@ -116,13 +116,13 @@
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="admin-nav-caret"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <div class="admin-submenu" data-admin-submenu>
-                    <a class="admin-sub-link" href="#">Revenue Overview</a>
-                    <a class="admin-sub-link" href="#">Payment Methods</a>
-                    <a class="admin-sub-link" href="#">Payment Gateway</a>
-                    <a class="admin-sub-link" href="#">Invoice Settings</a>
-                    <a class="admin-sub-link" href="#">Tax Settings</a>
-                    <a class="admin-sub-link" href="#">Expenses</a>
-                    <a class="admin-sub-link" href="#">Profit & Loss</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.finance.revenue_overview') ? 'active' : '' }}" href="{{ route('admin.finance.revenue_overview') }}">Revenue Overview</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.finance.payment_methods*') ? 'active' : '' }}" href="{{ route('admin.finance.payment_methods') }}">Payment Methods</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.finance.payment_gateway*') ? 'active' : '' }}" href="{{ route('admin.finance.payment_gateway') }}">Payment Gateway</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.finance.invoice_settings*') ? 'active' : '' }}" href="{{ route('admin.finance.invoice_settings') }}">Invoice Settings</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.finance.tax_settings*') ? 'active' : '' }}" href="{{ route('admin.finance.tax_settings') }}">Tax Settings</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.finance.expenses*') ? 'active' : '' }}" href="{{ route('admin.finance.expenses') }}">Expenses</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.finance.profit_loss') ? 'active' : '' }}" href="{{ route('admin.finance.profit_loss') }}">Profit & Loss</a>
                 </div>
             </div>
         </div>
