@@ -14,8 +14,11 @@ class UserState {
   }
 }
 
-class UserNotifier extends StateNotifier<UserState> {
-  UserNotifier() : super(UserState(isLoading: true));
+class UserNotifier extends Notifier<UserState> {
+  @override
+  UserState build() {
+    return UserState(isLoading: true);
+  }
 
   void setUser(Map<String, dynamic> data) {
     state = state.copyWith(data: data, isLoading: false);
@@ -44,6 +47,4 @@ class UserNotifier extends StateNotifier<UserState> {
   }
 }
 
-final userProvider = StateNotifierProvider<UserNotifier, UserState>((ref) {
-  return UserNotifier();
-});
+final userProvider = NotifierProvider<UserNotifier, UserState>(UserNotifier.new);
