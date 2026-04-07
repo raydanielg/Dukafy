@@ -38,7 +38,7 @@
 
     <div class="landing-container landing-header-inner">
         <a class="landing-brand" href="{{ url('/') }}">
-            <img class="landing-logo" src="{{ asset('LOGO-MALKIA-KONNECT-removebg-preview.png') }}" alt="Dukafy" />
+            <img class="landing-logo" src="{{ asset('freepik__letter_dukafy_word_make_it_cool_with_green_co.png') }}" alt="Dukafy" />
         </a>
 
         <nav class="landing-nav">

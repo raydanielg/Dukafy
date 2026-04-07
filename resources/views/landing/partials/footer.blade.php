@@ -4,7 +4,7 @@
             {{-- Brand & About --}}
             <div class="landing-footer-col">
                 <a href="{{ url('/') }}" class="landing-footer-logo-link">
-                    <img src="{{ asset('LOGO-MALKIA-KONNECT-removebg-preview.png') }}" alt="Dukafy" class="landing-footer-logo">
+                    <img src="{{ asset('freepik__letter_dukafy_word_make_it_cool_with_green_co.png') }}" alt="Dukafy" class="landing-footer-logo">
                 </a>
                 <p class="landing-footer-desc">
                     Dukafy inakusaidia kusimamia mauzo, bidhaa, wateja, na ripoti kwa urahisi.

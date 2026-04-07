@@ -9,6 +9,9 @@
 
     <title>{{ config('app.name', 'Dukafy') }}</title>
 
+    <link rel="icon" href="{{ asset('freepik__letter_dukafy_word_make_it_cool_with_green_co.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('freepik__letter_dukafy_word_make_it_cool_with_green_co.png') }}">
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
