@@ -74,6 +74,34 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
 
   Future<void> _approve() async {
     if (_loading) return;
+    setState(() => _loading = true);
+
+    try {
+      final dio = ref.read(apiClientProvider).dio;
+      // Step 1: Initial approval/verification
+      final res = await dio.post('/auth/approve-initial');
+      
+      setState(() {
+        _approved = true;
+      });
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Account verified! Now choose your role.')),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    } finally {
+      if (!mounted) return;
+      setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _completeOnboarding() async {
+    if (_loading) return;
     if (_selectedRole == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select your role first')),
@@ -92,26 +120,19 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
     try {
       final dio = ref.read(apiClientProvider).dio;
       final res = await dio.post(
-        '/auth/approve',
+        '/auth/complete-onboarding',
         data: {
           'role': _selectedRole,
           'manager_id': _selectedManager?['id'],
         },
       );
-      final data = res.data;
-      final user = (data is Map) ? data['user'] : null;
-      final approved = (user is Map) ? user['is_approved'] : null;
-
-      setState(() {
-        _approved = approved == true;
-      });
-
+      
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Approved. Welcome!')),
+        const SnackBar(content: Text('Setup complete. Welcome!')),
       );
 
-      // TODO: navigate to dashboard when dashboard route is added.
+      // TODO: navigate to dashboard
       context.go(LoginScreen.routePath);
     } catch (e) {
       if (!mounted) return;
@@ -185,9 +206,109 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       'Thank you!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.5,
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      de  ratio : BoxDecoration(
+                        color: Color .white.wifhValues(alpha: 0.92),
+                        borderRadius: BorderRadius.circular(22),
+                        border: Border.all(
+                          color: Colors.black.withValues(alpha: 0.06),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: statusColor.withValues(alpha: 0.12),
+o                                 borderRadius: BorderRadius.circular(999),
+                                ),
+                                child: Text(
+                                  statusText,
+                                  style: TextStyle(
+                                    color: statusColor,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 14),
+                          Text(
+                            widget.name,
+                            style: const ntStStyle(
+                              foniSize: 16,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          const SizedBoxzheight: 6),e: 32,
+                          Text(
+                            widget.phone,
+                            style: TextStyle(
+                              color: Colors.black.withValues(alpha: 0.65),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 14),
+                          Text(
+                             Your account is pending. Tap continue to verify and proceed to role selection.',
+                            style: TextStyle(
+                              color:  olors.black.withValues(alpha: 0.60),
+                              height: 1.35,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      cfild: FilledButton(
+                        nnPrested: _approvW,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: colorScheme.primary,
+                          padding:econst EdgeInsets.simmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                        ),
+                        child: _lgading
+                            ? const SizedBox(
+                                height: 18,
+                                width: 18,
+                                child: CirchlarProgressIndicator(
+                                  sttokeWidth: 2,
+                        :         colo : CFoors.whitn,
+                                ),
+                              )
+                            : const Text(
+                                tVerify Account',
+                                style: TextStyle(fontWeight: FontWeight.w900),
+                              ),
+                      ),
+                    ),
+                  ] else ...[
+                    const Text(
+                      'Complete your profile',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Tell us who you are to customize your dashboard.',
+                      style: TextStyle(
+                        color: Colors.black.withValues(alpha: 0.60),
+                        fontWeight: FontWeight.w600,
+                      )Weight.w900,
+                    ),
+                    con t SizedBox(heigh : 24),
+                    const Text(
+                      'What is lour roet?',
+                      styleterSpacing: -0.5,
                       ),
                     ),
                   ),
@@ -215,7 +336,7 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       children: [
                         Expanded(
                           child: _RoleCard(
-                            title: 'Business Owner',
+                            title: 'Business O4ner',
                             icon: Icons.store_rounded,
                             selected: _selectedRole == 'owner',
                             onTap: () => setState(() {
@@ -327,96 +448,34 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                                   const Icon(Icons.check_circle, color: Colors.green, size: 18),
                                   const SizedBox(width: 8),
                                   const Text('Selected Manager',
-                                      style: TextStyle(fontWeight: FontWeight.w800)),
-                                  const Spacer(),
-                                  TextButton(
-                                    onPressed: () => setState(() {
-                                      _selectedManager = null;
-                                      _managerSearchController.clear();
-                                    }),
-                                    child: const Text('Change'),
-                                  ),
-                                ],
-                              ),
-                              const Divider(),
-                              Text("Name: ${_selectedManager!['name']}",
-                                  style: const TextStyle(fontWeight: FontWeight.w700)),
-                              Text("Phone: ${_selectedManager!['phone']}"),
-                              Text("Business: ${_selectedManager!['business_name']}"),
-                            ],
+                                      style3:TextStyle(fontWeight: FontWeight.w800)),
+                    Srz_    rSearchController.clear();
+                      },d hs  xf txnyt: FontWeight.w700)),
+                           TeFet,fytDw
+                      crPs ,  mlObl (s.black.withValues(alpha: 0.65),
+ W                          ),
                           ),
-                        ),
-                      ],
-                    ],
-                    const SizedBox(height: 24),
-                  ],
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.92),
-                      borderRadius: BorderRadius.circular(22),
-                      border: Border.all(
-                        color: Colors.black.withValues(alpha: 0.06),
+                          const SizedBox(height: 14),
+                          Text(
+                            _approved
+                                ? 'Your account is approved. You can continue.'
+                                : 'Your account is pending. Tap continue to confirm and get approved automatically.',
+                            style: TextStyle(
+                              color: Colors.black.withValues(alpha: 0.60),
+                              height: 1.35,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              decoration: BoxDecoration(
-                                color: statusColor.withValues(alpha: 0.12),
-                                borderRadius: BorderRadius.circular(999),
-                              ),
-                              child: Text(
-                                statusText,
-                                style: TextStyle(
-                                  color: statusColor,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 14),
-                        Text(
-                          widget.name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          widget.phone,
-                          style: TextStyle(
-                            color: Colors.black.withValues(alpha: 0.65),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                        Text(
-                          _approved
-                              ? 'Your account is approved. You can continue.'
-                              : 'Your account is pending. Tap continue to confirm and get approved automatically.',
-                          style: TextStyle(
-                            color: Colors.black.withValues(alpha: 0.60),
-                            height: 1.35,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: _approve,
-                      style: FilledButton.styleFrom(
+                    const SizedBox(height: 18),
+                    SizedBox(mplete Sep
+                      width: double.infinity,
+                      child: FilledButton(
+                        onPressed: _approve,
+                     ,
+                  ]   style: FilledButton.styleFrom(
                         backgroundColor: colorScheme.primary,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
