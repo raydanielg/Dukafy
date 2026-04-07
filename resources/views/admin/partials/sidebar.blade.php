@@ -200,10 +200,10 @@
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="admin-nav-caret"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <div class="admin-submenu" data-admin-submenu>
-                    <a class="admin-sub-link" href="#">Modules Manager</a>
-                    <a class="admin-sub-link" href="#">Announcements</a>
-                    <a class="admin-sub-link" href="#">System Logs</a>
-                    <a class="admin-sub-link" href="#">Cron Jobs</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.extras.modules.*') ? 'active' : '' }}" href="{{ route('admin.extras.modules.index') }}">Modules Manager</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.extras.announcements.*') ? 'active' : '' }}" href="{{ route('admin.extras.announcements.index') }}">Announcements</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.extras.system_logs') ? 'active' : '' }}" href="{{ route('admin.extras.system_logs') }}">System Logs</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.extras.cron_jobs.*') ? 'active' : '' }}" href="{{ route('admin.extras.cron_jobs.index') }}">Cron Jobs</a>
                 </div>
             </div>
         </div>
