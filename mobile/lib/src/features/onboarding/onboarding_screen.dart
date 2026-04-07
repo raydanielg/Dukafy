@@ -77,7 +77,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 children: [
                   TextButton(
                     onPressed: _saving ? null : () => context.go(LoginScreen.routePath),
-                    child: const Text('Ruka'),
+                    child: const Text('Skip'),
                   ),
                   Row(
                     children: List.generate(pages.length, (i) {
@@ -277,7 +277,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : Text(
-                          isLast ? 'Anza' : 'Endelea',
+                          isLast ? 'Get Started' : 'Continue',
                           style: const TextStyle(fontWeight: FontWeight.w800),
                         ),
                 ),
@@ -295,9 +295,11 @@ class _OnboardPageData {
     required this.title,
     required this.subtitle,
     required this.icon,
+    required this.backgroundAsset,
   });
 
   final String title;
   final String subtitle;
   final IconData icon;
+  final String backgroundAsset;
 }
