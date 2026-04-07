@@ -176,14 +176,17 @@
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="admin-nav-caret"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <div class="admin-submenu" data-admin-submenu>
-                    <a class="admin-sub-link" href="#">General Settings</a>
-                    <a class="admin-sub-link" href="#">Business Defaults</a>
-                    <a class="admin-sub-link" href="#">Email Settings</a>
-                    <a class="admin-sub-link" href="#">SMS / WhatsApp Settings</a>
-                    <a class="admin-sub-link" href="#">Backup Settings</a>
-                    <a class="admin-sub-link" href="#">Maintenance Mode</a>
-                    <a class="admin-sub-link" href="#">Clear Cache</a>
-                    <a class="admin-sub-link" href="#">System Health</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.system_settings.general*') ? 'active' : '' }}" href="{{ route('admin.system_settings.general') }}">General Settings</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.system_settings.business_defaults*') ? 'active' : '' }}" href="{{ route('admin.system_settings.business_defaults') }}">Business Defaults</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.system_settings.email*') ? 'active' : '' }}" href="{{ route('admin.system_settings.email') }}">Email Settings</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.system_settings.sms_whatsapp*') ? 'active' : '' }}" href="{{ route('admin.system_settings.sms_whatsapp') }}">SMS / WhatsApp Settings</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.system_settings.backup*') ? 'active' : '' }}" href="{{ route('admin.system_settings.backup') }}">Backup Settings</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.system_settings.maintenance*') ? 'active' : '' }}" href="{{ route('admin.system_settings.maintenance') }}">Maintenance Mode</a>
+                    <form method="POST" action="{{ route('admin.system_settings.clear_cache') }}" onsubmit="return confirm('Clear cache now?');" class="d-inline">
+                        @csrf
+                        <button type="submit" class="admin-sub-link" style="background:none;border:0;padding:0;text-align:left;width:100%;">Clear Cache</button>
+                    </form>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.system_settings.health') ? 'active' : '' }}" href="{{ route('admin.system_settings.health') }}">System Health</a>
                 </div>
             </div>
         </div>
