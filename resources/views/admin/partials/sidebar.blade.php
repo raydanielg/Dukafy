@@ -77,17 +77,17 @@
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="admin-nav-caret"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <div class="admin-submenu" data-admin-submenu>
-                    <a class="admin-sub-link" href="#">Login Security</a>
-                    <a class="admin-sub-link" href="#">Password Policy</a>
-                    <a class="admin-sub-link" href="#">IP Whitelisting</a>
-                    <a class="admin-sub-link" href="#">Blocked IPs</a>
-                    <a class="admin-sub-link" href="#">Database Encryption</a>
-                    <a class="admin-sub-link" href="#">Backup Security</a>
-                    <a class="admin-sub-link" href="#">Audit Log</a>
-                    <a class="admin-sub-link" href="#">Session Management</a>
-                    <a class="admin-sub-link" href="#">API Security</a>
-                    <a class="admin-sub-link" href="#">Data Retention Policy</a>
-                    <a class="admin-sub-link" href="#">Security Alerts</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.security.login_security*') ? 'active' : '' }}" href="{{ route('admin.security.login_security') }}">Login Security</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.security.password_policy*') ? 'active' : '' }}" href="{{ route('admin.security.password_policy') }}">Password Policy</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.security.ip_whitelisting*') ? 'active' : '' }}" href="{{ route('admin.security.ip_whitelisting') }}">IP Whitelisting</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.security.blocked_ips*') ? 'active' : '' }}" href="{{ route('admin.security.blocked_ips') }}">Blocked IPs</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.security.database_encryption*') ? 'active' : '' }}" href="{{ route('admin.security.database_encryption') }}">Database Encryption</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.security.backup_security*') ? 'active' : '' }}" href="{{ route('admin.security.backup_security') }}">Backup Security</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.security.audit_log') ? 'active' : '' }}" href="{{ route('admin.security.audit_log') }}">Audit Log</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.security.session_management') ? 'active' : '' }}" href="{{ route('admin.security.session_management') }}">Session Management</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.security.api_security*') ? 'active' : '' }}" href="{{ route('admin.security.api_security') }}">API Security</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.security.data_retention*') ? 'active' : '' }}" href="{{ route('admin.security.data_retention') }}">Data Retention Policy</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.security.security_alerts*') ? 'active' : '' }}" href="{{ route('admin.security.security_alerts') }}">Security Alerts</a>
                 </div>
             </div>
         </div>
