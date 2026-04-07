@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'auth_repository.dart';
 import 'login_screen.dart';
 import 'widgets/auth_background.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
   static const routeName = 'register';
   static const routePath = '/register';
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -24,6 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
+  bool _loading = false;
 
   @override
   void dispose() {
@@ -222,10 +225,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Expanded(
                                     child: FilledButton(
                                       onPressed: () {
+                                        if (_loading) return;
                                         if (!_formKey.currentState!.validate()) return;
+
                                         FocusScope.of(context).unfocus();
-                                        // TODO: call API
-                                        context.go(LoginScreen.routePath);
+
+                                        final name =
+                                            '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}'.trim();
+                                        final phone = _phoneController.text.trim();
+                                        final password = _passwordController.text;
+
+                                        setState(() => _loading = true);
+
+                                        ref
+                                            .read(authRepositoryProvider)
+                                            .register(name: name, phone: phone, password: password)
+                                            .then((_) {
+                                          if (!mounted) return;
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text('Account created (demo).'),
+                                            ),
+                                          );
+                                          context.go(LoginScreen.routePath);
+                                        }).catchError((e) {
+                                          if (!mounted) return;
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(content: Text(e.toString())),
+                                          );
+                                        }).whenComplete(() {
+                                          if (!mounted) return;
+                                          setState(() => _loading = false);
+                                        });
                                       },
                                       style: FilledButton.styleFrom(
                                         backgroundColor: colorScheme.primary,
@@ -234,10 +265,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           borderRadius: BorderRadius.circular(999),
                                         ),
                                       ),
-                                      child: const Text(
-                                        'Continue',
-                                        style: TextStyle(fontWeight: FontWeight.w900),
-                                      ),
+                                      child: _loading
+                                          ? const SizedBox(
+                                              height: 18,
+                                              width: 18,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : const Text(
+                                              'Continue',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w900,
+                                              ),
+                                            ),
                                     ),
                                   ),
                                 ],
