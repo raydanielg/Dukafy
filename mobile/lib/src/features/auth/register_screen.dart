@@ -205,52 +205,57 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
+                          const SizedBox(height: 18),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: () =>
+                                      context.go(LoginScreen.routePath),
+                                  style: OutlinedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(999),
+                                    ),
+                                  ),
+                                  child: const Text('Back'),
+                                ),
+                              ),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: FilledButton(
+                                  onPressed: () {
+                                    if (!_formKey.currentState!.validate()) {
+                                      return;
+                                    }
+                                    FocusScope.of(context).unfocus();
+                                    // TODO: call API
+                                    context.go(LoginScreen.routePath);
+                                  },
+                                  style: FilledButton.styleFrom(
+                                    backgroundColor: colorScheme.primary,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(999),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Continue',
+                                    style: TextStyle(fontWeight: FontWeight.w900),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                             ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 18),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () => context.go(LoginScreen.routePath),
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(999),
-                            ),
-                          ),
-                          child: const Text('Back'),
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: FilledButton(
-                          onPressed: () {
-                            if (!_formKey.currentState!.validate()) return;
-                            FocusScope.of(context).unfocus();
-                            // TODO: call API
-                            context.go(LoginScreen.routePath);
-                          },
-                          style: FilledButton.styleFrom(
-                            backgroundColor: colorScheme.primary,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(999),
-                            ),
-                          ),
-                          child: const Text(
-                            'Continue',
-                            style: TextStyle(fontWeight: FontWeight.w900),
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
               ],
