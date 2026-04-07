@@ -17,6 +17,21 @@ class Article extends Model
 
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('storage/' . $this->image) : null;
+        if (!$this->image) {
+            return null;
+        }
+
+        // If already a full URL
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+            return $this->image;
+        }
+
+        // If the image is stored directly under /public
+        if (file_exists(public_path($this->image))) {
+            return url($this->image);
+        }
+
+        // Default: stored in /storage (public disk)
+        return asset('storage/' . $this->image);
     }
 }
