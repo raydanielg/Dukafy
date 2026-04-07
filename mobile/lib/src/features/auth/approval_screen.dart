@@ -337,39 +337,48 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       if (_managerSuggestions.isNotEmpty && _selectedManager == null)
                         Container(
                           margin: const EdgeInsets.only(top: 4),
+                          constraints: const BoxConstraints(maxHeight: 250), // Prevent infinite height
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.05),
+                                color: Colors.black.withValues(alpha: 0.1),
                                 blurRadius: 10,
+                                offset: const Offset(0, 4),
                               ),
                             ],
                           ),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            padding: EdgeInsets.zero,
-                            itemCount: _managerSuggestions.length,
-                            itemBuilder: (context, index) {
-                              final m = _managerSuggestions[index];
-                              return ListTile(
-                                leading: CircleAvatar(
-                                  backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
-                                  child: Text(m['name'][0].toUpperCase(),
-                                      style: TextStyle(
-                                          color: colorScheme.primary, fontWeight: FontWeight.bold)),
-                                ),
-                                title:
-                                    Text(m['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
-                                subtitle: Text("${m['business_name']} • ${m['phone']}"),
-                                onTap: () => setState(() {
-                                  _selectedManager = m;
-                                  _managerSearchController.text = m['name'];
-                                  _managerSuggestions = [];
-                                }),
-                              );
-                            },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              itemCount: _managerSuggestions.length,
+                              separatorBuilder: (context, index) => const Divider(height: 1),
+                              itemBuilder: (context, index) {
+                                final m = _managerSuggestions[index];
+                                return ListTile(
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  leading: CircleAvatar(
+                                    backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
+                                    child: Text(m['name'][0].toUpperCase(),
+                                        style: TextStyle(
+                                            color: colorScheme.primary, fontWeight: FontWeight.bold)),
+                                  ),
+                                  title:
+                                      Text(m['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
+                                  subtitle: Text("${m['business_name']}\n${m['phone']}", 
+                                    style: TextStyle(fontSize: 12, height: 1.4)),
+                                  isThreeLine: true,
+                                  onTap: () => setState(() {
+                                    _selectedManager = m;
+                                    _managerSearchController.text = m['name'];
+                                    _managerSuggestions = [];
+                                  }),
+                                );
+                              },
+                            ),
                           ),
                         ),
                       if (_selectedManager != null) ...[
