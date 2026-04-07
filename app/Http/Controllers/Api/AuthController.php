@@ -139,6 +139,9 @@ class AuthController extends Controller
             $data = $request->validate([
                 'role' => ['required', 'string', 'in:owner,cashier'],
                 'manager_id' => ['nullable', 'required_if:role,cashier', 'exists:users,id'],
+                // Optional business info for owners
+                'business_name' => ['nullable', 'string', 'max:255'],
+                'business_type' => ['nullable', 'string', 'exists:business_types,slug'],
             ]);
 
             /** @var User|null $user */
@@ -150,12 +153,31 @@ class AuthController extends Controller
             $roleSlug = $data['role'] === 'owner' ? 'manager' : 'cashier';
             $roleId = DB::table('roles')->where('slug', $roleSlug)->value('id');
 
+            // 1. Create business if owner provided name
+            $businessId = $user->business_id;
+            if ($data['role'] === 'owner' && !empty($data['business_name'])) {
+                $typeId = null;
+                if (!empty($data['business_type'])) {
+                    $typeId = DB::table('business_types')->where('slug', $data['business_type'])->value('id');
+                }
+
+                $businessId = DB::table('businesses')->insertGetId([
+                    'name' => $data['business_name'],
+                    'slug' => \Illuminate\Support\Str::slug($data['business_name']) . '-' . rand(100, 999),
+                    'business_type_id' => $typeId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            // 2. Update user
             $user->forceFill([
+                'business_id' => $businessId,
                 'manager_id' => $data['manager_id'] ?? null,
             ])->save();
 
+            // 3. Assign Role
             if ($roleId) {
-                // Ensure we update or insert the role for this user
                 DB::table('role_user')->updateOrInsert(
                     ['user_id' => $user->id],
                     ['role_id' => $roleId, 'updated_at' => now(), 'created_at' => now()]
@@ -170,6 +192,7 @@ class AuthController extends Controller
                     'phone' => $user->phone,
                     'is_approved' => (bool) $user->is_approved,
                     'role' => $roleSlug,
+                    'business_id' => $user->business_id,
                 ],
             ]);
         } catch (\Exception $e) {
