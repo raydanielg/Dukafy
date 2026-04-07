@@ -29,60 +29,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  void _openPolicySheet({required String title, required String body}) {
-    showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+  InputDecoration _pillDecoration({
+    required String hintText,
+    required IconData icon,
+    Widget? suffix,
+    Widget? prefix,
+  }) {
+    return InputDecoration(
+      hintText: hintText,
+      prefixIcon: prefix ?? Icon(icon),
+      suffixIcon: suffix,
+      filled: true,
+      fillColor: Colors.grey.withValues(alpha: 0.06),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(999),
+        borderSide: BorderSide.none,
       ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  body,
-                  style: TextStyle(
-                    color: Colors.black.withValues(alpha: 0.70),
-                    height: 1.45,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: FilledButton(
-                    onPressed: () {
-                      // TODO: open website
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Open Website',
-                      style: TextStyle(fontWeight: FontWeight.w900),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 
@@ -93,153 +56,114 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final isSw = locale.languageCode == 'sw';
 
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          const Image(
-            image: AssetImage(
-              'assets/images/front-view-woman-with-face-mask-market.jpg',
-            ),
-            fit: BoxFit.cover,
-            color: Colors.black54,
-            colorBlendMode: BlendMode.darken,
-          ),
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 14, 20, 18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      SegmentedButton<String>(
-                        segments: const [
-                          ButtonSegment(value: 'en', label: Text('EN')),
-                          ButtonSegment(value: 'sw', label: Text('SW')),
-                        ],
-                        selected: {isSw ? 'sw' : 'en'},
-                        onSelectionChanged: (value) {
-                          final code = value.first;
-                          ref
-                              .read(localeControllerProvider.notifier)
-                              .setLocale(Locale(code));
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(
-                            Colors.white.withValues(alpha: 0.14),
-                          ),
-                          foregroundColor: const WidgetStatePropertyAll(
-                            Colors.white,
-                          ),
-                          side: WidgetStatePropertyAll(
-                            BorderSide(color: Colors.white.withValues(alpha: 0.18)),
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      TextButton(
-                        onPressed: () => context.go(RegisterScreen.routePath),
-                        child: Text(
-                          isSw ? 'Jisajili' : 'Register',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    isSw ? 'Karibu!' : 'Welcome!',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    isSw
-                        ? 'Ingia kwa namba ya simu na nenosiri.'
-                        : 'Login with your phone number and password.',
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.78),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 520),
-                      child: Container(
-                        padding: const EdgeInsets.all(18),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(22),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.18),
-                              blurRadius: 24,
-                              offset: const Offset(0, 18),
-                            ),
+      backgroundColor: const Color(0xFFF7F7F7),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        SegmentedButton<String>(
+                          segments: const [
+                            ButtonSegment(value: 'en', label: Text('EN')),
+                            ButtonSegment(value: 'sw', label: Text('SW')),
                           ],
+                          selected: {isSw ? 'sw' : 'en'},
+                          onSelectionChanged: (value) {
+                            final code = value.first;
+                            ref
+                                .read(localeControllerProvider.notifier)
+                                .setLocale(Locale(code));
+                          },
                         ),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                          const Text(
-                            'Phone number',
-                            style: TextStyle(fontWeight: FontWeight.w800),
-                          ),
-                          const SizedBox(height: 8),
+                        const Spacer(),
+                        TextButton(
+                          onPressed: () => context.go(RegisterScreen.routePath),
+                          child: Text(isSw ? 'Jisajili' : 'Register'),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+                    Text(
+                      isSw ? 'Ingia' : 'Sign in',
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      isSw
+                          ? 'Weka taarifa zako kuendelea.'
+                          : 'Enter your details below to continue.',
+                      style: TextStyle(
+                        color: Colors.black.withValues(alpha: 0.60),
+                        height: 1.4,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
                           TextFormField(
                             controller: _phoneController,
                             keyboardType: TextInputType.phone,
-                            decoration: InputDecoration(
-                              hintText: isSw ? 'Mfano: 07XXXXXXXX' : 'e.g. 07XXXXXXXX',
-                              prefixIcon: const Icon(Icons.phone_outlined),
-                              filled: true,
-                              fillColor: Colors.grey.withValues(alpha: 0.05),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                borderSide: BorderSide.none,
+                            decoration: _pillDecoration(
+                              hintText: isSw
+                                  ? 'Weka namba ya simu'
+                                  : 'Enter your phone number',
+                              icon: Icons.phone_outlined,
+                              prefix: Padding(
+                                padding: const EdgeInsets.only(left: 14, right: 10),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                      '+255',
+                                      style: TextStyle(fontWeight: FontWeight.w800),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Container(
+                                      width: 1,
+                                      height: 22,
+                                      color: Colors.black.withValues(alpha: 0.12),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Icon(Icons.phone_outlined),
+                                  ],
+                                ),
                               ),
                             ),
                             validator: (v) => (v == null || v.trim().length < 9)
-                                ? (isSw ? 'Weka namba sahihi' : 'Enter a valid phone number')
+                                ? (isSw
+                                    ? 'Weka namba sahihi'
+                                    : 'Enter a valid phone number')
                                 : null,
                           ),
-                          const SizedBox(height: 14),
-                          const Text(
-                            'Password',
-                            style: TextStyle(fontWeight: FontWeight.w800),
-                          ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 12),
                           TextFormField(
                             controller: _passwordController,
                             obscureText: _obscurePassword,
-                            decoration: InputDecoration(
-                              hintText: '••••••••',
-                              prefixIcon: const Icon(Icons.lock_outline),
-                              suffixIcon: IconButton(
+                            decoration: _pillDecoration(
+                              hintText: isSw ? 'Nenosiri' : 'Password',
+                              icon: Icons.lock_outline,
+                              suffix: TextButton(
                                 onPressed: () => setState(
                                   () => _obscurePassword = !_obscurePassword,
                                 ),
-                                icon: Icon(
+                                child: Text(
                                   _obscurePassword
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined,
+                                      ? (isSw ? 'Onesha' : 'Show')
+                                      : (isSw ? 'Ficha' : 'Hide'),
+                                  style: const TextStyle(fontWeight: FontWeight.w800),
                                 ),
-                              ),
-                              filled: true,
-                              fillColor: Colors.grey.withValues(alpha: 0.05),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                borderSide: BorderSide.none,
                               ),
                             ),
                             validator: (value) {
@@ -255,60 +179,60 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             child: TextButton(
                               onPressed: () =>
                                   context.go(ForgotPasswordScreen.routePath),
-                              child: Text(isSw ? 'Umesahau nenosiri?' : 'Forgot password?'),
-                            ),
-                          ),
-                          const SizedBox(height: 14),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 54,
-                            child: FilledButton(
-                              style: FilledButton.styleFrom(
-                                backgroundColor: colorScheme.primary,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                              ),
-                              onPressed: () {
-                                if (!_formKey.currentState!.validate()) return;
-                                FocusScope.of(context).unfocus();
-                                // TODO: call API
-                              },
                               child: Text(
-                                isSw ? 'INGIA' : 'LOGIN',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 16,
-                                  letterSpacing: 1.1,
-                                ),
+                                isSw ? 'Umesahau nenosiri?' : 'Forgot password?',
                               ),
                             ),
                           ),
-                            ],
-                          ),
-                        ),
+                        ],
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 14),
-                  Center(
-                    child: TextButton(
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 18),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
                       onPressed: () => context.go(RegisterScreen.routePath),
-                      child: Text(
-                        isSw ? 'Huna akaunti? Jisajili' : "Don't have an account? Register",
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(999),
                         ),
+                      ),
+                      child: Text(isSw ? 'Jisajili' : 'Register'),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () {
+                        if (!_formKey.currentState!.validate()) return;
+                        FocusScope.of(context).unfocus();
+                        // TODO: call API
+                      },
+                      style: FilledButton.styleFrom(
+                        backgroundColor: colorScheme.primary,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                      ),
+                      child: Text(
+                        isSw ? 'Endelea' : 'Continue',
+                        style: const TextStyle(fontWeight: FontWeight.w900),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 6),
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
