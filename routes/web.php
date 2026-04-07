@@ -126,5 +126,15 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
         Route::get('/articles', [App\Http\Controllers\Admin\ArticleController::class, 'index'])->name('articles.index');
         Route::get('/articles/create', [App\Http\Controllers\Admin\ArticleController::class, 'create'])->name('articles.create');
         Route::post('/articles', [App\Http\Controllers\Admin\ArticleController::class, 'store'])->name('articles.store');
+        Route::get('/articles/{id}/edit', [App\Http\Controllers\Admin\ArticleController::class, 'edit'])->name('articles.edit');
+        Route::post('/articles/{id}', [App\Http\Controllers\Admin\ArticleController::class, 'update'])->name('articles.update');
+        Route::post('/articles/{id}/delete', [App\Http\Controllers\Admin\ArticleController::class, 'destroy'])->name('articles.destroy');
+
+        Route::get('/article-categories', [App\Http\Controllers\Admin\ArticleCategoryController::class, 'index'])->name('article_categories.index');
+        Route::get('/article-categories/create', [App\Http\Controllers\Admin\ArticleCategoryController::class, 'create'])->name('article_categories.create');
+        Route::post('/article-categories', [App\Http\Controllers\Admin\ArticleCategoryController::class, 'store'])->name('article_categories.store');
+        Route::get('/article-categories/{id}/edit', [App\Http\Controllers\Admin\ArticleCategoryController::class, 'edit'])->name('article_categories.edit');
+        Route::post('/article-categories/{id}', [App\Http\Controllers\Admin\ArticleCategoryController::class, 'update'])->name('article_categories.update');
+        Route::post('/article-categories/{id}/delete', [App\Http\Controllers\Admin\ArticleCategoryController::class, 'destroy'])->name('article_categories.destroy');
     });
 });
