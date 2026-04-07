@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/auth/login_screen.dart';
+import '../features/auth/register_screen.dart';
+import '../features/auth/forgot_password_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -24,6 +26,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: LoginScreen.routePath,
         name: LoginScreen.routeName,
         builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: RegisterScreen.routePath,
+        name: RegisterScreen.routeName,
+        builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: ForgotPasswordScreen.routePath,
+        name: ForgotPasswordScreen.routeName,
+        builder: (context, state) => const ForgotPasswordScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
