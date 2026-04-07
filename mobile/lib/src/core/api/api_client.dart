@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../storage/storage_providers.dart';
 
-const kDefaultApiBaseUrl = 'http://10.0.2.2:8000/api';
+const kDefaultApiBaseUrl = 'http://10.118.138.203:8000/api';
 
 class ApiClient {
   ApiClient({required Dio dio}) : _dio = dio;
