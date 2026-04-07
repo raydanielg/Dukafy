@@ -281,5 +281,14 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
             Route::get('/subscription-revenue', [App\Http\Controllers\Admin\ReportController::class, 'subscriptionRevenue'])->name('subscription_revenue');
             Route::get('/churn-report', [App\Http\Controllers\Admin\ReportController::class, 'churnReport'])->name('churn_report');
         });
+
+        Route::prefix('help')->name('help.')->group(function () {
+            Route::get('/documentation', [App\Http\Controllers\Admin\HelpSupportController::class, 'documentation'])->name('documentation');
+            Route::get('/tickets', [App\Http\Controllers\Admin\HelpSupportController::class, 'tickets'])->name('tickets');
+            Route::get('/tickets/{id}', [App\Http\Controllers\Admin\HelpSupportController::class, 'ticketShow'])->name('tickets.show');
+            Route::post('/tickets/{id}/reply', [App\Http\Controllers\Admin\HelpSupportController::class, 'ticketReply'])->name('tickets.reply');
+            Route::get('/system-info', [App\Http\Controllers\Admin\HelpSupportController::class, 'systemInfo'])->name('system_info');
+            Route::get('/contact-developer', [App\Http\Controllers\Admin\HelpSupportController::class, 'contactDeveloper'])->name('contact_developer');
+        });
     });
 });
