@@ -20,17 +20,25 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
-    _bootstrap();
+    _handleNavigation();
   }
 
-  Future<void> _bootstrap() async {
-    await Future<void>.delayed(const Duration(milliseconds: 900));
-
-    final done = await ref.read(secureStorageProvider).isOnboardingDone();
-
+  Future<void> _handleNavigation() async {
+    // Wait for splash animation/delay
+    await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
-    context.go(done ? LoginScreen.routePath : OnboardingScreen.routePath);
+
+    final storage = ref.read(secureStorageProvider);
+    final token = await storage.getAuthToken();
+
+    if (token != null && token.isNotEmpty) {
+      // User is already logged in, go to Dashboard
+      context.go(DashboardScreen.routePath);
+    } else {
+      // No token, check if onboarding is needed or go to Login
+      final done = await ref.read(secureStorageProvider).isOnboardingDone();
+      context.go(done ? LoginScreen.routePath : OnboardingScreen.routePath);
+    }
   }
 
   @override
