@@ -154,6 +154,60 @@ class AuthController extends Controller
         }
     }
 
+    public function updateProfile(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $data = $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'avatar' => ['nullable', 'image', 'max:2048'], // 2MB max
+            ]);
+
+            if ($request->hasFile('avatar')) {
+                $path = $request->file('avatar')->store('avatars', 'public');
+                $user->avatar = $path;
+            }
+
+            $user->name = $data['name'];
+            $user->save();
+
+            return response()->json([
+                'message' => 'Profile updated',
+                'user' => $user->load(['business', 'roles'])
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Update failed', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function updateBusinessLogo(Request $request)
+    {
+        try {
+            $user = $request->user();
+            if (!$user->business_id) {
+                return response()->json(['message' => 'No business associated'], 404);
+            }
+
+            $request->validate([
+                'logo' => ['required', 'image', 'max:2048'],
+            ]);
+
+            $path = $request->file('logo')->store('logos', 'public');
+            
+            DB::table('businesses')->where('id', $user->business_id)->update([
+                'logo' => $path,
+                'updated_at' => now(),
+            ]);
+
+            return response()->json([
+                'message' => 'Business logo updated',
+                'logo_url' => asset('storage/' . $path)
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Update failed', 'error' => $e->getMessage()], 500);
+        }
+    }
+
     public function completeOnboarding(Request $request)
     {
         try {

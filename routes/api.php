@@ -12,6 +12,8 @@ Route::prefix('auth')->group(function () {
         Route::post('/approve-initial', [App\Http\Controllers\Api\AuthController::class, 'approveInitial']);
         Route::post('/complete-onboarding', [App\Http\Controllers\Api\AuthController::class, 'completeOnboarding']);
         Route::delete('/delete-account', [App\Http\Controllers\Api\AuthController::class, 'deleteAccount']);
+        Route::post('/update-profile', [App\Http\Controllers\Api\AuthController::class, 'updateProfile']);
+        Route::post('/update-business-logo', [App\Http\Controllers\Api\AuthController::class, 'updateBusinessLogo']);
         Route::post('/logout', [App\Http\Controllers\Api\AuthController::class, 'logout']);
     });
 });
