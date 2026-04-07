@@ -188,7 +188,26 @@ class SecurityController extends Controller
     {
         $keys = DB::table('api_keys')->orderByDesc('id')->get();
 
-        return view('admin.security.api_security', compact('keys'));
+        $apiBaseUrl = DB::table('system_settings')
+            ->where('group', 'api')
+            ->where('key', 'base_url')
+            ->value('value');
+
+        return view('admin.security.api_security', compact('keys', 'apiBaseUrl'));
+    }
+
+    public function updateApiBaseUrl(Request $request)
+    {
+        $data = $request->validate([
+            'api_base_url' => ['required', 'string', 'max:255'],
+        ]);
+
+        DB::table('system_settings')->updateOrInsert(
+            ['group' => 'api', 'key' => 'base_url'],
+            ['value' => $data['api_base_url'], 'updated_at' => now(), 'created_at' => now()]
+        );
+
+        return redirect()->back();
     }
 
     public function createApiKey(Request $request)

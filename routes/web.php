@@ -113,6 +113,7 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
             Route::get('/session-management', [App\Http\Controllers\Admin\SecurityController::class, 'sessionManagement'])->name('session_management');
 
             Route::get('/api-security', [App\Http\Controllers\Admin\SecurityController::class, 'apiSecurity'])->name('api_security');
+            Route::post('/api-security/base-url', [App\Http\Controllers\Admin\SecurityController::class, 'updateApiBaseUrl'])->name('api_security.base_url');
             Route::post('/api-security', [App\Http\Controllers\Admin\SecurityController::class, 'createApiKey'])->name('api_security.create');
             Route::post('/api-security/{id}/revoke', [App\Http\Controllers\Admin\SecurityController::class, 'revokeApiKey'])->name('api_security.revoke');
 
