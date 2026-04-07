@@ -144,6 +144,21 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
             Route::post('/assign', [App\Http\Controllers\Admin\SubscriptionAssignController::class, 'store'])->name('assign.store');
         });
 
+        Route::prefix('finance')->name('finance.')->group(function () {
+            Route::get('/revenue-overview', [App\Http\Controllers\Admin\FinanceController::class, 'revenueOverview'])->name('revenue_overview');
+            Route::get('/payment-methods', [App\Http\Controllers\Admin\FinanceController::class, 'paymentMethods'])->name('payment_methods');
+            Route::post('/payment-methods', [App\Http\Controllers\Admin\FinanceController::class, 'addPaymentMethod'])->name('payment_methods.store');
+            Route::get('/payment-gateway', [App\Http\Controllers\Admin\FinanceController::class, 'paymentGateway'])->name('payment_gateway');
+            Route::post('/payment-gateway', [App\Http\Controllers\Admin\FinanceController::class, 'updatePaymentGateway'])->name('payment_gateway.update');
+            Route::get('/invoice-settings', [App\Http\Controllers\Admin\FinanceController::class, 'invoiceSettings'])->name('invoice_settings');
+            Route::post('/invoice-settings', [App\Http\Controllers\Admin\FinanceController::class, 'updateInvoiceSettings'])->name('invoice_settings.update');
+            Route::get('/tax-settings', [App\Http\Controllers\Admin\FinanceController::class, 'taxSettings'])->name('tax_settings');
+            Route::post('/tax-settings', [App\Http\Controllers\Admin\FinanceController::class, 'updateTaxSettings'])->name('tax_settings.update');
+            Route::get('/expenses', [App\Http\Controllers\Admin\FinanceController::class, 'expenses'])->name('expenses');
+            Route::post('/expenses', [App\Http\Controllers\Admin\FinanceController::class, 'addExpense'])->name('expenses.store');
+            Route::get('/profit-loss', [App\Http\Controllers\Admin\FinanceController::class, 'profitLoss'])->name('profit_loss');
+        });
+
         Route::get('/articles', [App\Http\Controllers\Admin\ArticleController::class, 'index'])->name('articles.index');
         Route::get('/articles/create', [App\Http\Controllers\Admin\ArticleController::class, 'create'])->name('articles.create');
         Route::post('/articles', [App\Http\Controllers\Admin\ArticleController::class, 'store'])->name('articles.store');
