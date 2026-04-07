@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/storage/storage_providers.dart';
 import '../onboarding/onboarding_screen.dart';
 import '../auth/login_screen.dart';
+import '../dashboard/dashboard_screen.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
