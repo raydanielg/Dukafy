@@ -40,8 +40,10 @@ class UserController extends Controller
     {
         $roles = DB::table('roles')->orderBy('name')->get();
         $groups = DB::table('user_groups')->orderBy('name')->get();
+        $businesses = DB::table('businesses')->orderBy('name')->get();
+        $branches = DB::table('branches')->orderBy('name')->get();
 
-        return view('admin.users.create', compact('roles', 'groups'));
+        return view('admin.users.create', compact('roles', 'groups', 'businesses', 'branches'));
     }
 
     public function store(Request $request)
@@ -53,10 +55,14 @@ class UserController extends Controller
             'is_admin' => ['nullable'],
             'role_id' => ['nullable', 'integer'],
             'group_id' => ['nullable', 'integer'],
+            'business_id' => ['nullable', 'integer'],
+            'branch_id' => ['nullable', 'integer'],
             'approved' => ['nullable'],
         ]);
 
         $userId = DB::table('users')->insertGetId([
+            'business_id' => $data['business_id'] ?? null,
+            'branch_id' => $data['branch_id'] ?? null,
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -90,11 +96,13 @@ class UserController extends Controller
 
         $roles = DB::table('roles')->orderBy('name')->get();
         $groups = DB::table('user_groups')->orderBy('name')->get();
+        $businesses = DB::table('businesses')->orderBy('name')->get();
+        $branches = DB::table('branches')->orderBy('name')->get();
 
         $selectedRoleId = DB::table('role_user')->where('user_id', $id)->value('role_id');
         $selectedGroupId = DB::table('user_group_user')->where('user_id', $id)->value('user_group_id');
 
-        return view('admin.users.edit', compact('user', 'roles', 'groups', 'selectedRoleId', 'selectedGroupId'));
+        return view('admin.users.edit', compact('user', 'roles', 'groups', 'businesses', 'branches', 'selectedRoleId', 'selectedGroupId'));
     }
 
     public function update(Request $request, int $id)
@@ -106,10 +114,14 @@ class UserController extends Controller
             'is_admin' => ['nullable'],
             'role_id' => ['nullable', 'integer'],
             'group_id' => ['nullable', 'integer'],
+            'business_id' => ['nullable', 'integer'],
+            'branch_id' => ['nullable', 'integer'],
             'approved' => ['nullable'],
         ]);
 
         $update = [
+            'business_id' => $data['business_id'] ?? null,
+            'branch_id' => $data['branch_id'] ?? null,
             'name' => $data['name'],
             'email' => $data['email'],
             'is_admin' => isset($data['is_admin']),

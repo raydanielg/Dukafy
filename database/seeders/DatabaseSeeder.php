@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             SecurityDefaultsSeeder::class,
             PlanSeeder::class,
             FinanceDefaultsSeeder::class,
+            BusinessDefaultsSeeder::class,
             SiteContactSeeder::class,
             TestimonialSeeder::class,
             ArticleCategorySeeder::class,

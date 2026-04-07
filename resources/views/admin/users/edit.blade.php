@@ -43,6 +43,26 @@
                     </div>
 
                     <div class="col-md-6">
+                        <label class="form-label">Business</label>
+                        <select name="business_id" class="form-select">
+                            <option value="">—</option>
+                            @foreach($businesses as $b)
+                                <option value="{{ $b->id }}" {{ (int) $user->business_id === (int) $b->id ? 'selected' : '' }}>{{ $b->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Branch</label>
+                        <select name="branch_id" class="form-select">
+                            <option value="">—</option>
+                            @foreach($branches as $br)
+                                <option value="{{ $br->id }}" {{ (int) $user->branch_id === (int) $br->id ? 'selected' : '' }}>{{ $br->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
                         <label class="form-label">Group</label>
                         <select name="group_id" class="form-select">
                             <option value="">—</option>
