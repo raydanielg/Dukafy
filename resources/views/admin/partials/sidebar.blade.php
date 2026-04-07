@@ -217,10 +217,10 @@
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="admin-nav-caret"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <div class="admin-submenu" data-admin-submenu>
-                    <a class="admin-sub-link" href="#">Access Logs</a>
-                    <a class="admin-sub-link" href="#">Error Logs</a>
-                    <a class="admin-sub-link" href="#">Payment Logs</a>
-                    <a class="admin-sub-link" href="#">Email Logs</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.logs.access') ? 'active' : '' }}" href="{{ route('admin.logs.access') }}">Access Logs</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.logs.errors') ? 'active' : '' }}" href="{{ route('admin.logs.errors') }}">Error Logs</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.logs.payments') ? 'active' : '' }}" href="{{ route('admin.logs.payments') }}">Payment Logs</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.logs.emails') ? 'active' : '' }}" href="{{ route('admin.logs.emails') }}">Email Logs</a>
                 </div>
             </div>
         </div>
