@@ -94,7 +94,30 @@ class AuthController extends Controller
         ]);
     }
 
-    public function approve(Request $request)
+    public function approveInitial(Request $request)
+    {
+        /** @var User|null $user */
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        if (!$user->is_approved) {
+            $user->forceFill(['is_approved' => true])->save();
+        }
+
+        return response()->json([
+            'message' => 'Verified',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'phone' => $user->phone,
+                'is_approved' => (bool) $user->is_approved,
+            ],
+        ]);
+    }
+
+    public function completeOnboarding(Request $request)
     {
         $data = $request->validate([
             'role' => ['required', 'string', 'in:owner,cashier'],
@@ -110,22 +133,19 @@ class AuthController extends Controller
         $roleSlug = $data['role'] === 'owner' ? 'manager' : 'cashier';
         $roleId = DB::table('roles')->where('slug', $roleSlug)->value('id');
 
-        if (!$user->is_approved) {
-            $user->forceFill([
-                'is_approved' => true,
-                'manager_id' => $data['manager_id'] ?? null,
-            ])->save();
+        $user->forceFill([
+            'manager_id' => $data['manager_id'] ?? null,
+        ])->save();
 
-            if ($roleId) {
-                DB::table('role_user')->updateOrInsert(
-                    ['user_id' => $user->id],
-                    ['role_id' => $roleId, 'updated_at' => now(), 'created_at' => now()]
-                );
-            }
+        if ($roleId) {
+            DB::table('role_user')->updateOrInsert(
+                ['user_id' => $user->id],
+                ['role_id' => $roleId, 'updated_at' => now(), 'created_at' => now()]
+            );
         }
 
         return response()->json([
-            'message' => 'Approved',
+            'message' => 'Onboarding completed',
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,

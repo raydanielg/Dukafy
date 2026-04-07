@@ -9,7 +9,8 @@ Route::prefix('auth')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/me', [App\Http\Controllers\Api\AuthController::class, 'me']);
         Route::get('/managers/search', [App\Http\Controllers\Api\AuthController::class, 'searchManagers']);
-        Route::post('/approve', [App\Http\Controllers\Api\AuthController::class, 'approve']);
+        Route::post('/approve-initial', [App\Http\Controllers\Api\AuthController::class, 'approveInitial']);
+        Route::post('/complete-onboarding', [App\Http\Controllers\Api\AuthController::class, 'completeOnboarding']);
         Route::post('/logout', [App\Http\Controllers\Api\AuthController::class, 'logout']);
     });
 });
