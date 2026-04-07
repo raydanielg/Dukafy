@@ -9,6 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->string('email')->nullable()->change();
             $table->string('phone')->nullable()->unique()->after('email');
         });
     }
@@ -18,6 +19,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropUnique(['phone']);
             $table->dropColumn('phone');
+            $table->string('email')->nullable(false)->change();
         });
     }
 };
