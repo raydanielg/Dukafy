@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminUserSeeder::class,
             RolePermissionSeeder::class,
+            SecurityDefaultsSeeder::class,
             SiteContactSeeder::class,
             TestimonialSeeder::class,
             ArticleCategorySeeder::class,
