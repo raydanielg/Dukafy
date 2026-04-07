@@ -14,23 +14,23 @@
             <div class="admin-metric-value">{{ number_format($stats['total_users']) }}</div>
         </div>
         <div class="admin-metric-card">
-            <div class="admin-metric-label">New Users (30d)</div>
-            <div class="admin-metric-value">{{ number_format($stats['new_users_30d']) }}</div>
+            <div class="admin-metric-label">Total Businesses</div>
+            <div class="admin-metric-value text-primary">{{ number_format($stats['total_businesses']) }}</div>
+        </div>
+        <div class="admin-metric-card">
+            <div class="admin-metric-label">New Businesses (30d)</div>
+            <div class="admin-metric-value text-success">{{ number_format($stats['new_businesses_30d']) }}</div>
         </div>
         <div class="admin-metric-card">
             <div class="admin-metric-label">Articles</div>
             <div class="admin-metric-value">{{ number_format($stats['total_articles']) }}</div>
-        </div>
-        <div class="admin-metric-card">
-            <div class="admin-metric-label">Newsletters</div>
-            <div class="admin-metric-value">{{ number_format($stats['total_newsletters']) }}</div>
         </div>
     </div>
 
     <div class="admin-grid">
         <div class="admin-panel">
             <div class="admin-panel-head">
-                <div class="admin-panel-title">User Registrations (Last 30 Days)</div>
+                <div class="admin-panel-title">User growth (Last 30 Days)</div>
             </div>
             <div class="admin-panel-body">
                 <canvas id="userTrendChart" height="200"></canvas>
@@ -39,10 +39,10 @@
 
         <div class="admin-panel">
             <div class="admin-panel-head">
-                <div class="admin-panel-title">Login Activity (Last 30 Days)</div>
+                <div class="admin-panel-title">Business Growth (Last 30 Days)</div>
             </div>
             <div class="admin-panel-body">
-                <canvas id="loginTrendChart" height="200"></canvas>
+                <canvas id="businessTrendChart" height="200"></canvas>
             </div>
         </div>
     </div>
@@ -58,7 +58,7 @@
         data: {
             labels: {!! json_encode($userTrend->pluck('date')) !!},
             datasets: [{
-                label: 'New Registrations',
+                label: 'New Users',
                 data: {!! json_encode($userTrend->pluck('count')) !!},
                 borderColor: '#10b981',
                 backgroundColor: 'rgba(16, 185, 129, 0.1)',
@@ -74,16 +74,18 @@
         }
     });
 
-    const loginTrendCtx = document.getElementById('loginTrendChart').getContext('2d');
-    new Chart(loginTrendCtx, {
-        type: 'bar',
+    const businessTrendCtx = document.getElementById('businessTrendChart').getContext('2d');
+    new Chart(businessTrendCtx, {
+        type: 'line',
         data: {
-            labels: {!! json_encode($loginTrend->pluck('date')) !!},
+            labels: {!! json_encode($businessTrend->pluck('date')) !!},
             datasets: [{
-                label: 'Logins',
-                data: {!! json_encode($loginTrend->pluck('count')) !!},
-                backgroundColor: '#3b82f6',
-                borderRadius: 4
+                label: 'New Businesses',
+                data: {!! json_encode($businessTrend->pluck('count')) !!},
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                fill: true,
+                tension: 0.4
             }]
         },
         options: {

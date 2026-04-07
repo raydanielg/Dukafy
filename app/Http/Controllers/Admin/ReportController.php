@@ -17,9 +17,11 @@ class ReportController extends Controller
         // Stats
         $stats = [
             'total_users' => DB::table('users')->count(),
+            'total_businesses' => DB::table('businesses')->count(),
             'total_articles' => DB::table('articles')->count(),
             'total_newsletters' => DB::table('newsletters')->count(),
             'new_users_30d' => DB::table('users')->where('created_at', '>=', $dateLimit)->count(),
+            'new_businesses_30d' => DB::table('businesses')->where('created_at', '>=', $dateLimit)->count(),
         ];
 
         // Chart: User Registrations (last 30 days)
@@ -30,15 +32,15 @@ class ReportController extends Controller
             ->orderBy('date')
             ->get();
 
-        // Chart: Logins (last 30 days)
-        $loginTrend = DB::table('user_login_histories')
-            ->select(DB::raw('DATE(login_at) as date'), DB::raw('COUNT(*) as count'))
-            ->where('login_at', '>=', $dateLimit)
+        // Chart: Business Registrations (last 30 days)
+        $businessTrend = DB::table('businesses')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
+            ->where('created_at', '>=', $dateLimit)
             ->groupBy('date')
             ->orderBy('date')
             ->get();
 
-        return view('admin.reports.system_usage', compact('stats', 'userTrend', 'loginTrend'));
+        return view('admin.reports.system_usage', compact('stats', 'userTrend', 'businessTrend'));
     }
 
     public function businessPerformance()
