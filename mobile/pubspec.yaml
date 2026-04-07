@@ -46,6 +46,7 @@ dependencies:
   state_notifier: ^1.0.0
   riverpod_annotation: ^4.0.2
   riverpod: ^3.2.1
+  flutter_html: ^3.0.0
 
 dev_dependencies:
   flutter_test:
