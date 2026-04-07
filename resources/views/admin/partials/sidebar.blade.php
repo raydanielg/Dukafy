@@ -234,10 +234,10 @@
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="admin-nav-caret"><path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
                 <div class="admin-submenu" data-admin-submenu>
-                    <a class="admin-sub-link" href="#">Documentation</a>
-                    <a class="admin-sub-link" href="#">Support Tickets</a>
-                    <a class="admin-sub-link" href="#">System Info</a>
-                    <a class="admin-sub-link" href="#">Contact Developer</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.help.documentation') ? 'active' : '' }}" href="{{ route('admin.help.documentation') }}">Documentation</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.help.tickets*') ? 'active' : '' }}" href="{{ route('admin.help.tickets') }}">Support Tickets</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.help.system_info') ? 'active' : '' }}" href="{{ route('admin.help.system_info') }}">System Info</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.help.contact_developer') ? 'active' : '' }}" href="{{ route('admin.help.contact_developer') }}">Contact Developer</a>
                 </div>
             </div>
         </div>
