@@ -104,25 +104,33 @@ class AuthController extends Controller
 
     public function approveInitial(Request $request)
     {
-        /** @var User|null $user */
-        $user = $request->user();
-        if (!$user) {
-            return response()->json(['message' => 'Unauthenticated'], 401);
-        }
+        try {
+            /** @var User|null $user */
+            $user = $request->user();
+            if (!$user) {
+                return response()->json(['message' => 'Unauthenticated'], 401);
+            }
 
-        if (!$user->is_approved) {
-            $user->forceFill(['is_approved' => true])->save();
-        }
+            if (!$user->is_approved) {
+                $user->forceFill(['is_approved' => true])->save();
+            }
 
-        return response()->json([
-            'message' => 'Verified',
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'phone' => $user->phone,
-                'is_approved' => (bool) $user->is_approved,
-            ],
-        ]);
+            return response()->json([
+                'message' => 'Verified',
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'phone' => $user->phone,
+                    'is_approved' => (bool) $user->is_approved,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Approve Initial Error: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Verification failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function completeOnboarding(Request $request)
