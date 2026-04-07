@@ -56,3 +56,7 @@ Route::get('/articles/category/{slug}', function ($slug) {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
+});
