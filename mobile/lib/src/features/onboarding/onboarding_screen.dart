@@ -42,6 +42,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final overlayHeight =
+        (MediaQuery.sizeOf(context).height * 0.48).clamp(320.0, 440.0);
 
     final pages = <_OnboardPageData>[
       const _OnboardPageData(
@@ -67,6 +69,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final isLast = _index == pages.length - 1;
 
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -105,15 +108,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     right: 0,
                     bottom: 0,
                     child: Container(
-                      height: 360,
+                      height: overlayHeight,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                           colors: [
-                            Colors.black.withValues(alpha: 0.78),
-                            Colors.black.withValues(alpha: 0.55),
-                            Colors.black.withValues(alpha: 0.22),
+                            colorScheme.primary.withValues(alpha: 0.85),
+                            Colors.black.withValues(alpha: 0.65),
+                            Colors.black.withValues(alpha: 0.28),
                             Colors.transparent,
                           ],
                           stops: const [0.0, 0.35, 0.72, 1.0],
@@ -164,15 +167,21 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                                     textAlign: TextAlign.center,
                                   ),
                                   const SizedBox(height: 10),
-                                  Text(
-                                    page.subtitle,
-                                    style: TextStyle(
-                                      color: Colors.white.withValues(alpha: 0.88),
-                                      fontSize: 14.5,
-                                      height: 1.55,
-                                      fontWeight: FontWeight.w600,
+                                  Flexible(
+                                    child: SingleChildScrollView(
+                                      padding: EdgeInsets.zero,
+                                      physics: const BouncingScrollPhysics(),
+                                      child: Text(
+                                        page.subtitle,
+                                        style: TextStyle(
+                                          color: Colors.white.withValues(alpha: 0.88),
+                                          fontSize: 14.5,
+                                          height: 1.55,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                    textAlign: TextAlign.center,
                                   ),
                                   const SizedBox(height: 18),
                                   SizedBox(
