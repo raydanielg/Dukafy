@@ -45,10 +45,25 @@ class SubscriptionAssignController extends Controller
             'subscription_id' => $subscriptionId,
             'user_id' => $data['user_id'],
             'event' => 'created',
-            'meta' => json_encode(['assigned_by' => auth()->id()]),
+            'meta' => json_encode(['assigned_by' => auth()->id(), 'plan_id' => $data['plan_id'], 'status' => $data['status']]),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        if ($data['status'] !== 'trial') {
+            $amount = (int) (DB::table('plans')->where('id', $data['plan_id'])->value('price_monthly') ?? 0);
+
+            DB::table('invoices')->insert([
+                'subscription_id' => $subscriptionId,
+                'amount' => $amount,
+                'currency' => 'TZS',
+                'status' => 'unpaid',
+                'issued_at' => now()->toDateString(),
+                'due_at' => now()->addDays(7)->toDateString(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
         return redirect()->route('admin.subscriptions.index');
     }

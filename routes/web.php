@@ -129,7 +129,10 @@ Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
             Route::get('/expiring-soon', [App\Http\Controllers\Admin\SubscriptionController::class, 'expiringSoon'])->name('expiring');
             Route::get('/cancelled', [App\Http\Controllers\Admin\SubscriptionController::class, 'cancelled'])->name('cancelled');
             Route::get('/trial-requests', [App\Http\Controllers\Admin\SubscriptionController::class, 'trialRequests'])->name('trials');
+            Route::post('/trial-requests/{id}/approve', [App\Http\Controllers\Admin\SubscriptionController::class, 'approveTrial'])->name('trials.approve');
+            Route::post('/trial-requests/{id}/reject', [App\Http\Controllers\Admin\SubscriptionController::class, 'rejectTrial'])->name('trials.reject');
             Route::get('/invoices-payments', [App\Http\Controllers\Admin\SubscriptionController::class, 'invoices'])->name('billing');
+            Route::post('/invoices-payments/payment', [App\Http\Controllers\Admin\SubscriptionController::class, 'addPayment'])->name('billing.payment');
 
             Route::get('/plans', [App\Http\Controllers\Admin\PlanController::class, 'index'])->name('plans');
             Route::get('/plans/create', [App\Http\Controllers\Admin\PlanController::class, 'create'])->name('plans.create');
