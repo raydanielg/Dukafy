@@ -141,6 +141,16 @@ class AuthRepository {
     }
   }
 
+  Future<void> deleteAccount() async {
+    final dio = _ref.read(apiClientProvider).dio;
+    try {
+      await dio.delete('/auth/delete-account');
+    } catch (_) {
+      // ignore
+    }
+    await _ref.read(secureStorageProvider).clearAuthToken();
+  }
+
   Future<void> logout() async {
     final dio = _ref.read(apiClientProvider).dio;
     try {
