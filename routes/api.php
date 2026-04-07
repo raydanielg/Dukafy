@@ -11,6 +11,7 @@ Route::prefix('auth')->group(function () {
         Route::get('/managers/search', [App\Http\Controllers\Api\AuthController::class, 'searchManagers']);
         Route::post('/approve-initial', [App\Http\Controllers\Api\AuthController::class, 'approveInitial']);
         Route::post('/complete-onboarding', [App\Http\Controllers\Api\AuthController::class, 'completeOnboarding']);
+        Route::delete('/delete-account', [App\Http\Controllers\Api\AuthController::class, 'deleteAccount']);
         Route::post('/logout', [App\Http\Controllers\Api\AuthController::class, 'logout']);
     });
 });

@@ -113,9 +113,9 @@ class AuthController extends Controller
                 return response()->json(['message' => 'Unauthenticated'], 401);
             }
 
-            if (!$user->is_approved) {
-                $user->forceFill(['is_approved' => true])->save();
-            }
+            // Mark as approved in DB
+            $user->is_approved = true;
+            $user->save();
 
             return response()->json([
                 'message' => 'Verified',
@@ -123,7 +123,7 @@ class AuthController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'phone' => $user->phone,
-                    'is_approved' => (bool) $user->is_approved,
+                    'is_approved' => true,
                 ],
             ]);
         } catch (\Exception $e) {
@@ -132,6 +132,25 @@ class AuthController extends Controller
                 'message' => 'Verification failed',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        try {
+            /** @var User|null $user */
+            $user = $request->user();
+            if (!$user) {
+                return response()->json(['message' => 'Unauthenticated'], 401);
+            }
+
+            // Revoke tokens and delete user
+            $user->tokens()->delete();
+            $user->delete();
+
+            return response()->json(['message' => 'Account deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to delete account', 'error' => $e->getMessage()], 500);
         }
     }
 
