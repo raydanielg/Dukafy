@@ -18,10 +18,7 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected function appends(): array
-    {
-        return ['avatar_url'];
-    }
+    protected $appends = ['avatar_url'];
 
     public function getAvatarUrlAttribute()
     {

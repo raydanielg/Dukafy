@@ -25,6 +25,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     super.initState();
   }
 
+  Future<void> _refreshMe() async {
+    try {
+      final dio = ref.read(apiClientProvider).dio;
+      final res = await dio.get('/auth/me');
+      final user = res.data['user'];
+      if (user is Map<String, dynamic>) {
+        ref.read(userProvider.notifier).setUser(user);
+      } else if (user is Map) {
+        ref.read(userProvider.notifier).setUser(Map<String, dynamic>.from(user));
+      }
+    } catch (_) {
+      // ignore
+    }
+  }
+
   Future<void> _pickAndUploadImage(bool isAvatar) async {
     final picker = ImagePicker();
     final image = await picker.pickImage(source: ImageSource.gallery, maxWidth: 512, imageQuality: 80);
@@ -47,11 +62,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       
       if (mounted) {
         if (isAvatar) {
-          final newUrl = res.data['user']['avatar_url'];
-          ref.read(userProvider.notifier).updateAvatar(newUrl);
+          final user = res.data is Map ? (res.data as Map)['user'] : null;
+          final avatarUrl = (user is Map) ? user['avatar_url'] : null;
+          if (avatarUrl is String && avatarUrl.isNotEmpty) {
+            ref.read(userProvider.notifier).updateAvatar(avatarUrl);
+          } else {
+            await _refreshMe();
+          }
         } else {
-          final newUrl = res.data['logo_url'];
-          ref.read(userProvider.notifier).updateBusinessLogo(newUrl);
+          final logoUrl = (res.data is Map) ? (res.data as Map)['logo_url'] : null;
+          if (logoUrl is String && logoUrl.isNotEmpty) {
+            ref.read(userProvider.notifier).updateBusinessLogo(logoUrl);
+          } else {
+            await _refreshMe();
+          }
         }
 
         ScaffoldMessenger.of(context).showSnackBar(
