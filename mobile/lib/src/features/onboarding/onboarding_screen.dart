@@ -19,9 +19,32 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _controller = PageController();
   int _index = 0;
   bool _saving = false;
+  late final AnimationController _pulseController;
+  late final Animation<double> _pulseOpacity;
+  late final Animation<double> _pulseScale;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+
+    _pulseOpacity = Tween<double>(begin: 0.88, end: 1.0).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+    _pulseScale = Tween<double>(begin: 0.98, end: 1.02).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+
+    _pulseController.repeat(reverse: true);
+  }
 
   @override
   void dispose() {
+    _pulseController.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -188,43 +211,53 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                                   SizedBox(
                                     width: double.infinity,
                                     height: 54,
-                                    child: FilledButton(
-                                      onPressed: _saving
-                                          ? null
-                                          : () {
-                                              if (isLast) {
-                                                _finish();
-                                                return;
-                                              }
+                                    child: FadeTransition(
+                                      opacity:
+                                          _saving ? const AlwaysStoppedAnimation(1) : _pulseOpacity,
+                                      child: ScaleTransition(
+                                        scale: _saving
+                                            ? const AlwaysStoppedAnimation(1)
+                                            : _pulseScale,
+                                        child: FilledButton(
+                                          onPressed: _saving
+                                              ? null
+                                              : () {
+                                                  if (isLast) {
+                                                    _finish();
+                                                    return;
+                                                  }
 
-                                              _controller.nextPage(
-                                                duration:
-                                                    const Duration(milliseconds: 260),
-                                                curve: Curves.easeOut,
-                                              );
-                                            },
-                                      style: FilledButton.styleFrom(
-                                        backgroundColor: colorScheme.primary,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(16),
+                                                  _controller.nextPage(
+                                                    duration: const Duration(
+                                                      milliseconds: 260,
+                                                    ),
+                                                    curve: Curves.easeOut,
+                                                  );
+                                                },
+                                          style: FilledButton.styleFrom(
+                                            backgroundColor: colorScheme.primary,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(16),
+                                            ),
+                                          ),
+                                          child: _saving
+                                              ? const SizedBox(
+                                                  width: 20,
+                                                  height: 20,
+                                                  child: CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                              : Text(
+                                                  isLast ? 'Get Started' : 'Continue',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w900,
+                                                    letterSpacing: 0.2,
+                                                  ),
+                                                ),
                                         ),
                                       ),
-                                      child: _saving
-                                          ? const SizedBox(
-                                              width: 20,
-                                              height: 20,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 2,
-                                                color: Colors.white,
-                                              ),
-                                            )
-                                          : Text(
-                                              isLast ? 'Get Started' : 'Continue',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w900,
-                                                letterSpacing: 0.2,
-                                              ),
-                                            ),
                                     ),
                                   ),
                                 ],
