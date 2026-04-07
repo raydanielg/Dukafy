@@ -17,6 +17,12 @@ import '../members/members_screen.dart';
 import '../customers/customers_screen.dart';
 import '../suppliers/suppliers_screen.dart';
 
+import '../loans/loans_screen.dart';
+import '../expenses/expenses_screen.dart';
+import '../banking/banking_screen.dart';
+import '../notifications/notifications_screen.dart';
+import '../reports/reports_screen.dart';
+
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
@@ -403,12 +409,48 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       crossAxisSpacing: 12,
       childAspectRatio: 0.95,
       children: [
-        _FeatureCard(title: 'Customers', subtitle: 'Manage Borrowers, clients & profiles', icon: Icons.people_outline, color: primaryGreen, onTap: () => context.push(CustomersScreen.routePath)),
-        _FeatureCard(title: 'Loans & Repayments', subtitle: 'Applications & active loans', icon: Icons.grid_view_rounded, color: primaryGreen),
-        _FeatureCard(title: 'Expenses', subtitle: 'Operational costs', icon: Icons.payments_outlined, color: primaryGreen),
-        _FeatureCard(title: 'Treasury & Banking', subtitle: 'Manage teller, Customers and Debts', icon: Icons.account_balance_wallet_outlined, color: primaryGreen),
-        _FeatureCard(title: 'SMS & Emails', subtitle: 'Notifications & Alerts', icon: Icons.mail_outline, color: primaryGreen),
-        _FeatureCard(title: 'Reports', subtitle: 'Business Analytics', icon: Icons.bar_chart_rounded, color: primaryGreen),
+        _FeatureCard(
+          title: 'Customers',
+          subtitle: 'Manage Borrowers, clients & profiles',
+          icon: Icons.people_outline,
+          color: primaryGreen,
+          onTap: () => context.push(CustomersScreen.routePath),
+        ),
+        _FeatureCard(
+          title: 'Loans & Repayments',
+          subtitle: 'Applications & active loans',
+          icon: Icons.grid_view_rounded,
+          color: primaryGreen,
+          onTap: () => context.push(LoansScreen.routePath),
+        ),
+        _FeatureCard(
+          title: 'Expenses',
+          subtitle: 'Operational costs',
+          icon: Icons.payments_outlined,
+          color: primaryGreen,
+          onTap: () => context.push(ExpensesScreen.routePath),
+        ),
+        _FeatureCard(
+          title: 'Treasury & Banking',
+          subtitle: 'Manage teller, Customers and Debts',
+          icon: Icons.account_balance_wallet_outlined,
+          color: primaryGreen,
+          onTap: () => context.push(BankingScreen.routePath),
+        ),
+        _FeatureCard(
+          title: 'SMS & Emails',
+          subtitle: 'Notifications & Alerts',
+          icon: Icons.mail_outline,
+          color: primaryGreen,
+          onTap: () => context.push(NotificationsScreen.routePath),
+        ),
+        _FeatureCard(
+          title: 'Reports',
+          subtitle: 'Business Analytics',
+          icon: Icons.bar_chart_rounded,
+          color: primaryGreen,
+          onTap: () => context.push(ReportsScreen.routePath),
+        ),
       ],
     );
   }
