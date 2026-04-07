@@ -143,55 +143,68 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => context.go(LoginScreen.routePath),
-                      child: const Text('Back to login'),
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  FadeTransition(
-                    opacity: _fade,
-                    child: ScaleTransition(
-                      scale: _scale,
-                      child: Container(
-                        height: 84,
-                        width: 84,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: colorScheme.primary.withValues(alpha: 0.12),
-                          border: Border.all(
-                            color: colorScheme.primary.withValues(alpha: 0.25),
-                            width: 2,
+                  const SizedBox(height: 40),
+                  Center(
+                    child: FadeTransition(
+                      opacity: _fade,
+                      child: ScaleTransition(
+                        scale: _scale,
+                        child: Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [
+                                colorScheme.primary,
+                                colorScheme.primary.withValues(alpha: 0.7),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: colorScheme.primary.withValues(alpha: 0.3),
+                                blurRadius: 20,
+                                spreadRadius: 5,
+                              ),
+                            ],
                           ),
-                        ),
-                        child: Icon(
-                          _approved ? Icons.verified_rounded : Icons.hourglass_top_rounded,
-                          size: 44,
-                          color: colorScheme.primary,
+                          child: const Icon(
+                            Icons.check_rounded,
+                            size: 60,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Thank you',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w900,
+                  const SizedBox(height: 24),
+                  const Center(
+                    child: Text(
+                      'Thank you!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.5,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Your account has been created. Confirm to continue.',
-                    style: TextStyle(
-                      color: Colors.black.withValues(alpha: 0.60),
-                      height: 1.4,
-                      fontWeight: FontWeight.w600,
+                  const SizedBox(height: 12),
+                  Center(
+                    child: Text(
+                      'Your account has been created successfully.\nPlease choose your role to get started.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black.withValues(alpha: 0.60),
+                        height: 1.5,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 32),
                   if (!_approved) ...[
                     const Text(
                       'Choose your role',
