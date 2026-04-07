@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/api/api_client.dart';
 import 'login_screen.dart';
+import '../dashboard/dashboard_screen.dart';
 import 'widgets/auth_background.dart';
 
 class ApprovalScreen extends ConsumerStatefulWidget {
@@ -131,7 +132,7 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
         const SnackBar(content: Text('Setup complete. Welcome!')),
       );
 
-      context.go(LoginScreen.routePath);
+      context.go(DashboardScreen.routePath);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

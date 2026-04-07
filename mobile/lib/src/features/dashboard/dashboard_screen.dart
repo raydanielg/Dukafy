@@ -14,8 +14,19 @@ class DashboardScreen extends ConsumerWidget {
         title: const Text('Dashboard'),
         actions: [
           IconButton(
-            onPressed: () {
-              // TODO: Implement logout logic
+            onPressed: () async {
+              try {
+                await ref.read(authRepositoryProvider).logout();
+                if (context.mounted) {
+                  context.go('/login');
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(e.toString())),
+                  );
+                }
+              }
             },
             icon: const Icon(Icons.logout),
           ),

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'auth_repository.dart';
 import 'approval_screen.dart';
+import '../dashboard/dashboard_screen.dart';
 import 'forgot_password_screen.dart';
 import 'register_screen.dart';
 import 'widgets/auth_background.dart';
@@ -216,10 +217,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                             );
                                             return;
                                           }
-
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(content: Text('Logged in (demo).')),
-                                          );
+                                          if (isApproved) {
+                                            context.go(DashboardScreen.routePath);
+                                            return;
+                                          }
                                         }).catchError((e) {
                                           if (!mounted) return;
                                           ScaffoldMessenger.of(context).showSnackBar(
