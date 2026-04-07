@@ -22,7 +22,19 @@ class AuthController extends Controller
             'name' => $data['name'],
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
+            'is_approved' => false,
         ]);
+
+        // Auto-assign Manager role to new users
+        $managerRoleId = DB::table('roles')->where('slug', 'manager')->value('id');
+        if ($managerRoleId) {
+            DB::table('role_user')->insert([
+                'role_id' => $managerRoleId,
+                'user_id' => $user->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
         $token = $user->createToken('mobile')->plainTextToken;
 
