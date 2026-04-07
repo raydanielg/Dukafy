@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'login_screen.dart';
+import 'widgets/auth_background.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -54,99 +55,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void _openPolicySheet({required String title, required String body}) {
-    showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  body,
-                  style: TextStyle(
-                    color: Colors.black.withValues(alpha: 0.70),
-                    height: 1.45,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: FilledButton(
-                    onPressed: () {
-                      // TODO: open website
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Open Website',
-                      style: TextStyle(fontWeight: FontWeight.w900),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Create account',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      "Fill in your details below to get started. You'll be able to sign in once your account is created.",
-                      style: TextStyle(
-                        color: Colors.black.withValues(alpha: 0.60),
-                        height: 1.4,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          const AuthBackground(),
+          SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Create account',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "Fill in your details below to get started. You'll be able to sign in once your account is created.",
+                          style: TextStyle(
+                            color: Colors.black.withValues(alpha: 0.60),
+                            height: 1.4,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 18),
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
                           TextFormField(
                             controller: _firstNameController,
                             decoration: _pillDecoration(
@@ -257,56 +205,58 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ],
-                      ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 18),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => context.go(LoginScreen.routePath),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(999),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 18),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => context.go(LoginScreen.routePath),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                          ),
+                          child: const Text('Back'),
                         ),
                       ),
-                      child: const Text('Back'),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: () {
-                        if (!_formKey.currentState!.validate()) return;
-                        FocusScope.of(context).unfocus();
-                        // TODO: call API
-                        context.go(LoginScreen.routePath);
-                      },
-                      style: FilledButton.styleFrom(
-                        backgroundColor: colorScheme.primary,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(999),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: FilledButton(
+                          onPressed: () {
+                            if (!_formKey.currentState!.validate()) return;
+                            FocusScope.of(context).unfocus();
+                            // TODO: call API
+                            context.go(LoginScreen.routePath);
+                          },
+                          style: FilledButton.styleFrom(
+                            backgroundColor: colorScheme.primary,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                          ),
+                          child: const Text(
+                            'Continue',
+                            style: TextStyle(fontWeight: FontWeight.w900),
+                          ),
                         ),
                       ),
-                      child: const Text(
-                        'Continue',
-                        style: TextStyle(fontWeight: FontWeight.w900),
-                      ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
