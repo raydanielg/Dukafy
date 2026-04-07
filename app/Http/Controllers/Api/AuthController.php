@@ -96,14 +96,32 @@ class AuthController extends Controller
 
     public function approve(Request $request)
     {
+        $data = $request->validate([
+            'role' => ['required', 'string', 'in:owner,cashier'],
+            'manager_id' => ['nullable', 'required_if:role,cashier', 'exists:users,id'],
+        ]);
+
         /** @var User|null $user */
         $user = $request->user();
         if (!$user) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
+        $roleSlug = $data['role'] === 'owner' ? 'manager' : 'cashier';
+        $roleId = DB::table('roles')->where('slug', $roleSlug)->value('id');
+
         if (!$user->is_approved) {
-            $user->forceFill(['is_approved' => true])->save();
+            $user->forceFill([
+                'is_approved' => true,
+                'manager_id' => $data['manager_id'] ?? null,
+            ])->save();
+
+            if ($roleId) {
+                DB::table('role_user')->updateOrInsert(
+                    ['user_id' => $user->id],
+                    ['role_id' => $roleId, 'updated_at' => now(), 'created_at' => now()]
+                );
+            }
         }
 
         return response()->json([
@@ -113,8 +131,36 @@ class AuthController extends Controller
                 'name' => $user->name,
                 'phone' => $user->phone,
                 'is_approved' => (bool) $user->is_approved,
+                'role' => $roleSlug,
             ],
         ]);
+    }
+
+    public function searchManagers(Request $request)
+    {
+        $q = $request->get('q');
+        if (strlen($q) < 2) {
+            return response()->json([]);
+        }
+
+        $managers = User::query()
+            ->where('name', 'like', "%{$q}%")
+            ->whereHas('roles', function($query) {
+                $query->where('slug', 'manager');
+            })
+            ->with(['business'])
+            ->limit(5)
+            ->get()
+            ->map(function($m) {
+                return [
+                    'id' => $m->id,
+                    'name' => $m->name,
+                    'phone' => $m->phone,
+                    'business_name' => $m->business?->name ?? 'No business assigned',
+                ];
+            });
+
+        return response()->json($managers);
     }
 
     public function logout(Request $request)
