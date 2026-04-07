@@ -55,7 +55,7 @@ Route::get('/articles/category/{slug}', function ($slug) {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'admin', 'admin.activity'])->group(function () {
     Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
