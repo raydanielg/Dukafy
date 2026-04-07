@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../core/api/api_client.dart';
+import '../auth/user_provider.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -17,28 +18,16 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   bool _isLoading = false;
-  Map<String, dynamic>? _user;
   final Color primaryGreen = const Color(0xFF2E7D32);
 
   @override
   void initState() {
     super.initState();
-    _loadUser();
-  }
-
-  Future<void> _loadUser() async {
-    try {
-      final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.get('/auth/me');
-      setState(() {
-        _user = res.data['user'];
-      });
-    } catch (_) {}
   }
 
   Future<void> _pickAndUploadImage(bool isAvatar) async {
     final picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.gallery, maxWidth: 512);
+    final image = await picker.pickImage(source: ImageSource.gallery, maxWidth: 512, imageQuality: 80);
     
     if (image == null) return;
 
@@ -46,16 +35,25 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     try {
       final dio = ref.read(apiClientProvider).dio;
+      final userData = ref.read(userProvider).data;
+      
       final formData = FormData.fromMap({
         isAvatar ? 'avatar' : 'logo': await MultipartFile.fromFile(image.path),
-        if (isAvatar) 'name': _user?['name'] ?? '',
+        if (isAvatar) 'name': userData?['name'] ?? '',
       });
 
       final url = isAvatar ? '/auth/update-profile' : '/auth/update-business-logo';
-      await dio.post(url, data: formData);
+      final res = await dio.post(url, data: formData);
       
-      await _loadUser();
       if (mounted) {
+        if (isAvatar) {
+          final newUrl = res.data['user']['avatar_url'];
+          ref.read(userProvider.notifier).updateAvatar(newUrl);
+        } else {
+          final newUrl = res.data['logo_url'];
+          ref.read(userProvider.notifier).updateBusinessLogo(newUrl);
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('${isAvatar ? "Avatar" : "Logo"} updated successfully!')),
         );
@@ -73,7 +71,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_user == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    final userState = ref.watch(userProvider);
+    final user = userState.data;
+
+    if (user == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
 
     return Scaffold(
       appBar: AppBar(
@@ -93,9 +94,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   CircleAvatar(
                     radius: 60,
                     backgroundColor: primaryGreen.withOpacity(0.1),
-                    backgroundImage: _user?['avatar_url'] != null ? NetworkImage(_user!['avatar_url']) : null,
-                    child: _user?['avatar_url'] == null 
-                      ? Text(_user?['name']?[0].toUpperCase() ?? 'U', style: TextStyle(fontSize: 40, color: primaryGreen, fontWeight: FontWeight.bold))
+                    backgroundImage: user['avatar_url'] != null ? NetworkImage(user['avatar_url']) : null,
+                    child: user['avatar_url'] == null 
+                      ? Text(user['name']?[0].toUpperCase() ?? 'U', style: TextStyle(fontSize: 40, color: primaryGreen, fontWeight: FontWeight.bold))
                       : null,
                   ),
                   Positioned(
@@ -112,14 +113,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            Text(_user?['name'] ?? '', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            Text(_user?['phone'] ?? '', style: const TextStyle(color: Colors.grey)),
+            Text(user['name'] ?? '', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            Text(user['phone'] ?? '', style: const TextStyle(color: Colors.grey)),
             
             const SizedBox(height: 40),
             const Divider(),
             
             // Business Logo Section
-            if (_user?['business'] != null) ...[
+            if (user['business'] != null) ...[
               const SizedBox(height: 20),
               const Align(alignment: Alignment.centerLeft, child: Text('Business Logo', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
               const SizedBox(height: 15),
@@ -134,10 +135,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.grey.shade300),
                       ),
-                      child: _user?['business']?['logo_url'] != null
+                      child: user['business']?['logo_url'] != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(12),
-                            child: Image.network(_user!['business']['logo_url'], fit: BoxFit.contain),
+                            child: Image.network(user['business']['logo_url'], fit: BoxFit.contain),
                           )
                         : const Center(child: Icon(Icons.storefront, size: 40, color: Colors.grey)),
                     ),
@@ -155,7 +156,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              Text(_user?['business']?['name'] ?? '', style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(user['business']?['name'] ?? '', style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
             
             if (_isLoading) ...[
