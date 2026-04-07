@@ -103,7 +103,7 @@
                 <div class="admin-submenu" data-admin-submenu>
                     <a class="admin-sub-link {{ request()->routeIs('admin.articles.index') ? 'active' : '' }}" href="{{ route('admin.articles.index') }}">All Articles</a>
                     <a class="admin-sub-link {{ request()->routeIs('admin.articles.create') ? 'active' : '' }}" href="{{ route('admin.articles.create') }}">Add New Article</a>
-                    <a class="admin-sub-link" href="#">Categories</a>
+                    <a class="admin-sub-link {{ request()->routeIs('admin.article_categories.*') ? 'active' : '' }}" href="{{ route('admin.article_categories.index') }}">Categories</a>
                 </div>
             </div>
         </div>

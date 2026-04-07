@@ -13,7 +13,7 @@
 
     <div class="admin-panel">
         <div class="admin-panel-body">
-            <form method="POST" action="{{ route('admin.articles.store') }}" class="admin-form">
+            <form method="POST" action="{{ route('admin.articles.store') }}" class="admin-form" enctype="multipart/form-data">
                 @csrf
 
                 <div class="row g-3">
@@ -38,8 +38,27 @@
                     </div>
 
                     <div class="col-md-6">
+                        <label class="form-label">Audience / Tag</label>
+                        <input type="text" name="age_range" value="{{ old('age_range') }}" class="form-control" placeholder="e.g. Retail, Wholesale, Accounting">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Upload Image (optional)</label>
+                        <input type="file" name="image_file" class="form-control">
+                        <div class="form-text">Max 5MB. Stored in public disk.</div>
+                    </div>
+
+                    <div class="col-md-6">
                         <label class="form-label">Image Path</label>
                         <input type="text" name="image" value="{{ old('image') }}" class="form-control" placeholder="e.g. images/blog/cover.png">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Featured</label>
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" value="1" id="is_featured" name="is_featured">
+                            <label class="form-check-label" for="is_featured">Mark as featured</label>
+                        </div>
                     </div>
 
                     <div class="col-md-12">
