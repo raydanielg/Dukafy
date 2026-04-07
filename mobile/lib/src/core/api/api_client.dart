@@ -5,6 +5,23 @@ import '../storage/storage_providers.dart';
 
 const kDefaultApiBaseUrl = 'http://10.118.138.203:8000/api';
 
+String _normalizeBaseUrl(String raw) {
+  var url = raw.trim();
+  if (url.isEmpty) return '';
+
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'http://$url';
+  }
+
+  url = url.replaceAll(RegExp(r'/+$'), '');
+
+  if (!url.endsWith('/api')) {
+    url = '$url/api';
+  }
+
+  return url;
+}
+
 class ApiClient {
   ApiClient({required Dio dio}) : _dio = dio;
 
@@ -17,8 +34,8 @@ final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(
     BaseOptions(
       baseUrl: kDefaultApiBaseUrl,
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 20),
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
       headers: {
         'Accept': 'application/json',
       },
@@ -29,9 +46,12 @@ final dioProvider = Provider<Dio>((ref) {
     InterceptorsWrapper(
       onRequest: (options, handler) async {
         final storage = ref.read(secureStorageProvider);
-        final baseUrl = await storage.getApiBaseUrl();
-        if (baseUrl != null && baseUrl.trim().isNotEmpty) {
-          options.baseUrl = baseUrl.trim();
+        final rawBaseUrl = await storage.getApiBaseUrl();
+        if (rawBaseUrl != null && rawBaseUrl.trim().isNotEmpty) {
+          final normalized = _normalizeBaseUrl(rawBaseUrl);
+          if (normalized.isNotEmpty) {
+            options.baseUrl = normalized;
+          }
         }
 
         final token = await storage.getAuthToken();
