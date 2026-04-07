@@ -279,6 +279,40 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       ),
     );
   }
+
+  Widget _buildDrawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: primaryGreen,
+            ),
+            child: Text('Drawer Header'),
+          ),
+          ListTile(
+            title: Text('Item 1'),
+            onTap: () {
+              // Update the state of the app
+              // ...
+              // Then close the drawer
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: Text('Item 2'),
+            onTap: () {
+              // Update the state of the app
+              // ...
+              // Then close the drawer
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _SmallKPICard extends StatelessWidget {
