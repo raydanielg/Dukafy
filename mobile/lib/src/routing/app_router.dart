@@ -9,6 +9,7 @@ import '../features/auth/register_screen.dart';
 import '../features/auth/forgot_password_screen.dart';
 import '../features/auth/approval_screen.dart';
 import '../features/dashboard/dashboard_screen.dart';
+import '../features/profile/profile_screen.dart';
 import '../features/pos/pos_screen.dart';
 import '../features/products/products_screen.dart';
 import '../features/purchases/purchases_screen.dart';
@@ -60,6 +61,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: DashboardScreen.routePath,
         name: DashboardScreen.routeName,
         builder: (context, state) => const DashboardScreen(),
+      ),
+      GoRoute(
+        path: ProfileScreen.routePath,
+        name: ProfileScreen.routeName,
+        builder: (context, state) => const ProfileScreen(),
       ),
       GoRoute(
         path: POSScreen.routePath,
