@@ -49,13 +49,45 @@ class SaleController extends Controller
             'discount' => ['nullable', 'numeric', 'min:0'],
             'payment_method' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
-            'items' => ['required', 'array', 'min:1'],
+            'items' => ['required', 'array'],
             'items.*.product_id' => ['nullable', 'integer'],
-            'items.*.product_name' => ['required', 'string', 'max:255'],
+            'items.*.product_name' => ['nullable', 'string', 'max:255'],
             'items.*.sku' => ['nullable', 'string', 'max:255'],
-            'items.*.qty' => ['required', 'integer', 'min:1'],
-            'items.*.unit_price' => ['required', 'numeric', 'min:0'],
+            'items.*.qty' => ['nullable', 'integer', 'min:1'],
+            'items.*.unit_price' => ['nullable', 'numeric', 'min:0'],
         ]);
+
+        $items = collect($data['items'])
+            ->map(function ($item) {
+                return [
+                    'product_id' => $item['product_id'] ?? null,
+                    'product_name' => isset($item['product_name']) ? trim((string) $item['product_name']) : null,
+                    'sku' => isset($item['sku']) ? trim((string) $item['sku']) : null,
+                    'qty' => $item['qty'] ?? null,
+                    'unit_price' => $item['unit_price'] ?? null,
+                ];
+            })
+            ->filter(function ($item) {
+                return !empty($item['product_id']) || !empty($item['product_name']);
+            })
+            ->values()
+            ->all();
+
+        if (count($items) < 1) {
+            return redirect()->back()->withErrors(['items' => 'Please add at least one sale item.'])->withInput();
+        }
+
+        foreach ($items as $idx => $item) {
+            if (empty($item['product_name'])) {
+                return redirect()->back()->withErrors(['items.' . $idx . '.product_name' => 'Product name is required.'])->withInput();
+            }
+            if (empty($item['qty'])) {
+                return redirect()->back()->withErrors(['items.' . $idx . '.qty' => 'Qty is required.'])->withInput();
+            }
+            if ($item['unit_price'] === null || $item['unit_price'] === '') {
+                return redirect()->back()->withErrors(['items.' . $idx . '.unit_price' => 'Unit price is required.'])->withInput();
+            }
+        }
 
         $saleNo = $data['sale_no'] ?? null;
         if (!$saleNo) {
@@ -63,7 +95,7 @@ class SaleController extends Controller
         }
 
         $subtotal = 0;
-        foreach ($data['items'] as $item) {
+        foreach ($items as $item) {
             $subtotal += ((int) $item['qty']) * ((float) $item['unit_price']);
         }
         $tax = (float) ($data['tax'] ?? 0);
@@ -88,7 +120,7 @@ class SaleController extends Controller
                 'updated_at' => now(),
             ]);
 
-            foreach ($data['items'] as $item) {
+            foreach ($items as $item) {
                 $lineTotal = ((int) $item['qty']) * ((float) $item['unit_price']);
 
                 DB::table('sale_items')->insert([
