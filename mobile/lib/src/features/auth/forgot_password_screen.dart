@@ -33,7 +33,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         fit: StackFit.expand,
         children: [
           const Image(
-            image: AssetImage('assets/images/onboarding_3.jpg'),
+            image: AssetImage(
+              'assets/images/front-view-woman-with-face-mask-market.jpg',
+            ),
             fit: BoxFit.cover,
             color: Colors.black54,
             colorBlendMode: BlendMode.darken,
