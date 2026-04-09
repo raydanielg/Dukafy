@@ -17,12 +17,7 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
-    @if(app()->environment('production'))
-        <link rel="stylesheet" href="{{ asset('build/assets/app-CYWMYAbo.css') }}">
-        <script src="{{ asset('build/assets/app-BX6Qa1eb.js') }}" defer></script>
-    @else
-        @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-    @endif
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
     <div id="app">
