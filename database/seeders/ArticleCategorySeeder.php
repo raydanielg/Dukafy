@@ -12,39 +12,34 @@ class ArticleCategorySeeder extends Seeder
     {
         $categories = [
             [
-                'name' => 'Maternal Health',
-                'description' => 'Health guidance and self-care for mothers',
-                'icon' => 'heart',
+                'name' => 'Usimamizi wa Biashara',
+                'description' => 'Mbinu bora za kuendesha na kusimamia biashara yako kila siku.',
+                'icon' => 'briefcase',
             ],
             [
-                'name' => 'Newborns (0-12 months)',
-                'description' => 'Care tips and health information for newborn babies',
-                'icon' => 'baby',
+                'name' => 'Mauzo na Masoko',
+                'description' => 'Jinsi ya kupata wateja wapya na kuongeza mauzo ya bidhaa zako.',
+                'icon' => 'cart-check',
             ],
             [
-                'name' => 'Nutrition',
-                'description' => 'Healthy eating recommendations for mothers and children',
-                'icon' => 'apple',
+                'name' => 'Usimamizi wa Stoo',
+                'description' => 'Mbinu za kudhibiti mzigo (stock) na kuzuia upotevu.',
+                'icon' => 'box-seam',
             ],
             [
-                'name' => 'Planning Pregnancy',
-                'description' => 'Guidelines for women planning to get pregnant',
-                'icon' => 'calendar',
+                'name' => 'Uhasibu na Fedha',
+                'description' => 'Kuweka rekodi za fedha, faida, na matumizi ya biashara.',
+                'icon' => 'cash-stack',
             ],
             [
-                'name' => 'Pregnancy',
-                'description' => 'Helpful advice and information for pregnant women',
-                'icon' => 'sun',
+                'name' => 'Huduma kwa Wateja',
+                'description' => 'Jinsi ya kuhudumia wateja ili waendelee kurudi kwenye biashara yako.',
+                'icon' => 'people',
             ],
             [
-                'name' => 'Preschoolers (3-6 years)',
-                'description' => 'Health and education advice for preschool-aged children',
-                'icon' => 'school',
-            ],
-            [
-                'name' => 'Toddlers (1-3 years)',
-                'description' => 'Child development and parenting tips for toddlers',
-                'icon' => 'person-walking',
+                'name' => 'Teknolojia na Biashara',
+                'description' => 'Kutumia mifumo ya kidijitali kukuza biashara yako.',
+                'icon' => 'laptop',
             ],
         ];
 
