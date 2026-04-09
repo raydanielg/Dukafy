@@ -267,12 +267,25 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       opacity: _fade,
                       child: ScaleTransition(
                         scale: _scale,
-                        child: Lottie.asset(
-                          'assets/icons/lottieflow-success-01-000000-easey.json',
-                          height: 150,
-                          width: 150,
-                          repeat: true,
-                          animate: true,
+                        child: Container(
+                          height: 120,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.green.withOpacity(0.3),
+                                blurRadius: 20,
+                                spreadRadius: 5,
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.check,
+                            size: 70,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
