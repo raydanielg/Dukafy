@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:lottie/lottie.dart';
+
 import '../../core/api/api_client.dart';
 import 'login_screen.dart';
 import '../dashboard/dashboard_screen.dart';
@@ -179,31 +181,18 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       opacity: _fade,
                       child: ScaleTransition(
                         scale: _scale,
-                        child: Container(
-                          height: 100,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                              colors: [
-                                colorScheme.primary,
-                                colorScheme.primary.withValues(alpha: 0.7),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: colorScheme.primary.withValues(alpha: 0.3),
-                                blurRadius: 20,
-                                spreadRadius: 5,
+                        child: Lottie.asset(
+                          'assets/icons/lottieflow-success-01-000000-easey.json',
+                          height: 150,
+                          width: 150,
+                          repeat: true,
+                          delegates: LottieDelegates(
+                            values: [
+                              ValueDelegate.color(
+                                const ['**'],
+                                value: Colors.green,
                               ),
                             ],
-                          ),
-                          child: const Icon(
-                            Icons.check_rounded,
-                            size: 60,
-                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -236,39 +225,27 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                   ),
                   const SizedBox(height: 32),
                   if (!_approved) ...[
+                    const Text(
+                      'Account Details',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.92),
-                        borderRadius: BorderRadius.circular(22),
-                        border: Border.all(color: Colors.black.withValues(alpha: 0.06)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.black.withOpacity(0.06)),
                       ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: statusColor.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(999),
-                            ),
-                            child: Text(statusText,
-                                style: TextStyle(color: statusColor, fontWeight: FontWeight.w900)),
-                          ),
-                          const SizedBox(height: 14),
-                          Text(widget.name,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900)),
-                          const SizedBox(height: 4),
-                          Text(widget.phone,
-                              style: TextStyle(
-                                  color: Colors.black.withValues(alpha: 0.65),
-                                  fontWeight: FontWeight.w700)),
-                          const SizedBox(height: 14),
-                          const Text(
-                            'Please verify your account to proceed to role selection.',
-                            style: TextStyle(fontWeight: FontWeight.w600, height: 1.4),
-                          ),
+                          _buildDetailRow('Full Name', widget.name, isFirst: true),
+                          _buildDetailRow('Phone Number', widget.phone),
+                          _buildDetailRow('Status', statusText, valueColor: statusColor, isLast: true),
                         ],
                       ),
                     ),
@@ -278,19 +255,20 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       child: FilledButton(
                         onPressed: _approve,
                         style: FilledButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
                         child: _loading
                             ? const SizedBox(
-                                height: 18,
-                                width: 18,
+                                height: 20,
+                                width: 20,
                                 child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                             : const Text('Verify Account',
-                                style: TextStyle(fontWeight: FontWeight.w900)),
+                                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
                       ),
                     ),
-                  ] else ...[
+                  ]
+ else ...[
                     const Text('Step 2: Choose your role',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 12),
