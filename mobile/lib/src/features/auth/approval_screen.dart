@@ -434,15 +434,66 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       ),
                     ),
                   ] else ...[
-                    const Text('Step 2: Choose your role',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                    const SizedBox(height: 12),
+                    // Step 2 Header
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.green.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.green.withOpacity(0.3)),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Text(
+                              '2',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Choose Your Role',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  'Select how you will use Dukafy',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // Role Selection Cards
                     Row(
                       children: [
                         Expanded(
                           child: _RoleCard(
                             title: 'Business Owner',
-                            icon: Icons.store_rounded,
+                            icon: Icons.storefront,
                             selected: _selectedRole == 'owner',
                             onTap: () => setState(() {
                               _selectedRole = 'owner';
@@ -450,11 +501,11 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                             }),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: _RoleCard(
                             title: 'Employee / Cashier',
-                            icon: Icons.person_pin_rounded,
+                            icon: Icons.badge,
                             selected: _selectedRole == 'cashier',
                             onTap: () => setState(() => _selectedRole = 'cashier'),
                           ),
@@ -619,21 +670,64 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       ],
                     ],
                     const SizedBox(height: 32),
-                    SizedBox(
+                    Container(
                       width: double.infinity,
+                      height: 58,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: colorScheme.primary.withOpacity(0.4),
+                            blurRadius: 15,
+                            spreadRadius: 2,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
                       child: FilledButton(
-                        onPressed: _completeOnboarding,
+                        onPressed: _loading ? null : _completeOnboarding,
                         style: FilledButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          elevation: 0,
                         ),
                         child: _loading
-                            ? const SizedBox(
-                                height: 18,
-                                width: 18,
-                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                            : const Text('Complete Setup',
-                                style: TextStyle(fontWeight: FontWeight.w900)),
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    height: 22,
+                                    width: 22,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.5,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    'Setting up...',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 16,
+                                      color: Colors.white.withOpacity(0.9),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.rocket_launch, size: 22),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Complete Setup',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ],
+                              ),
                       ),
                     ),
                   ],
