@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../storage/storage_providers.dart';
 
-const kDefaultApiBaseUrl = 'http://10.118.138.203:8000/api';
+const kDefaultApiBaseUrl = 'https://ematokeo.ac.tz/api';
 
 String _normalizeBaseUrl(String raw) {
   var url = raw.trim();
