@@ -890,6 +890,68 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
       ),
     );
   }
+
+  Widget _buildTypeChip(String type, IconData icon, ColorScheme colorScheme) {
+    final isSelected = _selectedBusinessType == type;
+    final typeLabels = {
+      'pharmacy': 'Pharmacy',
+      'restaurant': 'Restaurant',
+      'retail': 'Retail',
+      'wholesale': 'Wholesale',
+    };
+
+    return GestureDetector(
+      onTap: () => setState(() => _selectedBusinessType = type),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? colorScheme.primary : Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? colorScheme.primary : Colors.grey.withOpacity(0.3),
+            width: isSelected ? 2 : 1,
+          ),
+          boxShadow: [
+            if (isSelected)
+              BoxShadow(
+                color: colorScheme.primary.withOpacity(0.3),
+                blurRadius: 8,
+                spreadRadius: 1,
+                offset: const Offset(0, 3),
+              ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 18,
+              color: isSelected ? Colors.white : Colors.black54,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              typeLabels[type]!,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                color: isSelected ? Colors.white : Colors.black87,
+              ),
+            ),
+            if (isSelected) ...[
+              const SizedBox(width: 4),
+              const Icon(
+                Icons.check,
+                size: 14,
+                color: Colors.white,
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _RoleCard extends StatelessWidget {
