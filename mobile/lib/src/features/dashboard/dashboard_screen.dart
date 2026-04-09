@@ -45,7 +45,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   bool _kpiLoading = true;
 
   // Carousel controller for auto-scroll
-  final PageController _kpiPageController = PageController(viewportFraction: 0.45);
+  final PageController _kpiPageController = PageController(viewportFraction: 0.38);
   Timer? _autoScrollTimer;
   int _currentKpiPage = 0;
 
