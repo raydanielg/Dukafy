@@ -72,14 +72,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () =>
-                                context.go(RegisterScreen.routePath),
-                            child: const Text('Register'),
-                          ),
-                        ),
                         const SizedBox(height: 18),
                         const Text(
                           'Sign in',
