@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -51,14 +53,58 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
     _fade = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
 
     _controller.forward();
+    
+    // Start countdown for verification waiting
+    _startCountdown();
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
     _controller.dispose();
     _managerSearchController.dispose();
     _businessNameController.dispose();
     super.dispose();
+  }
+
+  void _startCountdown() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_countdown > 0) {
+        setState(() => _countdown--);
+      } else {
+        timer.cancel();
+        // Auto-check verification status when countdown reaches 0
+        _checkVerificationStatus();
+      }
+    });
+  }
+
+  Future<void> _checkVerificationStatus() async {
+    try {
+      final dio = ref.read(apiClientProvider).dio;
+      final res = await dio.get('/auth/me');
+      final userData = res.data['user'];
+      
+      if (mounted && userData['is_approved'] == true) {
+        setState(() {
+          _approved = true;
+          _countdown = 180; // Reset countdown
+        });
+        _timer?.cancel();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account verified! Now choose your role.')),
+        );
+      } else {
+        // Still not approved, restart countdown
+        setState(() => _countdown = 180);
+        _startCountdown();
+      }
+    } catch (_) {
+      // On error, restart countdown
+      setState(() => _countdown = 180);
+      _startCountdown();
+    }
   }
 
   Future<void> _searchManagers(String query) async {
