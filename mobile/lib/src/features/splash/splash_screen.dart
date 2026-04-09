@@ -7,6 +7,7 @@ import '../onboarding/onboarding_screen.dart';
 import '../auth/login_screen.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../auth/user_provider.dart';
+import '../auth/approval_screen.dart';
 import '../../core/api/api_client.dart';
 import '../../core/auth/biometric_service.dart';
 
