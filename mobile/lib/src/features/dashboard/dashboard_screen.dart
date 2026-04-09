@@ -257,31 +257,95 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             ],
                           ),
                           const SizedBox(height: 12),
-                          // Two main KPI Cards with nice edges
+                          // KPI Carousel with auto-scroll
+                          SizedBox(
+                            height: 140,
+                            child: Skeletonizer(
+                              enabled: _kpiLoading,
+                              child: PageView.builder(
+                                controller: _kpiPageController,
+                                onPageChanged: (index) => setState(() => _currentKpiPage = index),
+                                padEnds: false,
+                                itemCount: 6,
+                                itemBuilder: (context, index) {
+                                  final kpiItems = [
+                                    {
+                                      'title': 'Stock In',
+                                      'value': 'TSh ${_kpiData['stock_in'] ?? 0}',
+                                      'subtitle': 'Inventory value',
+                                      'icon': Icons.inventory_2,
+                                      'color': Colors.blue,
+                                    },
+                                    {
+                                      'title': 'Profit',
+                                      'value': '${_kpiData['profit'] ?? 0}',
+                                      'subtitle': 'Net profit',
+                                      'icon': Icons.trending_up,
+                                      'color': Colors.green,
+                                    },
+                                    {
+                                      'title': 'Orders',
+                                      'value': 'TSh ${_kpiData['orders'] ?? 0}',
+                                      'subtitle': 'Total orders',
+                                      'icon': Icons.shopping_cart,
+                                      'color': Colors.purple,
+                                    },
+                                    {
+                                      'title': 'Credits',
+                                      'value': 'TSh ${_kpiData['credits'] ?? 2000000}',
+                                      'subtitle': 'Outstanding',
+                                      'icon': Icons.credit_card,
+                                      'color': Colors.orange,
+                                    },
+                                    {
+                                      'title': 'Expense',
+                                      'value': 'TSh ${_kpiData['expenses'] ?? 2000000}',
+                                      'subtitle': 'Total expenses',
+                                      'icon': Icons.receipt_long,
+                                      'color': Colors.red,
+                                    },
+                                    {
+                                      'title': 'Sales',
+                                      'value': 'TSh ${_kpiData['sales'] ?? 0}',
+                                      'subtitle': 'Total sales',
+                                      'icon': Icons.point_of_sale,
+                                      'color': primaryGreen,
+                                    },
+                                  ];
+                                  final item = kpiItems[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 12),
+                                    child: _KPICard(
+                                      title: item['title'] as String,
+                                      value: item['value'] as String,
+                                      subtitle: item['subtitle'] as String,
+                                      icon: item['icon'] as IconData,
+                                      color: item['color'] as Color,
+                                      isPositive: (item['color'] as Color) != Colors.red && (item['color'] as Color) != Colors.orange,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          // Page Indicator Dots
+                          const SizedBox(height: 12),
                           Row(
-                            children: [
-                              Expanded(
-                                child: _KPICard(
-                                  title: 'Total Sales',
-                                  value: 'TZS 0.00',
-                                  subtitle: '+0% from last month',
-                                  icon: Icons.trending_up,
-                                  color: primaryGreen,
-                                  isPositive: true,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(6, (index) {
+                              return AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                margin: const EdgeInsets.symmetric(horizontal: 3),
+                                height: 6,
+                                width: _currentKpiPage == index ? 18 : 6,
+                                decoration: BoxDecoration(
+                                  color: _currentKpiPage == index
+                                      ? primaryGreen
+                                      : Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(3),
                                 ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: _KPICard(
-                                  title: 'Outstanding',
-                                  value: 'TZS 0.00',
-                                  subtitle: 'Credit balance',
-                                  icon: Icons.account_balance_wallet,
-                                  color: Colors.orange,
-                                  isPositive: false,
-                                ),
-                              ),
-                            ],
+                              );
+                            }),
                           ),
                           const SizedBox(height: 24),
                           // Quick Actions Grid
