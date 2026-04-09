@@ -342,24 +342,95 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       ),
                     ),
                     const SizedBox(height: 24),
+                    // Countdown Timer Display
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.orange.withOpacity(0.3)),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.timer, color: Colors.orange, size: 20),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Auto-check in: ${_countdown ~/ 60}:${(_countdown % 60).toString().padLeft(2, '0')}',
+                                style: const TextStyle(
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Please wait while we verify your account',
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 13,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Verify Account Button with Loading
                     SizedBox(
                       width: double.infinity,
+                      height: 54,
                       child: FilledButton(
-                        onPressed: _approve,
+                        onPressed: _loading ? null : _approve,
                         style: FilledButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12)),
+                          backgroundColor: Colors.green,
+                          disabledBackgroundColor: Colors.green.withOpacity(0.6),
                         ),
                         child: _loading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                    strokeWidth: 2, color: Colors.white))
-                            : const Text('Verify Account',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w900, fontSize: 16)),
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    'Verifying...',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 16,
+                                      color: Colors.white.withOpacity(0.9),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.verified_user, size: 20),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'Verify Account',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
                       ),
                     ),
                   ] else ...[
