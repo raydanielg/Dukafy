@@ -35,23 +35,24 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     final token = await storage.getAuthToken();
 
     if (token != null && token.isNotEmpty) {
-      // 1. Check if biometrics are available and authenticated
+      // NOTE: Biometric authentication temporarily disabled.
+      // Uncomment the block below to re-enable fingerprint/face ID on app launch.
+      /*
       final bio = ref.read(biometricServiceProvider);
       final isBioAvailable = await bio.isBiometricAvailable();
       
       if (isBioAvailable) {
         final authenticated = await bio.authenticate();
         if (!authenticated) {
-          // If biometric failed or cancelled, stay or show error
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Authentication failed. Please try again.')),
           );
-          // Retry or force login if needed, for now we stay on splash
           return;
         }
       }
+      */
 
-      // 2. Go to Dashboard (Persistent Session)
+      // Go to Dashboard (Persistent Session)
       // Even if offline, we go to dashboard to allow offline data viewing
       try {
         final dio = ref.read(apiClientProvider).dio;
