@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:lottie/lottie.dart';
 
 import '../../core/api/api_client.dart';
@@ -155,6 +154,44 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
       if (!mounted) return;
       setState(() => _loading = false);
     }
+  }
+
+  Widget _buildDetailRow(String label, String value,
+      {Color? valueColor, bool isLast = false}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      decoration: BoxDecoration(
+        border: isLast
+            ? null
+            : Border(
+                bottom: BorderSide(color: Colors.black.withOpacity(0.05))),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.5),
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: valueColor ?? Colors.black87,
+                fontWeight: FontWeight.w800,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -312,7 +349,7 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.black.withValues(alpha: 0.1)),
+                            borderSide: BorderSide(color: Colors.black.withOpacity(0.1)),
                           ),
                         ),
                       ),
@@ -333,7 +370,7 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                             label: Text(type.substring(0, 1).toUpperCase() + type.substring(1)),
                             selected: isSelected,
                             onSelected: (val) => setState(() => _selectedBusinessType = val ? type : null),
-                            selectedColor: colorScheme.primary.withValues(alpha: 0.2),
+                            selectedColor: colorScheme.primary.withOpacity(0.2),
                             labelStyle: TextStyle(
                               color: isSelected ? colorScheme.primary : Colors.black87,
                               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -366,20 +403,20 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.black.withValues(alpha: 0.1)),
+                            borderSide: BorderSide(color: Colors.black.withOpacity(0.1)),
                           ),
                         ),
                       ),
                       if (_managerSuggestions.isNotEmpty && _selectedManager == null)
                         Container(
                           margin: const EdgeInsets.only(top: 4),
-                          constraints: const BoxConstraints(maxHeight: 250), // Prevent infinite height
+                          constraints: const BoxConstraints(maxHeight: 250),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
+                                color: Colors.black.withOpacity(0.1),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -397,7 +434,7 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                                 return ListTile(
                                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                   leading: CircleAvatar(
-                                    backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
+                                    backgroundColor: colorScheme.primary.withOpacity(0.1),
                                     child: Text(m['name'][0].toUpperCase(),
                                         style: TextStyle(
                                             color: colorScheme.primary, fontWeight: FontWeight.bold)),
@@ -405,7 +442,7 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                                   title:
                                       Text(m['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
                                   subtitle: Text("${m['business_name']}\n${m['phone']}", 
-                                    style: TextStyle(fontSize: 12, height: 1.4)),
+                                    style: const TextStyle(fontSize: 12, height: 1.4)),
                                   isThreeLine: true,
                                   onTap: () => setState(() {
                                     _selectedManager = m;
@@ -422,9 +459,9 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                         Container(
                           padding: const EdgeInsets.all(14),
                           decoration: BoxDecoration(
-                            color: colorScheme.primary.withValues(alpha: 0.05),
+                            color: colorScheme.primary.withOpacity(0.05),
                             borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: colorScheme.primary.withValues(alpha: 0.2)),
+                            border: Border.all(color: colorScheme.primary.withOpacity(0.2)),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -481,42 +518,6 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
         ],
       ),
     );
-  Widget _buildDetailRow(String label, String value,
-      {Color? valueColor, bool isLast = false}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: BoxDecoration(
-        border: isLast
-            ? null
-            : Border(
-                bottom: BorderSide(color: Colors.black.withOpacity(0.05))),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.black.withOpacity(0.5),
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              value,
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                color: valueColor ?? Colors.black87,
-                fontWeight: FontWeight.w800,
-                fontSize: 14,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
 
@@ -545,13 +546,13 @@ class _RoleCard extends StatelessWidget {
           color: selected ? colorScheme.primary : Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: selected ? colorScheme.primary : Colors.black.withValues(alpha: 0.1),
+            color: selected ? colorScheme.primary : Colors.black.withOpacity(0.1),
             width: 2,
           ),
           boxShadow: [
             if (selected)
               BoxShadow(
-                color: colorScheme.primary.withValues(alpha: 0.3),
+                color: colorScheme.primary.withOpacity(0.3),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
