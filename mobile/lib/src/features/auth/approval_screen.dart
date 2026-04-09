@@ -975,38 +975,38 @@ class _RoleCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-        height: 140,
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
         decoration: BoxDecoration(
           color: selected ? colorScheme.primary : Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: selected ? colorScheme.primary : Colors.grey.withOpacity(0.3),
-            width: selected ? 3 : 2,
+            width: selected ? 2 : 1,
           ),
           boxShadow: [
             // Default shadow
             BoxShadow(
               color: Colors.black.withOpacity(0.08),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
             ),
             // Extra shadow when selected
             if (selected)
               BoxShadow(
                 color: colorScheme.primary.withOpacity(0.4),
-                blurRadius: 20,
-                spreadRadius: 2,
-                offset: const Offset(0, 8),
+                blurRadius: 12,
+                spreadRadius: 1,
+                offset: const Offset(0, 4),
               ),
           ],
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Icon in circle background when selected
+            // Icon in circle background
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: selected 
                     ? Colors.white.withOpacity(0.2) 
@@ -1015,29 +1015,30 @@ class _RoleCard extends StatelessWidget {
               ),
               child: Icon(
                 icon,
-                size: 36,
+                size: 28,
                 color: selected ? Colors.white : colorScheme.primary,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Text(
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: FontWeight.w800,
                 color: selected ? Colors.white : Colors.black87,
                 height: 1.2,
               ),
             ),
-            if (selected) ...[
-              const SizedBox(height: 6),
-              const Icon(
-                Icons.check_circle,
-                size: 18,
-                color: Colors.white,
+            if (selected)
+              const Padding(
+                padding: EdgeInsets.only(top: 6),
+                child: Icon(
+                  Icons.check_circle,
+                  size: 16,
+                  color: Colors.white,
+                ),
               ),
-            ],
           ],
         ),
       ),
