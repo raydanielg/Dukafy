@@ -53,21 +53,39 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       }
       */
 
-      // Go to Dashboard (Persistent Session)
-      // Even if offline, we go to dashboard to allow offline data viewing
+      // Check approval status before allowing dashboard access
       try {
         final dio = ref.read(apiClientProvider).dio;
-        // Background update user info if online
-        dio.get('/auth/me').then((res) {
-          if (mounted) {
-            ref.read(userProvider.notifier).setUser(res.data['user']);
-          }
-        }).catchError((_) {});
+        final res = await dio.get('/auth/me');
         
-        if (mounted) context.go(DashboardScreen.routePath);
+        if (mounted) {
+          final userData = res.data['user'];
+          ref.read(userProvider.notifier).setUser(userData);
+          
+          // Check if user is approved
+          final isApproved = userData['is_approved'] == true;
+          
+          if (!isApproved) {
+            // User not approved - must verify first
+            context.goNamed(
+              ApprovalScreen.routeName,
+              extra: {
+                'name': userData['name'] ?? '',
+                'phone': userData['phone'] ?? '',
+              },
+            );
+            return;
+          }
+          
+          // User is approved - go to Dashboard
+          context.go(DashboardScreen.routePath);
+        }
       } catch (e) {
-        // If critical error, maybe go to login, but since we have a token, we trust the session
-        if (mounted) context.go(DashboardScreen.routePath);
+        // If API fails (offline or error), check cached user data if available
+        // For safety, we'll go to login to re-authenticate
+        if (mounted) {
+          context.go(LoginScreen.routePath);
+        }
       }
     } else {
       final done = await storage.isOnboardingDone();
