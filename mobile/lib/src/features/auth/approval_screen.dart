@@ -25,6 +25,8 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
     with SingleTickerProviderStateMixin {
   bool _loading = false;
   bool _approved = false;
+  int _countdown = 180; // 3 minutes countdown for verification
+  Timer? _timer;
   String? _selectedRole; // 'owner' or 'cashier'
   Map<String, dynamic>? _selectedManager;
   final _managerSearchController = TextEditingController();
