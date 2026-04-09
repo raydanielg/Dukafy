@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -38,10 +40,44 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   final Color primaryGreen = const Color(0xFF2E7D32);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  // KPI Data
+  Map<String, dynamic> _kpiData = {};
+  bool _kpiLoading = true;
+
+  // Carousel controller for auto-scroll
+  final PageController _kpiPageController = PageController(viewportFraction: 0.45);
+  Timer? _autoScrollTimer;
+  int _currentKpiPage = 0;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _fetchUserData());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchUserData();
+      _fetchKpiData();
+      _startAutoScroll();
+    });
+  }
+
+  @override
+  void dispose() {
+    _autoScrollTimer?.cancel();
+    _kpiPageController.dispose();
+    super.dispose();
+  }
+
+  void _startAutoScroll() {
+    _autoScrollTimer?.cancel();
+    _autoScrollTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (_kpiPageController.hasClients && mounted) {
+        final nextPage = (_currentKpiPage + 1) % 6; // 6 KPI cards
+        _kpiPageController.animateToPage(
+          nextPage,
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
   }
 
   Future<void> _fetchUserData() async {
@@ -58,6 +94,36 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error loading dashboard: $e')),
         );
+      }
+    }
+  }
+
+  Future<void> _fetchKpiData() async {
+    setState(() => _kpiLoading = true);
+    try {
+      final dio = ref.read(apiClientProvider).dio;
+      // Try to fetch from API
+      final res = await dio.get('/dashboard/kpi').timeout(const Duration(seconds: 10));
+      if (mounted) {
+        setState(() {
+          _kpiData = res.data['data'] ?? {};
+          _kpiLoading = false;
+        });
+      }
+    } catch (e) {
+      // Use fallback data if API fails
+      if (mounted) {
+        setState(() {
+          _kpiData = {
+            'stock_in': 0,
+            'profit': 0,
+            'orders': 0,
+            'credits': 2000000,
+            'expenses': 2000000,
+            'sales': 0,
+          };
+          _kpiLoading = false;
+        });
       }
     }
   }
