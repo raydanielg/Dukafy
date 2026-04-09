@@ -514,46 +514,119 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                     ),
                     if (_selectedRole == 'owner') ...[
                       const SizedBox(height: 24),
-                      const Text('Business Setup',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        controller: _businessNameController,
-                        decoration: InputDecoration(
-                          hintText: 'Business Name (e.g. Malkia Pharmacy)',
-                          prefixIcon: const Icon(Icons.storefront_rounded),
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.black.withOpacity(0.1)),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      const Text('Business Type',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 8,
-                        children: [
-                          'pharmacy',
-                          'restaurant',
-                          'retail',
-                          'wholesale'
-                        ].map((type) {
-                          final isSelected = _selectedBusinessType == type;
-                          return ChoiceChip(
-                            label: Text(type.substring(0, 1).toUpperCase() + type.substring(1)),
-                            selected: isSelected,
-                            onSelected: (val) => setState(() => _selectedBusinessType = val ? type : null),
-                            selectedColor: colorScheme.primary.withOpacity(0.2),
-                            labelStyle: TextStyle(
-                              color: isSelected ? colorScheme.primary : Colors.black87,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      // Business Setup Dashboard Card
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.black.withOpacity(0.08)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.06),
+                              blurRadius: 20,
+                              spreadRadius: 2,
+                              offset: const Offset(0, 8),
                             ),
-                          );
-                        }).toList(),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Header
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: colorScheme.primary.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(
+                                    Icons.storefront,
+                                    color: colorScheme.primary,
+                                    size: 24,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                const Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Business Setup',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      SizedBox(height: 2),
+                                      Text(
+                                        'Create your business profile',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.black54,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Divider(height: 24),
+                            // Business Name Field
+                            const Text(
+                              'Business Name',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              controller: _businessNameController,
+                              decoration: InputDecoration(
+                                hintText: 'e.g. Malkia Pharmacy',
+                                prefixIcon: const Icon(Icons.storefront_rounded),
+                                filled: true,
+                                fillColor: Colors.grey.withOpacity(0.05),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide.none,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(color: Colors.grey.withOpacity(0.2)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            // Business Type Selection
+                            const Text(
+                              'Business Type',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              spacing: 10,
+                              runSpacing: 8,
+                              children: [
+                                _buildTypeChip('pharmacy', Icons.local_pharmacy, colorScheme),
+                                _buildTypeChip('restaurant', Icons.restaurant, colorScheme),
+                                _buildTypeChip('retail', Icons.shopping_bag, colorScheme),
+                                _buildTypeChip('wholesale', Icons.inventory_2, colorScheme),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                     if (_selectedRole == 'cashier') ...[
