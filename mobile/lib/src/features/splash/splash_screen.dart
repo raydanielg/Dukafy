@@ -19,6 +19,8 @@ class SplashScreen extends ConsumerStatefulWidget {
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
+import '../../core/auth/biometric_service.dart';
+
 class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
@@ -34,15 +36,37 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     final token = await storage.getAuthToken();
 
     if (token != null && token.isNotEmpty) {
+      // 1. Check if biometrics are available and authenticated
+      final bio = ref.read(biometricServiceProvider);
+      final isBioAvailable = await bio.isBiometricAvailable();
+      
+      if (isBioAvailable) {
+        final authenticated = await bio.authenticate();
+        if (!authenticated) {
+          // If biometric failed or cancelled, stay or show error
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Authentication failed. Please try again.')),
+          );
+          // Retry or force login if needed, for now we stay on splash
+          return;
+        }
+      }
+
+      // 2. Go to Dashboard (Persistent Session)
+      // Even if offline, we go to dashboard to allow offline data viewing
       try {
         final dio = ref.read(apiClientProvider).dio;
-        final res = await dio.get('/auth/me');
-        if (mounted) {
-          ref.read(userProvider.notifier).setUser(res.data['user']);
-          context.go(DashboardScreen.routePath);
-        }
+        // Background update user info if online
+        dio.get('/auth/me').then((res) {
+          if (mounted) {
+            ref.read(userProvider.notifier).setUser(res.data['user']);
+          }
+        }).catchError((_) {});
+        
+        if (mounted) context.go(DashboardScreen.routePath);
       } catch (e) {
-        if (mounted) context.go(LoginScreen.routePath);
+        // If critical error, maybe go to login, but since we have a token, we trust the session
+        if (mounted) context.go(DashboardScreen.routePath);
       }
     } else {
       final done = await storage.isOnboardingDone();
