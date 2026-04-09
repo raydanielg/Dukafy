@@ -631,30 +631,108 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                     ],
                     if (_selectedRole == 'cashier') ...[
                       const SizedBox(height: 24),
-                      const Text('Find your manager',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        controller: _managerSearchController,
-                        onChanged: _searchManagers,
-                        decoration: InputDecoration(
-                          hintText: 'Type manager name...',
-                          prefixIcon: const Icon(Icons.search),
-                          suffixIcon: _searchingManager
-                              ? const Padding(
-                                  padding: EdgeInsets.all(12),
-                                  child: SizedBox(
-                                      width: 16,
-                                      height: 16,
-                                      child: CircularProgressIndicator(strokeWidth: 2)),
-                                )
-                              : null,
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.black.withOpacity(0.1)),
-                          ),
+                      // Find Manager Dashboard Card
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.black.withOpacity(0.08)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.06),
+                              blurRadius: 20,
+                              spreadRadius: 2,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Header
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.orange.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Icon(
+                                    Icons.person_search,
+                                    color: Colors.orange,
+                                    size: 24,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                const Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Find Your Manager',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      SizedBox(height: 2),
+                                      Text(
+                                        'Connect with your business owner',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.black54,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Divider(height: 24),
+                            // Search Field
+                            const Text(
+                              'Search Manager',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            TextFormField(
+                              controller: _managerSearchController,
+                              onChanged: _searchManagers,
+                              decoration: InputDecoration(
+                                hintText: 'Type manager name or phone...',
+                                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                                suffixIcon: _searchingManager
+                                    ? const Padding(
+                                        padding: EdgeInsets.all(14),
+                                        child: SizedBox(
+                                            width: 18,
+                                            height: 18,
+                                            child: CircularProgressIndicator(strokeWidth: 2)),
+                                      )
+                                    : const Icon(Icons.arrow_forward, color: Colors.grey),
+                                filled: true,
+                                fillColor: Colors.grey.withOpacity(0.05),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide.none,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(color: Colors.grey.withOpacity(0.2)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(color: Colors.orange, width: 2),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       if (_managerSuggestions.isNotEmpty && _selectedManager == null)
