@@ -479,6 +479,35 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
         ],
       ),
     );
+  Widget _buildDetailRow(String label, String value,
+      {Color? valueColor, bool isFirst = false, bool isLast = false}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      decoration: BoxDecoration(
+        border: isLast ? null : Border(bottom: BorderSide(color: Colors.black.withOpacity(0.05))),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.5),
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              color: valueColor ?? Colors.black87,
+              fontWeight: FontWeight.w800,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
