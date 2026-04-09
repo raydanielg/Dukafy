@@ -219,7 +219,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           ],
         ),
         body: RefreshIndicator(
-          onRefresh: _fetchUserData,
+          onRefresh: () async {
+            await _fetchUserData();
+            await _fetchKpiData();
+          },
           color: primaryGreen,
           child: Stack(
             children: [
