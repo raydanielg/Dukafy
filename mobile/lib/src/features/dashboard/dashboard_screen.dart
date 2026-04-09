@@ -22,6 +22,7 @@ import '../expenses/expenses_screen.dart';
 import '../banking/banking_screen.dart';
 import '../notifications/notifications_screen.dart';
 import '../reports/reports_screen.dart';
+import '../auth/widgets/auth_background.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -154,45 +155,88 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         body: RefreshIndicator(
           onRefresh: _fetchUserData,
           color: primaryGreen,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                _buildBusinessSelector(userData),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 16),
-                      Row(
+          child: Stack(
+            children: [
+              // Background with subtle lines pattern
+              const AuthBackground(),
+              SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    // Main Balance Card (like screenshot)
+                    _buildBalanceCard(userData),
+                    const SizedBox(height: 20),
+                    // KPI Cards Section
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: _SmallKPICard(
-                              title: 'Apr Sales',
-                              value: '0.00',
-                              icon: Icons.trending_up,
-                              iconColor: primaryGreen,
+                          // Section Title
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Overview',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {},
+                                child: const Text('See all'),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          // Two main KPI Cards with nice edges
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _KPICard(
+                                  title: 'Total Sales',
+                                  value: 'TZS 0.00',
+                                  subtitle: '+0% from last month',
+                                  icon: Icons.trending_up,
+                                  color: primaryGreen,
+                                  isPositive: true,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _KPICard(
+                                  title: 'Outstanding',
+                                  value: 'TZS 0.00',
+                                  subtitle: 'Credit balance',
+                                  icon: Icons.account_balance_wallet,
+                                  color: Colors.orange,
+                                  isPositive: false,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 24),
+                          // Quick Actions Grid
+                          const Text(
+                            'Quick Actions',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.black87,
                             ),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _SmallKPICard(
-                              title: 'Apr Credits',
-                              value: '0.00',
-                              icon: Icons.credit_card,
-                              iconColor: primaryGreen,
-                            ),
-                          ),
+                          const SizedBox(height: 12),
+                          _buildFeatureGrid(),
+                          const SizedBox(height: 100),
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      _buildFeatureGrid(),
-                      const SizedBox(height: 100),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         bottomNavigationBar: _buildBottomNav(),
