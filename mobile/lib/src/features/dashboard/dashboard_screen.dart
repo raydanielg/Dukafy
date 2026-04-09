@@ -301,7 +301,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           const SizedBox(height: 12),
                           // KPI Carousel with auto-scroll
                           SizedBox(
-                            height: 140,
+                            height: 115,
                             child: Skeletonizer(
                               enabled: _kpiLoading,
                               child: PageView.builder(
@@ -871,16 +871,16 @@ class _KPICard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
-            blurRadius: 12,
+            blurRadius: 8,
             spreadRadius: 1,
-            offset: const Offset(0, 4),
+            offset: const Offset(0, 3),
           ),
         ],
         border: Border.all(color: Colors.black.withOpacity(0.05)),
@@ -893,20 +893,20 @@ class _KPICard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(icon, color: color, size: 18),
+                child: Icon(icon, color: color, size: 16),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 6),
               Expanded(
                 child: Text(
                   title,
                   style: TextStyle(
                     color: Colors.grey.shade600,
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: FontWeight.w600,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -914,18 +914,18 @@ class _KPICard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           // Value
           Text(
             value,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.w900,
               color: Colors.black87,
             ),
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           // Subtitle with trend indicator
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -933,16 +933,16 @@ class _KPICard extends StatelessWidget {
               Icon(
                 isPositive ? Icons.trending_up : Icons.trending_down,
                 color: isPositive ? Colors.green : Colors.red,
-                size: 12,
+                size: 11,
               ),
-              const SizedBox(width: 3),
+              const SizedBox(width: 2),
               Flexible(
                 child: Text(
                   subtitle,
                   style: TextStyle(
                     color: isPositive ? Colors.green : Colors.red,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
