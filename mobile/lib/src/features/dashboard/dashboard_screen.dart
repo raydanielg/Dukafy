@@ -102,28 +102,67 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     setState(() => _kpiLoading = true);
     try {
       final dio = ref.read(apiClientProvider).dio;
-      // Try to fetch from API
-      final res = await dio.get('/dashboard/kpi').timeout(const Duration(seconds: 10));
+
+      // Fetch all dashboard data in parallel
+      final responses = await Future.wait([
+        dio.get('/dashboard/stats').timeout(const Duration(seconds: 10)),
+        dio.get('/dashboard/summary').timeout(const Duration(seconds: 10)),
+        dio.get('/sales/today').timeout(const Duration(seconds: 10)),
+        dio.get('/inventory/value').timeout(const Duration(seconds: 10)),
+        dio.get('/credits/outstanding').timeout(const Duration(seconds: 10)),
+        dio.get('/expenses/total').timeout(const Duration(seconds: 10)),
+      ]);
+
       if (mounted) {
+        final stats = responses[0].data['data'] ?? {};
+        final summary = responses[1].data['data'] ?? {};
+        final sales = responses[2].data['data'] ?? {};
+        final inventory = responses[3].data['data'] ?? {};
+        final credits = responses[4].data['data'] ?? {};
+        final expenses = responses[5].data['data'] ?? {};
+
         setState(() {
-          _kpiData = res.data['data'] ?? {};
+          _kpiData = {
+            'stock_in': inventory['total_value'] ?? inventory['stock_value'] ?? 0,
+            'profit': summary['profit'] ?? stats['profit'] ?? 0,
+            'orders': sales['order_count'] ?? sales['orders'] ?? 0,
+            'credits': credits['total_outstanding'] ?? credits['amount'] ?? 0,
+            'expenses': expenses['total'] ?? expenses['amount'] ?? 0,
+            'sales': sales['total_sales'] ?? sales['amount'] ?? stats['sales'] ?? 0,
+            'balance': summary['balance'] ?? stats['balance'] ?? 0,
+            'today_sales': sales['today'] ?? 0,
+            'month_sales': sales['this_month'] ?? 0,
+          };
           _kpiLoading = false;
         });
       }
     } catch (e) {
-      // Use fallback data if API fails
-      if (mounted) {
-        setState(() {
-          _kpiData = {
-            'stock_in': 0,
-            'profit': 0,
-            'orders': 0,
-            'credits': 2000000,
-            'expenses': 2000000,
-            'sales': 0,
-          };
-          _kpiLoading = false;
-        });
+      // Try single endpoint if multiple fail
+      try {
+        final dio = ref.read(apiClientProvider).dio;
+        final res = await dio.get('/dashboard/kpi').timeout(const Duration(seconds: 10));
+        if (mounted) {
+          setState(() {
+            _kpiData = res.data['data'] ?? res.data ?? {};
+            _kpiLoading = false;
+          });
+        }
+      } catch (_) {
+        // Use fallback data if all APIs fail
+        if (mounted) {
+          setState(() {
+            _kpiData = {
+              'stock_in': 0,
+              'profit': 0,
+              'orders': 0,
+              'credits': 0,
+              'expenses': 0,
+              'sales': 0,
+              'balance': 0,
+            };
+            _kpiLoading = false;
+          });
+        }
       }
     }
   }
