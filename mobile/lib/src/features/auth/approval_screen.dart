@@ -666,41 +666,71 @@ class _RoleCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        height: 140,
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
         decoration: BoxDecoration(
           color: selected ? colorScheme.primary : Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: selected ? colorScheme.primary : Colors.black.withOpacity(0.1),
-            width: 2,
+            color: selected ? colorScheme.primary : Colors.grey.withOpacity(0.3),
+            width: selected ? 3 : 2,
           ),
           boxShadow: [
+            // Default shadow
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+            // Extra shadow when selected
             if (selected)
               BoxShadow(
-                color: colorScheme.primary.withOpacity(0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
+                color: colorScheme.primary.withOpacity(0.4),
+                blurRadius: 20,
+                spreadRadius: 2,
+                offset: const Offset(0, 8),
               ),
           ],
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 32,
-              color: selected ? Colors.white : Colors.black54,
+            // Icon in circle background when selected
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: selected 
+                    ? Colors.white.withOpacity(0.2) 
+                    : colorScheme.primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                size: 36,
+                color: selected ? Colors.white : colorScheme.primary,
+              ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             Text(
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w900,
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
                 color: selected ? Colors.white : Colors.black87,
+                height: 1.2,
               ),
             ),
+            if (selected) ...[
+              const SizedBox(height: 6),
+              const Icon(
+                Icons.check_circle,
+                size: 18,
+                color: Colors.white,
+              ),
+            ],
           ],
         ),
       ),
