@@ -157,13 +157,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 decoration: _pillDecoration(
                                   hintText: 'Create a password',
                                   icon: Icons.lock_outline,
-                                  suffix: TextButton(
+                                  suffix: IconButton(
                                     onPressed: () => setState(
                                       () => _obscurePassword = !_obscurePassword,
                                     ),
-                                    child: Text(
-                                      _obscurePassword ? 'Show' : 'Hide',
-                                      style: const TextStyle(fontWeight: FontWeight.w800),
+                                    icon: Icon(
+                                      _obscurePassword
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      size: 20,
+                                      color: Colors.black.withOpacity(0.5),
                                     ),
                                   ),
                                 ),
@@ -178,13 +181,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 decoration: _pillDecoration(
                                   hintText: 'Confirm your password',
                                   icon: Icons.lock_outline,
-                                  suffix: TextButton(
+                                  suffix: IconButton(
                                     onPressed: () => setState(
                                       () => _obscureConfirm = !_obscureConfirm,
                                     ),
-                                    child: Text(
-                                      _obscureConfirm ? 'Show' : 'Hide',
-                                      style: const TextStyle(fontWeight: FontWeight.w800),
+                                    icon: Icon(
+                                      _obscureConfirm
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      size: 20,
+                                      color: Colors.black.withOpacity(0.5),
                                     ),
                                   ),
                                 ),

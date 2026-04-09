@@ -135,13 +135,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 decoration: _pillDecoration(
                                   hintText: 'Password',
                                   icon: Icons.lock_outline,
-                                  suffix: TextButton(
+                                  suffix: IconButton(
                                     onPressed: () => setState(
                                       () => _obscurePassword = !_obscurePassword,
                                     ),
-                                    child: Text(
-                                      _obscurePassword ? 'Show' : 'Hide',
-                                      style: const TextStyle(fontWeight: FontWeight.w800),
+                                    icon: Icon(
+                                      _obscurePassword
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      size: 20,
+                                      color: Colors.black.withOpacity(0.5),
                                     ),
                                   ),
                                 ),
