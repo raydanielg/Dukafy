@@ -268,24 +268,11 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       child: ScaleTransition(
                         scale: _scale,
                         child: Lottie.asset(
-                          'assets/icons/lottieflow-success-09-000000-easey.json',
-                          height: 180,
-                          width: 180,
+                          'assets/icons/lottieflow-success-01-000000-easey.json',
+                          height: 150,
+                          width: 150,
                           repeat: true,
                           animate: true,
-                          frameRate: FrameRate.max,
-                          delegates: LottieDelegates(
-                            values: [
-                              ValueDelegate.color(
-                                const ['**', 'Shape Layer 1', 'Contents', 'Fill 1', 'Color'],
-                                value: Colors.green,
-                              ),
-                              ValueDelegate.color(
-                                const ['**', 'Checkmark', 'Fill 1', 'Color'],
-                                value: Colors.white,
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     ),
