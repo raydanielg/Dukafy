@@ -198,7 +198,6 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
                   const Center(
                     child: Text(
                       'Thank you!',
@@ -216,7 +215,7 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       'Your account has been created successfully.\nFollow the steps below to finish setup.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.black.withValues(alpha: 0.60),
+                        color: Colors.black.withOpacity(0.60),
                         height: 1.5,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -243,9 +242,10 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                       ),
                       child: Column(
                         children: [
-                          _buildDetailRow('Full Name', widget.name, isFirst: true),
+                          _buildDetailRow('Full Name', widget.name),
                           _buildDetailRow('Phone Number', widget.phone),
-                          _buildDetailRow('Status', statusText, valueColor: statusColor, isLast: true),
+                          _buildDetailRow('Status', statusText,
+                              valueColor: statusColor, isLast: true),
                         ],
                       ),
                     ),
@@ -256,19 +256,21 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
                         onPressed: _approve,
                         style: FilledButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
                         ),
                         child: _loading
                             ? const SizedBox(
                                 height: 20,
                                 width: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                                child: CircularProgressIndicator(
+                                    strokeWidth: 2, color: Colors.white))
                             : const Text('Verify Account',
-                                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w900, fontSize: 16)),
                       ),
                     ),
-                  ]
- else ...[
+                  ] else ...[
                     const Text('Step 2: Choose your role',
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 12),
@@ -480,11 +482,14 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
       ),
     );
   Widget _buildDetailRow(String label, String value,
-      {Color? valueColor, bool isFirst = false, bool isLast = false}) {
+      {Color? valueColor, bool isLast = false}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
-        border: isLast ? null : Border(bottom: BorderSide(color: Colors.black.withOpacity(0.05))),
+        border: isLast
+            ? null
+            : Border(
+                bottom: BorderSide(color: Colors.black.withOpacity(0.05))),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -497,12 +502,16 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
               fontSize: 14,
             ),
           ),
-          Text(
-            value,
-            style: TextStyle(
-              color: valueColor ?? Colors.black87,
-              fontWeight: FontWeight.w800,
-              fontSize: 14,
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: valueColor ?? Colors.black87,
+                fontWeight: FontWeight.w800,
+                fontSize: 14,
+              ),
             ),
           ),
         ],
