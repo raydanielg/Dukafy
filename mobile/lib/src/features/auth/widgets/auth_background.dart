@@ -61,54 +61,26 @@ class _AuthBackgroundPainter extends CustomPainter {
     final bg = Paint()..color = const Color(0xFFF7F7F7);
     canvas.drawRect(Offset.zero & size, bg);
 
-    final dotsPaint = Paint()..color = Colors.black.withOpacity(0.06);
-    final spacing = 22.0;
-    final dx = (t * spacing * 1.2);
-    final dy = (t * spacing * 0.8);
+    final dotsPaint = Paint()..color = Colors.black.withOpacity(0.05);
+    final spacing = 24.0;
+    final dx = (t * spacing * 0.5); // Slower movement
+    final dy = (t * spacing * 0.3);
 
     for (double y = -spacing; y < size.height + spacing; y += spacing) {
       for (double x = -spacing; x < size.width + spacing; x += spacing) {
         final px = (x + dx) % (size.width + spacing) - spacing;
         final py = (y + dy) % (size.height + spacing) - spacing;
-        canvas.drawCircle(Offset(px, py), 1.3, dotsPaint);
+        canvas.drawCircle(Offset(px, py), 1.0, dotsPaint);
       }
     }
 
-    final linePaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.6
-      ..color = primary.withOpacity(0.18);
-
-    final linePaint2 = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0
-      ..color = primary.withOpacity(0.12);
-
-    void drawWave({required double y0, required double amp, required Paint p}) {
-      final path = Path();
-      for (int i = 0; i <= 80; i++) {
-        final x = size.width * (i / 80);
-        final phase = (t * 2 * math.pi) + (i / 10);
-        final y = y0 + math.sin(phase) * amp;
-        if (i == 0) {
-          path.moveTo(x, y);
-        } else {
-          path.lineTo(x, y);
-        }
-      }
-      canvas.drawPath(path, p);
-    }
-
-    drawWave(y0: size.height * 0.22, amp: 10, p: linePaint2);
-    drawWave(y0: size.height * 0.34, amp: 14, p: linePaint);
-    drawWave(y0: size.height * 0.48, amp: 10, p: linePaint2);
-
+    // Glow effects for depth without lines
     final glow = Paint()
-      ..color = primary.withOpacity(0.08)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 40);
+      ..color = primary.withOpacity(0.07)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 50);
 
-    canvas.drawCircle(Offset(size.width * 0.82, size.height * 0.22), 140, glow);
-    canvas.drawCircle(Offset(size.width * 0.18, size.height * 0.62), 160, glow);
+    canvas.drawCircle(Offset(size.width * 0.85, size.height * 0.15), 180, glow);
+    canvas.drawCircle(Offset(size.width * 0.15, size.height * 0.75), 200, glow);
   }
 
   @override
