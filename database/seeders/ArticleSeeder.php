@@ -13,75 +13,86 @@ class ArticleSeeder extends Seeder
      */
     public function run(): void
     {
-        $logo = 'LOGO-MALKIA-KONNECT-removebg-preview.png';
+        $logo = 'LOGO-DUKAFY-removebg-preview.png';
         $articles = [
             [
-                'title' => 'Building Secure Attachment: The Foundation of Infant Emotional Health',
-                'category' => 'Newborns (0-12 months)',
-                'age_range' => '4-6 months',
+                'title' => 'Mbinu 5 za Kuongeza Mauzo Kwenye Biashara Yako Ndogo',
+                'category' => 'Mauzo na Masoko',
+                'age_range' => 'Wote',
                 'image' => $logo,
-                'published_at' => '2026-05-01',
+                'published_at' => '2026-04-10',
                 'is_featured' => true,
-                'content' => '<p>Attachment is the deep and enduring emotional bond that connects one person to another across time and space. In infants, this bond is primarily formed with their primary caregivers, usually the mother. Secure attachment is not just about "love"; it\'s about a physiological state of safety that allows a child\'s brain to grow optimally.</p>
-                <h3>Why Secure Attachment Matters</h3>
-                <p>Secure attachment provides a safe base from which children can explore the world. It is the foundation for healthy emotional development, social skills, and even cognitive growth. When a baby knows that their cries will be answered and their needs met, they learn that the world is a safe place.</p>
+                'content' => '<p>Kuongeza mauzo ni lengo kuu la kila mfanyabiashara. Katika soko la leo lenye ushindani mkubwa, unahitaji mbinu za kisasa ili kuwavutia wateja wapya na kuwafanya wale wa zamani waendelee kurudi.</p>
+                <h3>1. Tumia Mitandao ya Kijamii kwa Usahihi</h3>
+                <p>Usipost tu picha za bidhaa; elezea jinsi bidhaa zako zinavyotatua matatizo ya wateja wako. Tumia WhatsApp Status na Instagram Stories kuonyesha maisha ya kila siku ya biashara yako.</p>
+                <h3>2. Toa Huduma Bora kwa Wateja</h3>
+                <p>Mteja mmoja anayehudumiwa vizuri anaweza kuletea wateja wengine watano kupitia neno la mdomo (word of mouth). Hakikisha unawajibu wateja wako haraka na kwa lugha nzuri.</p>
                 <ul>
-                    <li><strong>Emotional Regulation:</strong> Children with secure attachment are better at managing their emotions later in life.</li>
-                    <li><strong>Trust in Others:</strong> It forms the template for all future relationships.</li>
-                    <li><strong>Resilience:</strong> Securely attached infants tend to be more resilient when facing stress or trauma in adulthood.</li>
+                    <li><strong>Zingatia Ubora:</strong> Kamwe usitoe bidhaa chini ya kiwango.</li>
+                    <li><strong>Sikiliza Maoni:</strong> Uliza wateja wako nini unaweza kuboresha.</li>
                 </ul>
-                <h3>Practical Steps to Build Attachment</h3>
-                <p>You don\'t have to be perfect. Building attachment is about the "rupture and repair" process. If you miss a cue, it\'s okay—just try again. Eye contact, skin-to-skin contact, and responsive feeding are all vital tools in this journey.</p>
-                <p>By responding consistently to your baby\'s needs, you are building a lifetime of emotional health. Remember, you cannot "spoil" a baby with too much love or attention in these early months.</p>',
+                <p>Kumbuka, biashara ni watu. Jenga uhusiano mwema na wateja wako na utaona mauzo yakiongezeka.</p>',
             ],
             [
-                'title' => 'Navigating Common Health Concerns in Infants: A Comprehensive Guide',
-                'category' => 'Newborns (0-12 months)',
-                'age_range' => '0-3 months',
+                'title' => 'Umuhimu wa Kutenganisha Fedha za Biashara na Fedha Binafsi',
+                'category' => 'Uhasibu na Fedha',
+                'age_range' => 'Wote',
                 'image' => $logo,
-                'published_at' => '2026-05-01',
+                'published_at' => '2026-04-10',
                 'is_featured' => true,
-                'content' => '<p>The first few months of a baby\'s life are filled with joy, but also with many questions about their health. Understanding common concerns can help parents feel more confident and reduce unnecessary anxiety. Most of the issues babies face are part of their normal adjustment to life outside the womb.</p>
-                <h3>Common Issues Parents Face</h3>
-                <p>From diaper rash to colic, babies experience various minor health issues that are part of normal development. Colic, for instance, often peaks at 6 weeks and subsides by 3-4 months. While stressful, it is usually not a sign of a medical problem.</p>
-                <blockquote>"Parenthood is a learning curve. Trust your instincts, but never hesitate to seek professional advice when something feels off." — Malkia Medical Team</blockquote>
-                <h3>When to Call the Doctor</h3>
-                <p>Learning the signs of when to call a doctor is an essential part of early parenthood. Look out for high fever (above 38°C for newborns), signs of dehydration (fewer than 6 wet diapers a day), or unusual lethargy. If your baby is not feeding well or seems excessively irritable, a quick check-up is always the safest route.</p>
-                <p>Always consult with your pediatrician if you are concerned about your baby\'s health or behavior. Your peace of mind is important too!</p>',
+                'content' => '<p>Moja ya makosa makubwa wanayofanya wafanyabiashara wengi ni kuchanganya fedha za matumizi ya nyumbani na fedha za biashara. Hii inafanya iwe vigumu kujua kama biashara inapata faida au hasara.</p>
+                <h3>Kwa nini utenganishe?</h3>
+                <p>Unapotenganisha fedha hizi, unakuwa na picha halisi ya ukuaji wa biashara yako. Inakusaidia pia kupanga bajeti ya biashara na kujilipa mshahara wewe mwenyewe kama mfanyakazi wa biashara yako.</p>
+                <blockquote>"Biashara inayokula mtaji wake haiwezi kudumu. Nidhamu ya fedha ndio siri ya utajiri." — Dukafy Expert Team</blockquote>
+                <h3>Hatua za Kuchukua:</h3>
+                <ol>
+                    <li>Fungua akaunti tofauti ya benki kwa ajili ya biashara pekee.</li>
+                    <li>Weka rekodi ya kila senti inayotoka na kuingia.</li>
+                    <li>Jilipe mshahara uliopangwa kila mwezi badala ya kuchukua fedha kila unapohitaji.</li>
+                </ol>',
             ],
             [
-                'title' => 'Developmental Milestones in the First Year: Supporting Your Baby\'s Growth',
-                'category' => 'Newborns (0-12 months)',
-                'age_range' => '0-3 months',
+                'title' => 'Jinsi ya Kudhibiti Stoo na Kuzuia Upotevu wa Bidhaa',
+                'category' => 'Usimamizi wa Stoo',
+                'age_range' => 'Wote',
                 'image' => $logo,
-                'published_at' => '2026-05-01',
+                'published_at' => '2026-04-10',
                 'is_featured' => true,
-                'content' => '<p>Every baby develops at their own pace, but there are certain milestones that most babies reach during their first year. These milestones include physical, social, and cognitive developments. It\'s important to remember that these are ranges, not strict deadlines.</p>
-                <h3>Key Milestones by Quarter</h3>
-                <p>In the first three months, your baby starts to smile at people and can briefly calm themselves. By six months, they may start to roll over and respond to their own name. The second half of the year is usually when the "big" moves happen—crawling, pulling to stand, and potentially those first precious words.</p>
-                <p>You can support this development through play, tummy time, and lots of interaction. Reading to your baby from day one is one of the best ways to support language development.</p>
-                <h3>Tummy Time: Why It Matters</h3>
-                <p>Tummy time helps build the neck and shoulder muscles needed for sitting and crawling. Start with just a few minutes a day and increase as your baby gets stronger. Make it fun by getting down on the floor with them!</p>',
+                'content' => '<p>Upotevu wa bidhaa stoo ni sawa na kupoteza fedha taslimu. Usimamizi mbovu wa stoo unaweza kuua biashara yoyote ile, iwe ni duka dogo au kampuni kubwa.</p>
+                <h3>Tumia Mfumo wa First-In, First-Out (FIFO)</h3>
+                <p>Hakikisha bidhaa zilizoingia mapema ndizo zinazotoka kwanza, hasa kwa bidhaa zinazoharibika haraka. Hii inazuia bidhaa kukaa muda mrefu na kuharibika au kupitwa na wakati.</p>
+                <h3>Fanya Ukaguzi wa Mara kwa Mara (Stock Take)</h3>
+                <p>Usisubiri mpaka mwisho wa mwaka kufanya hesabu. Fanya ukaguzi wa kushtukiza au wa kila wiki ili kuhakikisha idadi ya bidhaa zilizopo stoo inalingana na rekodi zako za mauzo.</p>
+                <p>Dukafy inakusaidia kurahisisha kazi hii kwa kuweka rekodi za kidijitali za kila bidhaa inayoingia na kutoka.</p>',
             ],
             [
-                'title' => 'Infant Feeding Milestones: From Exclusive Milk to First Solids',
-                'category' => 'Newborns (0-12 months)',
-                'age_range' => '0-3 months',
+                'title' => 'Faida za Kutumia Mifumo ya Kidijitali Katika Biashara',
+                'category' => 'Teknolojia na Biashara',
+                'age_range' => 'Wote',
                 'image' => $logo,
-                'published_at' => '2026-05-01',
+                'published_at' => '2026-04-10',
                 'is_featured' => true,
-                'content' => '<p>Feeding is one of the most important aspects of caring for your newborn. Whether breastfeeding or using formula, ensuring your baby gets the right nutrition is vital for their brain and body development. For the first six months, exclusive milk feeding is generally recommended by health experts.</p>
-                <h3>Starting Solids: The Signs of Readiness</h3>
-                <p>Around six months, most babies are ready to start exploring solid foods alongside their milk. It\'s an exciting but messy new chapter! Don\'t rush it—look for these signs of readiness:</p>
+                'content' => '<p>Dunia inabadilika, na biashara zinazotumia teknolojia ndizo zinazokua kwa kasi zaidi. Kutumia mfumo wa kidijitali badala ya madaftari ya mkono kuna faida nyingi mno.</p>
                 <ul>
-                    <li>Sitting up with little or no support.</li>
-                    <li>Good head control.</li>
-                    <li>Showing interest in what you are eating.</li>
-                    <li>The "tongue-thrust reflex" has disappeared.</li>
+                    <li><strong>Usalama wa Kumbukumbu:</strong> Madaftari yanaweza kupotea, kuchanika au kuungua, lakini data za kidijitali ziko salama "online".</li>
+                    <li><strong>Ripoti za Papo kwa Papo:</strong> Unaweza kuona faida yako kwa siku, wiki au mwezi kwa kubonyeza kitufe kimoja tu.</li>
+                    <li><strong>Usimamizi wa mbali:</strong> Unaweza kuona kinachoendelea kwenye biashara yako hata kama haupo eneo la kazi.</li>
                 </ul>
-                <h3>The First Tastes</h3>
-                <p>Start with single-grain cereals or pureed vegetables. Introduce one new food at a time and wait a few days to check for any allergic reactions. The goal at this stage is exploration and learning new textures, not replacing milk entirely.</p>
-                <p>Keep the environment calm and positive. If they reject a food, don\'t worry—it can take up to 15 tries for a baby to accept a new flavor!</p>',
+                <p>Kuanza kutumia mfumo kama Dukafy ni uwekezaji mdogo wenye matokeo makubwa kwa mustakabali wa biashara yako.</p>',
+            ],
+            [
+                'title' => 'Siri ya Kupata na Kutunza Wateja Wenye Uaminifu',
+                'category' => 'Huduma kwa Wateja',
+                'age_range' => 'Wote',
+                'image' => $logo,
+                'published_at' => '2026-04-10',
+                'is_featured' => true,
+                'content' => '<p>Kupata mteja mpya ni gharama kubwa kuliko kumtunza mteja uliyenaye tayari. Wateja waaminifu ndio uti wa mgongo wa biashara yoyote imara.</p>
+                <h3>Wajue Wateja Wako</h3>
+                <p>Jaribu kukumbuka majina ya wateja wako na mapendeleo yao. Hii inawafanya wajihisi kuthaminiwa na kuwa na ukaribu na biashara yako.</p>
+                <h3>Toa Zawadi au Punguzo (Loyalty Programs)</h3>
+                <p>Wape wateja wako wa kila siku zawadi ndogo ndogo au punguzo la bei baada ya kufikia idadi fulani ya manunuzi. Hii inawapa motisha ya kuendelea kuja kwako badala ya kwenda kwa washindani wako.</p>
+                <p>Huduma bora si tu kuhusu kuuza bidhaa, ni kuhusu kutatua matatizo ya mteja kwa tabasamu na uaminifu.</p>',
             ],
         ];
 
