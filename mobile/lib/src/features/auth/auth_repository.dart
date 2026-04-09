@@ -34,7 +34,8 @@ class AuthRepository {
   String _friendlyDioError(Object e) {
     if (e is! DioException) return 'Something went wrong. Please try again.';
 
-    switch (e.type) {
+    final dioErr = e as DioException;
+    switch (dioErr.type) {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
@@ -42,7 +43,7 @@ class AuthRepository {
       case DioExceptionType.connectionError:
         return 'Cannot reach server. Check API Base URL and connection.';
       case DioExceptionType.badResponse:
-        final data = e.response?.data;
+        final data = dioErr.response?.data;
         if (data is Map && data['message'] is String) {
           return data['message'] as String;
         }
@@ -53,6 +54,8 @@ class AuthRepository {
         return 'Bad certificate.';
       case DioExceptionType.unknown:
         return 'Network error. Please try again.';
+      default:
+        return 'An unexpected error occurred.';
     }
   }
 

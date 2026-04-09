@@ -61,7 +61,7 @@ class _AuthBackgroundPainter extends CustomPainter {
     final bg = Paint()..color = const Color(0xFFF7F7F7);
     canvas.drawRect(Offset.zero & size, bg);
 
-    final dotsPaint = Paint()..color = Colors.black.withValues(alpha: 0.06);
+    final dotsPaint = Paint()..color = Colors.black.withOpacity(0.06);
     final spacing = 22.0;
     final dx = (t * spacing * 1.2);
     final dy = (t * spacing * 0.8);
@@ -77,12 +77,12 @@ class _AuthBackgroundPainter extends CustomPainter {
     final linePaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.6
-      ..color = primary.withValues(alpha: 0.18);
+      ..color = primary.withOpacity(0.18);
 
     final linePaint2 = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0
-      ..color = primary.withValues(alpha: 0.12);
+      ..color = primary.withOpacity(0.12);
 
     void drawWave({required double y0, required double amp, required Paint p}) {
       final path = Path();
@@ -104,7 +104,7 @@ class _AuthBackgroundPainter extends CustomPainter {
     drawWave(y0: size.height * 0.48, amp: 10, p: linePaint2);
 
     final glow = Paint()
-      ..color = primary.withValues(alpha: 0.08)
+      ..color = primary.withOpacity(0.08)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 40);
 
     canvas.drawCircle(Offset(size.width * 0.82, size.height * 0.22), 140, glow);
