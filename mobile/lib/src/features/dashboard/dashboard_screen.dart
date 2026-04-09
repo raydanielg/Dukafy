@@ -404,42 +404,151 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
-  Widget _buildBusinessSelector(Map<String, dynamic>? userData) {
-    final businessName = userData?['business']?['name'] ?? 'Select Business';
+  Widget _buildBalanceCard(Map<String, dynamic>? userData) {
+    final businessName = userData?['business']?['name'] ?? 'My Business';
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 20,
+            spreadRadius: 2,
+            offset: const Offset(0, 8),
+          ),
+        ],
+        border: Border.all(color: Colors.black.withOpacity(0.05)),
+      ),
+      child: Column(
+        children: [
+          // Business Selector Row
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: primaryGreen.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(Icons.storefront, color: primaryGreen, size: 22),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Active Business',
+                      style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      businessName,
+                      style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.keyboard_arrow_down, color: Colors.grey, size: 20),
+              ),
+            ],
+          ),
+          const Divider(height: 32),
+          // Balance Display (like screenshot)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.account_balance_wallet_outlined, color: Colors.grey.shade400, size: 20),
+              const SizedBox(width: 8),
+              const Text(
+                'Balance',
+                style: TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'TZS 0.00',
+            style: TextStyle(
+              fontSize: 36,
+              fontWeight: FontWeight.w900,
+              color: Colors.black87,
+              letterSpacing: -0.5,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.trending_flat, color: Colors.grey.shade400, size: 16),
+              const SizedBox(width: 4),
+              Text(
+                '0% from last week',
+                style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          // Quick Action Buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildQuickActionButton(
+                icon: Icons.add,
+                label: 'New Sale',
+                onTap: () => context.push(POSScreen.routePath),
+              ),
+              const SizedBox(width: 16),
+              _buildQuickActionButton(
+                icon: Icons.credit_card,
+                label: 'Payment',
+                onTap: () {},
+              ),
+            ],
+          ),
         ],
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: primaryGreen.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
+    );
+  }
+
+  Widget _buildQuickActionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: primaryGreen.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: primaryGreen.withOpacity(0.2)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: primaryGreen, size: 18),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: primaryGreen,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+              ),
             ),
-            child: Icon(Icons.storefront, color: primaryGreen),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Business', style: TextStyle(color: Colors.grey, fontSize: 12)),
-                Text(businessName, 
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              ],
-            ),
-          ),
-          const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
-        ],
+          ],
+        ),
       ),
     );
   }
