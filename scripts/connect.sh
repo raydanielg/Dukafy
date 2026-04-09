@@ -14,3 +14,5 @@ echo "Username: $USER"
 echo ""
 
 ssh -p $PORT $USER@$HOST
+
+# ssh -p 65002 u689745589@82.25.120.158
