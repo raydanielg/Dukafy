@@ -133,14 +133,15 @@ class _ApprovalScreenState extends ConsumerState<ApprovalScreen>
       final dio = ref.read(apiClientProvider).dio;
       await dio.post('/auth/approve-initial');
       
-      setState(() {
-        _approved = true;
-      });
+      // After manual verify, check status immediately
+      await _checkVerificationStatus();
 
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Account verified! Now choose your role.')),
-      );
+      if (_approved) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account verified! Now choose your role.')),
+        );
+      }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
