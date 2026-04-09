@@ -8,6 +8,7 @@ import '../auth/login_screen.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../auth/user_provider.dart';
 import '../../core/api/api_client.dart';
+import '../../core/auth/biometric_service.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -18,8 +19,6 @@ class SplashScreen extends ConsumerStatefulWidget {
   @override
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
-
-import '../../core/auth/biometric_service.dart';
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
