@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# SSH Connection Script for Dukafy Server
+# Usage: ./connect.sh
+
+# Server Credentials
+HOST="82.25.120.158"
+PORT="65002"
+USER="u689745589"
+
+# Connect via SSH
+echo "Connecting to $HOST on port $PORT..."
+echo "Username: $USER"
+echo ""
+
+ssh -p $PORT $USER@$HOST
