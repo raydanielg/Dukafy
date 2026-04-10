@@ -352,6 +352,9 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> {
   }
 
   Widget _buildGridView(List<Map<String, dynamic>> products) {
+    if (products.isEmpty) {
+      return _buildEmptyState();
+    }
     return GridView.builder(
       padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -372,6 +375,9 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> {
   }
 
   Widget _buildListView(List<Map<String, dynamic>> products) {
+    if (products.isEmpty) {
+      return _buildEmptyState();
+    }
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: products.length,
