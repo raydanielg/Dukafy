@@ -391,6 +391,56 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> {
     );
   }
 
+  Widget _buildEmptyState() {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Illustration
+            Image.asset(
+              'assets/images/Sandy_Bus-26_Single-01.jpg',
+              height: 200,
+              fit: BoxFit.contain,
+            ),
+            const SizedBox(height: 24),
+            // Title
+            const Text(
+              'No Products Yet',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 12),
+            // Description
+            Text(
+              'Get started by adding your first product to the inventory.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.shade600,
+              ),
+            ),
+            const SizedBox(height: 32),
+            // CTA Button
+            FilledButton.icon(
+              onPressed: _showAddProductDialog,
+              icon: const Icon(Icons.add),
+              label: const Text('Add Your First Product'),
+              style: FilledButton.styleFrom(
+                backgroundColor: primaryGreen,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _showProductDetails(Map<String, dynamic> product) {
     showModalBottomSheet(
       context: context,
