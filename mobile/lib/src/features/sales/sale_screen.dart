@@ -65,7 +65,7 @@ class _SaleScreenState extends ConsumerState<SaleScreen> {
   Future<void> _fetchProducts() async {
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.get('/products').timeout(const Duration(seconds: 10));
+      final res = await dio.get('/auth/products').timeout(const Duration(seconds: 10));
       if (mounted) {
         setState(() {
           _products = List<Map<String, dynamic>>.from(res.data['data'] ?? res.data ?? []);
@@ -93,7 +93,7 @@ class _SaleScreenState extends ConsumerState<SaleScreen> {
   Future<void> _fetchCustomers() async {
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.get('/customers').timeout(const Duration(seconds: 10));
+      final res = await dio.get('/auth/customers').timeout(const Duration(seconds: 10));
       if (mounted) {
         setState(() {
           _customers = List<Map<String, dynamic>>.from(res.data['data'] ?? res.data ?? []);
@@ -156,7 +156,7 @@ class _SaleScreenState extends ConsumerState<SaleScreen> {
 
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.post('/sales', data: {
+      final res = await dio.post('/auth/sales', data: {
         'customer_id': _selectedCustomer?['id'],
         'items': _saleItems.map((item) => ({
           'product_id': item['product_id'],
