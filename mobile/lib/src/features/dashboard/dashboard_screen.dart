@@ -127,8 +127,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> with WidgetsB
     try {
       final dio = ref.read(apiClientProvider).dio;
 
-      // Try main dashboard endpoint
-      final res = await dio.get('/dashboard').timeout(const Duration(seconds: 10));
+      // Try main dashboard endpoint (within auth group)
+      final res = await dio.get('/auth/dashboard').timeout(const Duration(seconds: 10));
 
       if (mounted && res.data != null && res.data['success'] == true) {
         final data = res.data['data'] ?? {};
