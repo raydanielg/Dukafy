@@ -14,35 +14,65 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $request->user();
-        if (!$user || !$user->business_id) {
+        try {
+            $user = $request->user();
+            if (!$user || !$user->business_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No business associated'
+                ], 404);
+            }
+
+            $businessId = $user->business_id;
+            $today = Carbon::today();
+            $startOfMonth = Carbon::now()->startOfMonth();
+
+            // Get all metrics with individual try-catch for each
+            $data = [
+                'stock_in' => $this->safeCall(fn() => $this->getInventoryValue($businessId)),
+                'profit' => $this->safeCall(fn() => $this->getProfit($businessId)),
+                'orders' => $this->safeCall(fn() => $this->getOrderCount($businessId)),
+                'credits' => $this->safeCall(fn() => $this->getOutstandingCredits($businessId)),
+                'expenses' => $this->safeCall(fn() => $this->getTotalExpenses($businessId)),
+                'sales' => $this->safeCall(fn() => $this->getTotalSales($businessId)),
+                'balance' => $this->safeCall(fn() => $this->getCurrentBalance($businessId)),
+                'today_sales' => $this->safeCall(fn() => $this->getTodaySales($businessId, $today)),
+                'month_sales' => $this->safeCall(fn() => $this->getMonthSales($businessId, $startOfMonth)),
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Dashboard API Error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'user_id' => $request->user()?->id
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'No business associated'
-            ], 404);
+                'message' => 'Server error: ' . $e->getMessage(),
+                'data' => [
+                    'stock_in' => 0, 'profit' => 0, 'orders' => 0,
+                    'credits' => 0, 'expenses' => 0, 'sales' => 0,
+                    'balance' => 0, 'today_sales' => 0, 'month_sales' => 0,
+                ]
+            ], 500);
         }
+    }
 
-        $businessId = $user->business_id;
-        $today = Carbon::today();
-        $startOfMonth = Carbon::now()->startOfMonth();
-
-        // Get all metrics
-        $data = [
-            'stock_in' => $this->getInventoryValue($businessId),
-            'profit' => $this->getProfit($businessId),
-            'orders' => $this->getOrderCount($businessId),
-            'credits' => $this->getOutstandingCredits($businessId),
-            'expenses' => $this->getTotalExpenses($businessId),
-            'sales' => $this->getTotalSales($businessId),
-            'balance' => $this->getCurrentBalance($businessId),
-            'today_sales' => $this->getTodaySales($businessId, $today),
-            'month_sales' => $this->getMonthSales($businessId, $startOfMonth),
-        ];
-
-        return response()->json([
-            'success' => true,
-            'data' => $data
-        ]);
+    /**
+     * Safely execute a callback and return 0 on failure
+     */
+    private function safeCall(callable $callback)
+    {
+        try {
+            return $callback();
+        } catch (\Exception $e) {
+            \Log::warning('Dashboard metric error: ' . $e->getMessage());
+            return 0;
+        }
     }
 
     /**
