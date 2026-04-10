@@ -733,13 +733,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               _buildQuickActionButton(
                 icon: Icons.add,
                 label: 'New Sale',
-                onTap: () => context.push(POSScreen.routePath),
+                onTap: () => context.push('/sale'),
               ),
               const SizedBox(width: 16),
               _buildQuickActionButton(
                 icon: Icons.credit_card,
                 label: 'Payment',
-                onTap: () {},
+                onTap: () => context.push('/payment'),
               ),
             ],
           ),
