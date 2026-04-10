@@ -619,91 +619,183 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       ),
       child: Column(
         children: [
-          // Business Selector Row with Balance Dropdown
-          GestureDetector(
-            onTap: () => _showBalanceDropdown(context),
-            child: Row(
-              children: [
-                Container(
+          // Business Selector Row - Dropdown controls balance card
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: primaryGreen.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(Icons.storefront, color: primaryGreen, size: 22),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Active Business',
+                      style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      businessName,
+                      style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              // Dropdown arrow button - controls balance card visibility
+              GestureDetector(
+                onTap: () => setState(() => _showBalance = !_showBalance),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: primaryGreen.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(Icons.storefront, color: primaryGreen, size: 22),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Active Business',
-                        style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600),
-                      ),
-                      Text(
-                        businessName,
-                        style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: _showBalance ? primaryGreen : Colors.grey.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.keyboard_arrow_down, color: Colors.grey, size: 20),
-                ),
-              ],
-            ),
-          ),
-          const Divider(height: 32),
-          // Balance Card Header with Toggle
-          GestureDetector(
-            onTap: () => setState(() => _showBalance = !_showBalance),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.account_balance_wallet_outlined, color: primaryGreen, size: 22),
-                const SizedBox(width: 8),
-                const Text(
-                  'Balance',
-                  style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(width: 12),
-                // Toggle indicator
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: _showBalance ? primaryGreen : Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(12),
+                  child: AnimatedRotation(
+                    duration: const Duration(milliseconds: 300),
+                    turns: _showBalance ? 0.5 : 0,
+                    child: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: _showBalance ? Colors.white : Colors.grey,
+                      size: 22,
+                    ),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Balance Card Section - Expandable/Collapsible
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOutCubic,
+            height: _showBalance ? null : 0,
+            child: ClipRect(
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: _showBalance ? 1.0 : 0.0,
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade50,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey.shade200),
+                  ),
+                  child: Column(
                     children: [
-                      Icon(
-                        _showBalance ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                        size: 12,
-                        color: Colors.white,
+                      // Balance Header
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.account_balance_wallet_outlined, color: primaryGreen, size: 20),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Current Balance',
+                            style: TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w600),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        _showBalance ? 'SHOW' : 'HIDE',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
+                      const SizedBox(height: 12),
+                      // Amount
+                      Skeletonizer(
+                        enabled: _kpiLoading,
+                        child: Text(
+                          _kpiLoading ? 'TZS 0,000,000' : formattedBalance,
+                          style: const TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.black87,
+                            letterSpacing: -0.5,
+                          ),
                         ),
+                      ),
+                      const SizedBox(height: 8),
+                      // Trend
+                      Skeletonizer(
+                        enabled: _kpiLoading,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              isPositive ? Icons.trending_up : Icons.trending_down,
+                              color: isPositive ? Colors.green : Colors.red,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '$trendPercent from yesterday',
+                              style: TextStyle(
+                                color: isPositive ? Colors.green : Colors.red,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      // Action Buttons
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildActionButton(
+                              icon: Icons.add,
+                              label: 'New Sale',
+                              onTap: () => context.push(SaleScreen.routePath),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: _buildActionButton(
+                              icon: Icons.credit_card,
+                              label: 'Payment',
+                              onTap: () => context.push(PaymentScreen.routePath),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
+          // Collapsed indicator
+          if (!_showBalance)
+            GestureDetector(
+              onTap: () => setState(() => _showBalance = true),
+              child: Container(
+                margin: const EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade300),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.account_balance_wallet_outlined, size: 18, color: Colors.grey.shade600),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Tap arrow to view balance',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(Icons.keyboard_arrow_down, size: 18, color: Colors.grey.shade600),
+                  ],
+                ),
+              ),
+            ),
           const SizedBox(height: 12),
           // Balance Content - Collapsible
           AnimatedContainer(
