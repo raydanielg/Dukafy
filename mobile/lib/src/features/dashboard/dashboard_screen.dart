@@ -44,6 +44,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Map<String, dynamic> _kpiData = {};
   bool _kpiLoading = true;
 
+  // Balance visibility toggle
+  bool _showBalance = false;
+
   // Carousel controller for auto-scroll
   final PageController _kpiPageController = PageController(viewportFraction: 0.38);
   Timer? _autoScrollTimer;
@@ -652,7 +655,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             ],
           ),
           const Divider(height: 32),
-          // Balance Display (like screenshot)
+          // Balance Display with Eye Toggle
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -662,18 +665,40 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 'Balance',
                 style: TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w600),
               ),
+              const SizedBox(width: 8),
+              // Eye icon to toggle balance visibility
+              GestureDetector(
+                onTap: () => setState(() => _showBalance = !_showBalance),
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    _showBalance ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                    color: Colors.grey.shade600,
+                    size: 16,
+                  ),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 8),
           Skeletonizer(
             enabled: _kpiLoading,
-            child: Text(
-              _kpiLoading ? 'TZS 0,000,000' : formattedBalance,
-              style: const TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.w900,
-                color: Colors.black87,
-                letterSpacing: -0.5,
+            child: GestureDetector(
+              onTap: () => setState(() => _showBalance = !_showBalance),
+              child: Text(
+                _kpiLoading
+                    ? 'TZS •••,•••,•••'
+                    : (_showBalance ? formattedBalance : 'TZS •••,•••,•••'),
+                style: const TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.black87,
+                  letterSpacing: -0.5,
+                ),
               ),
             ),
           ),
