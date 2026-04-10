@@ -237,20 +237,28 @@ class DashboardController extends Controller
 
     private function getProfit($businessId)
     {
-        // Calculate profit from sales (total - cost of goods)
-        $sales = DB::table('sales')
-            ->where('business_id', $businessId)
-            ->sum('total');
+        try {
+            // Calculate profit from sales (total - cost of goods)
+            $sales = DB::table('sales')
+                ->where('business_id', $businessId)
+                ->sum('total') ?? 0;
 
-        // Get cost of goods sold from sale_items
-        $costOfGoods = DB::table('sale_items')
-            ->join('sales', 'sale_items.sale_id', '=', 'sales.id')
-            ->where('sales.business_id', $businessId)
-            ->selectRaw('SUM(sale_items.qty * products.cost) as cost')
-            ->join('products', 'sale_items.product_id', '=', 'products.id')
-            ->value('cost') ?? 0;
+            // Check if sale_items table exists and has data
+            $costOfGoods = 0;
+            if (DB::table('sale_items')->exists()) {
+                $costOfGoods = DB::table('sale_items')
+                    ->join('sales', 'sale_items.sale_id', '=', 'sales.id')
+                    ->where('sales.business_id', $businessId)
+                    ->selectRaw('SUM(sale_items.qty * products.cost) as cost')
+                    ->join('products', 'sale_items.product_id', '=', 'products.id')
+                    ->value('cost') ?? 0;
+            }
 
-        return (int) ($sales - $costOfGoods);
+            return (int) ($sales - $costOfGoods);
+        } catch (\Exception $e) {
+            \Log::warning('Profit calculation error: ' . $e->getMessage());
+            return 0;
+        }
     }
 
     private function getOrderCount($businessId)
