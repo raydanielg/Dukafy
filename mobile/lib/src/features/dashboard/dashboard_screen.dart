@@ -162,13 +162,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> with WidgetsB
       }
     } on TimeoutException catch (_) {
       if (mounted) {
-        _showErrorSnackBar('Connection timeout. Using cached data.');
-        _useFallbackData();
+        _showErrorSnackBar('Connection timeout. Pull down to retry.');
+        setState(() => _kpiLoading = false);
       }
     } catch (e) {
       if (mounted) {
-        _showErrorSnackBar('Could not load data. Using offline data.');
-        _useFallbackData();
+        _showErrorSnackBar('Failed to load data. Pull down to retry.');
+        setState(() => _kpiLoading = false);
       }
     }
   }
