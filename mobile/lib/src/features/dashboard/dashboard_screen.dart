@@ -588,8 +588,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
+  // Sample businesses for dropdown
+  final List<Map<String, dynamic>> _businesses = [
+    {'id': 1, 'name': 'Main Shop', 'type': 'Retail'},
+    {'id': 2, 'name': 'Branch 1', 'type': 'Wholesale'},
+    {'id': 3, 'name': 'Online Store', 'type': 'E-commerce'},
+  ];
+  int _selectedBusinessId = 1;
+
   Widget _buildBalanceCard(Map<String, dynamic>? userData) {
-    final businessName = userData?['business']?['name'] ?? 'My Business';
+    final businessName = userData?['business']?['name'] ?? _businesses.firstWhere((b) => b['id'] == _selectedBusinessId, orElse: () => _businesses[0])['name'];
+    final businessType = userData?['business']?['type'] ?? 'Business';
 
     // Format currency
     final balance = _kpiData['balance'] ?? 0;
@@ -605,56 +614,178 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.white,
+            Colors.grey.shade50,
+          ],
+        ),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 25,
+            spreadRadius: 3,
+            offset: const Offset(0, 10),
+          ),
+          BoxShadow(
+            color: primaryGreen.withOpacity(0.05),
             blurRadius: 20,
             spreadRadius: 2,
-            offset: const Offset(0, 8),
+            offset: const Offset(0, 5),
           ),
         ],
-        border: Border.all(color: Colors.black.withOpacity(0.05)),
+        border: Border.all(color: Colors.white, width: 1),
       ),
       child: Column(
         children: [
-          // Business Selector Row
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: primaryGreen.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(Icons.storefront, color: primaryGreen, size: 22),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Active Business',
-                      style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      businessName,
-                      style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
-                    ),
+          // Business Selector - Powerful Design
+          GestureDetector(
+            onTap: () => _showBusinessDropdown(context),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    primaryGreen.withOpacity(0.1),
+                    Colors.white,
                   ],
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.1),
-                  shape: BoxShape.circle,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: primaryGreen.withOpacity(0.2),
+                  width: 1,
                 ),
-                child: const Icon(Icons.keyboard_arrow_down, color: Colors.grey, size: 20),
               ),
-            ],
+              child: Row(
+                children: [
+                  // Business Icon with Badge
+                  Stack(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              primaryGreen,
+                              primaryGreen.withOpacity(0.8),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: [
+                            BoxShadow(
+                              color: primaryGreen.withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.storefront_rounded,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                      // Active indicator dot
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: Colors.greenAccent,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: primaryGreen.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                'ACTIVE',
+                                style: TextStyle(
+                                  color: primaryGreen,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          businessName,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 18,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          businessType,
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Dropdown Button
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: primaryGreen.withOpacity(0.2),
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: primaryGreen,
+                          size: 22,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           const Divider(height: 32),
           // Balance Display - Label always visible, amount hidden
