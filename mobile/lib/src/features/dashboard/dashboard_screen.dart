@@ -757,6 +757,167 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
+  void _showBalanceDropdown(BuildContext context) {
+    // Format number helper
+    String formatNumber(dynamic value) {
+      if (value == null) return '0';
+      final num = value is int ? value : (value is double ? value.toInt() : 0);
+      return num.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => ',');
+    }
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        margin: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 20,
+              spreadRadius: 5,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: primaryGreen.withOpacity(0.1),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: primaryGreen,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.account_balance_wallet, color: Colors.white, size: 24),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'All Balances',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        Text(
+                          'Business Overview',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            ),
+            // Balance Items
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Skeletonizer(
+                enabled: _kpiLoading,
+                child: Column(
+                  children: [
+                    _BalanceDropdownItem(
+                      icon: Icons.account_balance_wallet,
+                      title: 'Main Balance',
+                      value: 'TZS ${formatNumber(_kpiData['balance'])}',
+                      color: primaryGreen,
+                      isMain: true,
+                    ),
+                    const Divider(height: 24),
+                    _BalanceDropdownItem(
+                      icon: Icons.inventory_2,
+                      title: 'Stock Value',
+                      value: 'TZS ${formatNumber(_kpiData['stock_in'])}',
+                      color: Colors.blue,
+                    ),
+                    const Divider(height: 24),
+                    _BalanceDropdownItem(
+                      icon: Icons.trending_up,
+                      title: 'Profit',
+                      value: 'TZS ${formatNumber(_kpiData['profit'])}',
+                      color: Colors.green,
+                    ),
+                    const Divider(height: 24),
+                    _BalanceDropdownItem(
+                      icon: Icons.shopping_cart,
+                      title: 'Orders',
+                      value: '${formatNumber(_kpiData['orders'])} orders',
+                      color: Colors.purple,
+                    ),
+                    const Divider(height: 24),
+                    _BalanceDropdownItem(
+                      icon: Icons.credit_card,
+                      title: 'Outstanding Credits',
+                      value: 'TZS ${formatNumber(_kpiData['credits'])}',
+                      color: Colors.orange,
+                    ),
+                    const Divider(height: 24),
+                    _BalanceDropdownItem(
+                      icon: Icons.receipt_long,
+                      title: 'Total Expenses',
+                      value: 'TZS ${formatNumber(_kpiData['expenses'])}',
+                      color: Colors.red,
+                    ),
+                    const Divider(height: 24),
+                    _BalanceDropdownItem(
+                      icon: Icons.point_of_sale,
+                      title: 'Total Sales',
+                      value: 'TZS ${formatNumber(_kpiData['sales'])}',
+                      color: Colors.teal,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // Close button
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: FilledButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: primaryGreen,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'CLOSE',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildQuickActionButton({
     required IconData icon,
     required String label,
@@ -866,6 +1027,78 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BalanceDropdownItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String value;
+  final Color color;
+  final bool isMain;
+
+  const _BalanceDropdownItem({
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.color,
+    this.isMain = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: color, size: 22),
+        ),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey.shade600,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: isMain ? 18 : 16,
+                  fontWeight: isMain ? FontWeight.w900 : FontWeight.w700,
+                  color: isMain ? color : Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (isMain)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              'MAIN',
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
