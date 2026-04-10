@@ -160,12 +160,12 @@
                 </div>
                 <div class="admin-panel-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="bg-light">
+                        <table class="table admin-table table-hover align-middle mb-0">
+                            <thead>
                                 <tr>
-                                    <th class="ps-3 py-3 border-0">Subscriber</th>
-                                    <th class="py-3 border-0">Amount</th>
-                                    <th class="pe-3 py-3 border-0 text-end">Date</th>
+                                    <th>Subscriber</th>
+                                    <th>Amount</th>
+                                    <th class="text-end">Date</th>
                                 </tr>
                             </thead>
                             <tbody>
