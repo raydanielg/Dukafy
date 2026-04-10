@@ -102,24 +102,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 decoration: _pillDecoration(
                                   hintText: 'Enter your phone number',
                                   icon: Icons.phone_outlined,
-                                  prefix: Padding(
-                                    padding:
-                                        const EdgeInsets.only(left: 14, right: 10),
+                                  prefix: const Padding(
+                                    padding: EdgeInsets.only(left: 14, right: 10),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        const Text(
+                                        Text(
                                           '+255',
                                           style: TextStyle(fontWeight: FontWeight.w800),
                                         ),
-                                        const SizedBox(width: 10),
-                                        Container(
-                                          width: 1,
-                                          height: 22,
-                                          color: Colors.black.withValues(alpha: 0.12),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        const Icon(Icons.phone_outlined),
+                                        SizedBox(width: 10),
                                       ],
                                     ),
                                   ),
