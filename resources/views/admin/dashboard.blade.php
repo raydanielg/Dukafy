@@ -138,9 +138,9 @@
                             <tbody>
                                 @forelse($stats['recent_businesses'] as $biz)
                                     <tr>
-                                        <td class="ps-3 py-3 fw-bold">{{ $biz->name }}</td>
-                                        <td><span class="badge bg-light text-dark border">{{ $biz->currency }}</span></td>
-                                        <td class="pe-3 py-3 text-end text-muted small">{{ \Carbon\Carbon::parse($biz->created_at)->diffForHumans() }}</td>
+                                        <td class="fw-semibold">{{ $biz->name }}</td>
+                                        <td><span class="badge badge-default">{{ $biz->currency }}</span></td>
+                                        <td class="text-end text-muted">{{ \Carbon\Carbon::parse($biz->created_at)->diffForHumans() }}</td>
                                     </tr>
                                 @empty
                                     <tr><td colspan="3" class="text-center py-4 text-muted">No businesses yet.</td></tr>
