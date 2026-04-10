@@ -797,32 +797,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
             ),
           const SizedBox(height: 12),
-          // Hidden State Indicator
-          if (!_showBalance)
-            Container(
-              margin: const EdgeInsets.only(top: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.lock_outline, size: 18, color: Colors.grey.shade600),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Balance Hidden - Tap to Show',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
         ],
       ),
     );
