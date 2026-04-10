@@ -619,42 +619,45 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       ),
       child: Column(
         children: [
-          // Business Selector Row
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: primaryGreen.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
+          // Business Selector Row with Balance Dropdown
+          GestureDetector(
+            onTap: () => _showBalanceDropdown(context),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: primaryGreen.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(Icons.storefront, color: primaryGreen, size: 22),
                 ),
-                child: Icon(Icons.storefront, color: primaryGreen, size: 22),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Active Business',
-                      style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      businessName,
-                      style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
-                    ),
-                  ],
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Active Business',
+                        style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        businessName,
+                        style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.1),
-                  shape: BoxShape.circle,
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.keyboard_arrow_down, color: Colors.grey, size: 20),
                 ),
-                child: const Icon(Icons.keyboard_arrow_down, color: Colors.grey, size: 20),
-              ),
-            ],
+              ],
+            ),
           ),
           const Divider(height: 32),
           // Balance Display - Label always visible, amount hidden
