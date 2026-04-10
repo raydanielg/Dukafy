@@ -24,6 +24,8 @@ import '../expenses/expenses_screen.dart';
 import '../banking/banking_screen.dart';
 import '../notifications/notifications_screen.dart';
 import '../reports/reports_screen.dart';
+import '../sales/sale_screen.dart';
+import '../payments/payment_screen.dart';
 import '../auth/widgets/auth_background.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -733,13 +735,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               _buildQuickActionButton(
                 icon: Icons.add,
                 label: 'New Sale',
-                onTap: () => context.push('/sale'),
+                onTap: () => context.push(SaleScreen.routePath),
               ),
               const SizedBox(width: 16),
               _buildQuickActionButton(
                 icon: Icons.credit_card,
                 label: 'Payment',
-                onTap: () => context.push('/payment'),
+                onTap: () => context.push(PaymentScreen.routePath),
               ),
             ],
           ),
