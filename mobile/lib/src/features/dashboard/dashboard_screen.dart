@@ -765,12 +765,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   void _showBalanceDropdown(BuildContext context) {
-    // Format number helper
-    String formatNumber(dynamic value) {
-      if (value == null) return '0';
-      final num = value is int ? value : (value is double ? value.toInt() : 0);
-      return num.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => ',');
-    }
 
     showModalBottomSheet(
       context: context,
