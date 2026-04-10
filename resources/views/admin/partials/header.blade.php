@@ -1,5 +1,9 @@
 <header class="admin-header">
     <div class="admin-header-left">
+        <!-- Mobile Menu Toggle -->
+        <button type="button" class="admin-icon-btn d-lg-none me-3" id="admin-menu-toggle" aria-label="Toggle Menu">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="admin-icon"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
         <div class="admin-page-title">@yield('page_title', 'Dashboard')</div>
     </div>
 
