@@ -743,7 +743,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       Row(
                         children: [
                           Expanded(
-                            child: _buildActionButton(
+                            child: _buildQuickActionButton(
                               icon: Icons.add,
                               label: 'New Sale',
                               onTap: () => context.push(SaleScreen.routePath),
@@ -751,7 +751,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: _buildActionButton(
+                            child: _buildQuickActionButton(
                               icon: Icons.credit_card,
                               label: 'Payment',
                               onTap: () => context.push(PaymentScreen.routePath),
