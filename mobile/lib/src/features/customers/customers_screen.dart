@@ -56,7 +56,7 @@ class _CustomersScreenState extends ConsumerState<CustomersScreen> {
   Future<void> _fetchCustomers() async {
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.get('/customers', queryParameters: {
+      final res = await dio.get('/auth/customers', queryParameters: {
         'q': _searchController.text,
         'filter': _selectedFilter == 'all' ? null : _selectedFilter,
       }).timeout(const Duration(seconds: 10));
@@ -86,7 +86,7 @@ class _CustomersScreenState extends ConsumerState<CustomersScreen> {
   Future<void> _fetchCustomerGroups() async {
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.get('/customer-groups').timeout(const Duration(seconds: 10));
+      final res = await dio.get('/auth/customer-groups').timeout(const Duration(seconds: 10));
       if (mounted) {
         setState(() {
           _customerGroups = List<Map<String, dynamic>>.from(res.data['data'] ?? []);
@@ -109,7 +109,7 @@ class _CustomersScreenState extends ConsumerState<CustomersScreen> {
   Future<void> _fetchStats() async {
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.get('/customers/stats').timeout(const Duration(seconds: 10));
+      final res = await dio.get('/auth/customers/stats').timeout(const Duration(seconds: 10));
       if (mounted) {
         setState(() => _stats = res.data['data'] ?? {});
       }
@@ -127,7 +127,7 @@ class _CustomersScreenState extends ConsumerState<CustomersScreen> {
         onSave: (customer) async {
           try {
             final dio = ref.read(apiClientProvider).dio;
-            await dio.post('/customers', data: customer);
+            await dio.post('/auth/customers', data: customer);
             Navigator.pop(context);
             _fetchCustomers();
             ScaffoldMessenger.of(context).showSnackBar(
@@ -350,7 +350,7 @@ class _CustomersScreenState extends ConsumerState<CustomersScreen> {
         onDelete: () async {
           try {
             final dio = ref.read(apiClientProvider).dio;
-            await dio.delete('/customers/${customer['id']}');
+            await dio.delete('/auth/customers/${customer['id']}');
             Navigator.pop(context);
             _fetchCustomers();
             ScaffoldMessenger.of(context).showSnackBar(
