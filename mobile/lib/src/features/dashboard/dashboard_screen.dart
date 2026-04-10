@@ -771,7 +771,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             onTap: () {},
                           ),
                           _QuickActionIcon(
-                            icon: Icons.people_add_outlined,
+                            icon: Icons.group_add_outlined,
                             label: 'Team',
                             color: Colors.amber,
                             onTap: () => context.push(MembersScreen.routePath),
