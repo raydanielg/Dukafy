@@ -345,52 +345,45 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                 padEnds: false,
                                 itemCount: 6,
                                 itemBuilder: (context, index) {
-                                  // Helper to format numbers with thousand separators
-                                  String formatNumber(dynamic value) {
-                                    if (value == null) return '0';
-                                    final num = value is int ? value : (value is double ? value.toInt() : 0);
-                                    return num.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => ',');
-                                  }
-
                                   final kpiItems = [
                                     {
                                       'title': 'Stock In',
-                                      'value': 'TSh ${formatNumber(_kpiData['stock_in'])}',
+                                      'value': 'TSh ${_formatCurrency(_kpiData['stock_in'])}',
                                       'subtitle': 'Inventory value',
                                       'icon': Icons.inventory_2,
                                       'color': Colors.blue,
                                     },
                                     {
                                       'title': 'Profit',
-                                      'value': 'TSh ${formatNumber(_kpiData['profit'])}',
+                                      'value': 'TSh ${_formatCurrency(_kpiData['profit'])}',
                                       'subtitle': 'Net profit',
                                       'icon': Icons.trending_up,
                                       'color': Colors.green,
                                     },
                                     {
                                       'title': 'Orders',
-                                      'value': '${formatNumber(_kpiData['orders'])}',
+                                      'value': _formatCurrency(_kpiData['orders']),
                                       'subtitle': 'Total orders',
                                       'icon': Icons.shopping_cart,
                                       'color': Colors.purple,
                                     },
                                     {
                                       'title': 'Credits',
-                                      'value': 'TSh ${formatNumber(_kpiData['credits'])}',
+                                      'value': 'TSh ${_formatCurrency(_kpiData['credits'])}',
                                       'subtitle': 'Outstanding',
                                       'icon': Icons.credit_card,
                                       'color': Colors.orange,
                                     },
                                     {
                                       'title': 'Expense',
-                                      'value': 'TSh ${formatNumber(_kpiData['expenses'])}',
+                                      'value': 'TSh ${_formatCurrency(_kpiData['expenses'])}',
                                       'subtitle': 'Total expenses',
                                       'icon': Icons.receipt_long,
                                       'color': Colors.red,
                                     },
                                     {
                                       'title': 'Sales',
-                                      'value': 'TSh ${formatNumber(_kpiData['sales'])}',
+                                      'value': 'TSh ${_formatCurrency(_kpiData['sales'])}',
                                       'subtitle': 'Total sales',
                                       'icon': Icons.point_of_sale,
                                       'color': primaryGreen,
