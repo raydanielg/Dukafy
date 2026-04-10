@@ -77,7 +77,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
   Future<void> _fetchRecentPayments() async {
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.get('/payments/recent').timeout(const Duration(seconds: 10));
+      final res = await dio.get('/auth/payments/recent').timeout(const Duration(seconds: 10));
       if (mounted) {
         setState(() {
           _recentPayments = List<Map<String, dynamic>>.from(res.data['data'] ?? res.data ?? []);
@@ -101,7 +101,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
   Future<void> _fetchSuppliers() async {
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.get('/suppliers').timeout(const Duration(seconds: 10));
+      final res = await dio.get('/auth/suppliers').timeout(const Duration(seconds: 10));
       if (mounted) {
         setState(() => _suppliers = List<Map<String, dynamic>>.from(res.data['data'] ?? res.data ?? []));
       }
@@ -118,7 +118,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
   Future<void> _fetchEmployees() async {
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.get('/employees').timeout(const Duration(seconds: 10));
+      final res = await dio.get('/auth/employees').timeout(const Duration(seconds: 10));
       if (mounted) {
         setState(() => _employees = List<Map<String, dynamic>>.from(res.data['data'] ?? res.data ?? []));
       }
@@ -151,7 +151,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
 
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.post('/payments', data: {
+      final res = await dio.post('/auth/payments', data: {
         'payment_type': _selectedPaymentType,
         'recipient_id': _selectedRecipient?['id'],
         'amount': double.parse(_amountController.text),
