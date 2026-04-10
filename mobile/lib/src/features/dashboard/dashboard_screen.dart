@@ -765,37 +765,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
             ),
           ),
-          // Collapsed indicator
-          if (!_showBalance)
-            GestureDetector(
-              onTap: () => setState(() => _showBalance = true),
-              child: Container(
-                margin: const EdgeInsets.only(top: 8),
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.shade300),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.account_balance_wallet_outlined, size: 18, color: Colors.grey.shade600),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Tap arrow to view balance',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(Icons.keyboard_arrow_down, size: 18, color: Colors.grey.shade600),
-                  ],
-                ),
-              ),
-            ),
           const SizedBox(height: 12),
         ],
       ),
