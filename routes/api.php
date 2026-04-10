@@ -23,5 +23,14 @@ Route::prefix('auth')->group(function () {
         // POS
         Route::get('/products', [App\Http\Controllers\Api\ProductController::class, 'index']);
         Route::get('/customers', [App\Http\Controllers\Api\CustomerController::class, 'index']);
+
+        // Dashboard
+        Route::get('/dashboard', [App\Http\Controllers\Api\DashboardController::class, 'index']);
+        Route::get('/dashboard/stats', [App\Http\Controllers\Api\DashboardController::class, 'stats']);
+        Route::get('/dashboard/summary', [App\Http\Controllers\Api\DashboardController::class, 'summary']);
+        Route::get('/sales/today', [App\Http\Controllers\Api\DashboardController::class, 'todaySales']);
+        Route::get('/inventory/value', [App\Http\Controllers\Api\DashboardController::class, 'inventoryValue']);
+        Route::get('/credits/outstanding', [App\Http\Controllers\Api\DashboardController::class, 'outstandingCredits']);
+        Route::get('/expenses/total', [App\Http\Controllers\Api\DashboardController::class, 'totalExpenses']);
     });
 });
