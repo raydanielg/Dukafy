@@ -190,7 +190,7 @@ class _CustomersScreenState extends ConsumerState<CustomersScreen> {
                 _StatCard(
                   title: 'Active',
                   value: '${_stats['active_customers'] ?? _countActive()}',
-                  icon: Icons.person_check,
+                  icon: Icons.verified_user,
                   color: Colors.green,
                 ),
                 const SizedBox(width: 12),
