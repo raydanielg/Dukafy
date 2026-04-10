@@ -33,13 +33,13 @@ Route::prefix('auth')->group(function () {
         Route::get('/credits/outstanding', [App\Http\Controllers\Api\DashboardController::class, 'outstandingCredits']);
         Route::get('/expenses/total', [App\Http\Controllers\Api\DashboardController::class, 'totalExpenses']);
 
-        // Products
+        // Products - NOTE: stats must come before {id} routes!
         Route::get('/products', [App\Http\Controllers\Api\ProductController::class, 'index']);
         Route::post('/products', [App\Http\Controllers\Api\ProductController::class, 'store']);
+        Route::get('/products/stats', [App\Http\Controllers\Api\ProductController::class, 'stats']);
         Route::get('/products/{id}', [App\Http\Controllers\Api\ProductController::class, 'show']);
         Route::put('/products/{id}', [App\Http\Controllers\Api\ProductController::class, 'update']);
         Route::delete('/products/{id}', [App\Http\Controllers\Api\ProductController::class, 'destroy']);
-        Route::get('/products/stats', [App\Http\Controllers\Api\ProductController::class, 'stats']);
 
         // Product Categories
         Route::get('/product-categories', [App\Http\Controllers\Api\ProductCategoryController::class, 'index']);
