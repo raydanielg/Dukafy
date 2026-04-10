@@ -43,8 +43,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> with WidgetsB
   final Color primaryGreen = const Color(0xFF2E7D32);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // KPI Data
-  Map<String, dynamic> _kpiData = {};
+  // KPI Data - initialized with zeros
+  Map<String, dynamic> _kpiData = {
+    'stock_in': 0,
+    'profit': 0,
+    'orders': 0,
+    'credits': 0,
+    'expenses': 0,
+    'sales': 0,
+    'balance': 0,
+    'today_sales': 0,
+    'month_sales': 0,
+  };
   bool _kpiLoading = true;
 
   // Balance visibility toggle
