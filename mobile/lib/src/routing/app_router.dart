@@ -25,6 +25,8 @@ import '../features/expenses/expenses_screen.dart';
 import '../features/banking/banking_screen.dart';
 import '../features/notifications/notifications_screen.dart';
 import '../features/reports/reports_screen.dart';
+import '../features/sales/sale_screen.dart';
+import '../features/payments/payment_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -155,6 +157,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: ReportsScreen.routePath,
         name: ReportsScreen.routeName,
         builder: (context, state) => const ReportsScreen(),
+      ),
+      GoRoute(
+        path: SaleScreen.routePath,
+        name: SaleScreen.routeName,
+        builder: (context, state) => const SaleScreen(),
+      ),
+      GoRoute(
+        path: PaymentScreen.routePath,
+        name: PaymentScreen.routeName,
+        builder: (context, state) => const PaymentScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
