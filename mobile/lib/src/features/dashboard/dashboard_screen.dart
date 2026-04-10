@@ -1122,62 +1122,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
-  // OLD FeatureGrid - replaced above
-  Widget __buildOldFeatureGrid() {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 3,
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
-      childAspectRatio: 0.85,
-      children: [
-        _FeatureCard(
-          title: 'Customers',
-          subtitle: 'Clients & Borrowers',
-          icon: Icons.people_outline,
-          color: primaryGreen,
-          onTap: () => context.push(CustomersScreen.routePath),
-        ),
-        _FeatureCard(
-          title: 'Loans',
-          subtitle: 'Credit & Repayments',
-          icon: Icons.grid_view_rounded,
-          color: primaryGreen,
-          onTap: () => context.push(LoansScreen.routePath),
-        ),
-        _FeatureCard(
-          title: 'Expenses',
-          subtitle: 'Costs & Spending',
-          icon: Icons.payments_outlined,
-          color: primaryGreen,
-          onTap: () => context.push(ExpensesScreen.routePath),
-        ),
-        _FeatureCard(
-          title: 'Banking',
-          subtitle: 'Treasury & Teller',
-          icon: Icons.account_balance_wallet_outlined,
-          color: primaryGreen,
-          onTap: () => context.push(BankingScreen.routePath),
-        ),
-        _FeatureCard(
-          title: 'Messages',
-          subtitle: 'SMS & Alerts',
-          icon: Icons.mail_outline,
-          color: primaryGreen,
-          onTap: () => context.push(NotificationsScreen.routePath),
-        ),
-        _FeatureCard(
-          title: 'Reports',
-          subtitle: 'Analytics & Insights',
-          icon: Icons.bar_chart_rounded,
-          color: primaryGreen,
-          onTap: () => context.push(ReportsScreen.routePath),
-        ),
-      ],
-    );
-  }
-
   Widget _buildBottomNav() {
     return Container(
       decoration: BoxDecoration(
