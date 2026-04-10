@@ -719,23 +719,86 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      // Action Buttons
-                      Row(
+                      // Quick Actions Grid
+                      GridView.count(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 4,
+                        mainAxisSpacing: 8,
+                        crossAxisSpacing: 8,
+                        childAspectRatio: 0.75,
                         children: [
-                          Expanded(
-                            child: _buildQuickActionButton(
-                              icon: Icons.add,
-                              label: 'New Sale',
-                              onTap: () => context.push(SaleScreen.routePath),
-                            ),
+                          _QuickActionIcon(
+                            icon: Icons.inventory_2_outlined,
+                            label: 'Stock',
+                            color: Colors.blue,
+                            onTap: () => context.push(ProductsScreen.routePath),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _buildQuickActionButton(
-                              icon: Icons.credit_card,
-                              label: 'Payment',
-                              onTap: () => context.push(PaymentScreen.routePath),
-                            ),
+                          _QuickActionIcon(
+                            icon: Icons.shopping_cart_outlined,
+                            label: 'Sales',
+                            color: Colors.green,
+                            onTap: () => context.push(SaleScreen.routePath),
+                          ),
+                          _QuickActionIcon(
+                            icon: Icons.shopping_bag_outlined,
+                            label: 'Purchase',
+                            color: Colors.orange,
+                            onTap: () => context.push(PurchasesScreen.routePath),
+                          ),
+                          _QuickActionIcon(
+                            icon: Icons.trending_up,
+                            label: 'Profit',
+                            color: Colors.purple,
+                            onTap: () => context.push(ReportsScreen.routePath),
+                          ),
+                          _QuickActionIcon(
+                            icon: Icons.account_balance_wallet_outlined,
+                            label: 'Cashflow',
+                            color: Colors.teal,
+                            onTap: () => context.push(BankingScreen.routePath),
+                          ),
+                          _QuickActionIcon(
+                            icon: Icons.sms_outlined,
+                            label: 'SMS',
+                            color: Colors.indigo,
+                            onTap: () {},
+                          ),
+                          _QuickActionIcon(
+                            icon: Icons.email_outlined,
+                            label: 'Email',
+                            color: Colors.cyan,
+                            onTap: () {},
+                          ),
+                          _QuickActionIcon(
+                            icon: Icons.people_add_outlined,
+                            label: 'Team',
+                            color: Colors.amber,
+                            onTap: () => context.push(MembersScreen.routePath),
+                          ),
+                          _QuickActionIcon(
+                            icon: Icons.bar_chart_outlined,
+                            label: 'Reports',
+                            color: Colors.deepOrange,
+                            onTap: () => context.push(ReportsScreen.routePath),
+                          ),
+                          _QuickActionIcon(
+                            icon: Icons.add_business_outlined,
+                            label: 'Business',
+                            color: Colors.pink,
+                            onTap: () => context.push(ShopsScreen.routePath),
+                          ),
+                          _QuickActionIcon(
+                            icon: Icons.settings_outlined,
+                            label: 'Settings',
+                            color: Colors.grey.shade700,
+                            onTap: () => context.push(ProfileScreen.routePath),
+                          ),
+                          _QuickActionIcon(
+                            icon: Icons.credit_card_outlined,
+                            label: 'Payment',
+                            color: Colors.red,
+                            onTap: () => context.push(PaymentScreen.routePath),
                           ),
                         ],
                       ),
