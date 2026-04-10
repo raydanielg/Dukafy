@@ -660,65 +660,65 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             ),
           ),
           const Divider(height: 32),
-          // Balance Section with Toggle
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.account_balance_wallet_outlined, color: Colors.grey.shade400, size: 20),
-              const SizedBox(width: 8),
-              const Text(
-                'Balance',
-                style: TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(width: 12),
-              // Toggle Switch to show/hide balance
-              GestureDetector(
-                onTap: () => setState(() => _showBalance = !_showBalance),
-                child: Container(
-                  width: 50,
-                  height: 26,
-                  padding: const EdgeInsets.all(2),
+          // Balance Card Header with Toggle
+          GestureDetector(
+            onTap: () => setState(() => _showBalance = !_showBalance),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.account_balance_wallet_outlined, color: primaryGreen, size: 22),
+                const SizedBox(width: 8),
+                const Text(
+                  'Balance',
+                  style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(width: 12),
+                // Toggle indicator
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: _showBalance ? primaryGreen : Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(13),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: AnimatedAlign(
-                    duration: const Duration(milliseconds: 200),
-                    alignment: _showBalance ? Alignment.centerRight : Alignment.centerLeft,
-                    child: Container(
-                      width: 22,
-                      height: 22,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 2,
-                            offset: Offset(0, 1),
-                          ),
-                        ],
-                      ),
-                      child: Icon(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
                         _showBalance ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                         size: 12,
-                        color: _showBalance ? primaryGreen : Colors.grey,
+                        color: Colors.white,
                       ),
-                    ),
+                      const SizedBox(width: 4),
+                      Text(
+                        _showBalance ? 'SHOW' : 'HIDE',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 12),
-          // Amount Display with Skeleton
-          Skeletonizer(
-            enabled: _kpiLoading,
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: _showBalance
-                  ? Text(
-                      key: const ValueKey('visible'),
+          // Balance Content - Collapsible
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            height: _showBalance ? null : 0,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 200),
+              opacity: _showBalance ? 1.0 : 0.0,
+              child: Column(
+                children: [
+                  // Amount Display
+                  Skeletonizer(
+                    enabled: _kpiLoading,
+                    child: Text(
                       _kpiLoading ? 'TZS 0,000,000' : formattedBalance,
                       style: const TextStyle(
                         fontSize: 36,
@@ -726,73 +726,80 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         color: Colors.black87,
                         letterSpacing: -0.5,
                       ),
-                    )
-                  : Container(
-                      key: const ValueKey('hidden'),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.lock_outline, size: 16, color: Colors.grey.shade600),
-                          const SizedBox(width: 6),
-                          Text(
-                            'Hidden',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Skeletonizer(
-            enabled: _kpiLoading,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  isPositive ? Icons.trending_up : Icons.trending_down,
-                  color: isPositive ? Colors.green : Colors.red,
-                  size: 16,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  '$trendPercent from yesterday',
-                  style: TextStyle(
-                    color: isPositive ? Colors.green : Colors.red,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  // Trend indicator
+                  Skeletonizer(
+                    enabled: _kpiLoading,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          isPositive ? Icons.trending_up : Icons.trending_down,
+                          color: isPositive ? Colors.green : Colors.red,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '$trendPercent from yesterday',
+                          style: TextStyle(
+                            color: isPositive ? Colors.green : Colors.red,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Quick Action Buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildQuickActionButton(
+                        icon: Icons.add,
+                        label: 'New Sale',
+                        onTap: () => context.push(SaleScreen.routePath),
+                      ),
+                      const SizedBox(width: 16),
+                      _buildQuickActionButton(
+                        icon: Icons.credit_card,
+                        label: 'Payment',
+                        onTap: () => context.push(PaymentScreen.routePath),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 20),
-          // Quick Action Buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildQuickActionButton(
-                icon: Icons.add,
-                label: 'New Sale',
-                onTap: () => context.push(SaleScreen.routePath),
+          // Hidden State Indicator
+          if (!_showBalance)
+            Container(
+              margin: const EdgeInsets.only(top: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey.shade300),
               ),
-              const SizedBox(width: 16),
-              _buildQuickActionButton(
-                icon: Icons.credit_card,
-                label: 'Payment',
-                onTap: () => context.push(PaymentScreen.routePath),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.lock_outline, size: 18, color: Colors.grey.shade600),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Balance Hidden - Tap to Show',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
         ],
       ),
     );
