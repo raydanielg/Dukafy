@@ -56,11 +56,11 @@ Route::prefix('auth')->group(function () {
         // Customer Groups
         Route::get('/customer-groups', [App\Http\Controllers\Api\CustomerGroupController::class, 'index']);
 
-        // Sales
+        // Sales - NOTE: summary must come before {id} routes!
         Route::get('/sales', [App\Http\Controllers\Api\SaleController::class, 'index']);
         Route::post('/sales', [App\Http\Controllers\Api\SaleController::class, 'store']);
-        Route::get('/sales/{id}', [App\Http\Controllers\Api\SaleController::class, 'show']);
         Route::get('/sales/summary', [App\Http\Controllers\Api\SaleController::class, 'summary']);
+        Route::get('/sales/{id}', [App\Http\Controllers\Api\SaleController::class, 'show']);
 
         // Suppliers
         Route::get('/suppliers', [App\Http\Controllers\Api\SupplierController::class, 'index']);
