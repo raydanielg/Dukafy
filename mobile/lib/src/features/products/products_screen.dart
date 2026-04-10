@@ -58,7 +58,7 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> {
   Future<void> _fetchProducts() async {
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.get('/products', queryParameters: {
+      final res = await dio.get('/auth/products', queryParameters: {
         'q': _searchController.text,
         'category': _selectedCategory == 'all' ? null : _selectedCategory,
       }).timeout(const Duration(seconds: 10));
@@ -89,7 +89,7 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> {
   Future<void> _fetchCategories() async {
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.get('/product-categories').timeout(const Duration(seconds: 10));
+      final res = await dio.get('/auth/product-categories').timeout(const Duration(seconds: 10));
       if (mounted) {
         setState(() {
           _categories = List<Map<String, dynamic>>.from(res.data['data'] ?? []);
@@ -112,7 +112,7 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> {
   Future<void> _fetchStats() async {
     try {
       final dio = ref.read(apiClientProvider).dio;
-      final res = await dio.get('/products/stats').timeout(const Duration(seconds: 10));
+      final res = await dio.get('/auth/products/stats').timeout(const Duration(seconds: 10));
       if (mounted) {
         setState(() => _stats = res.data['data'] ?? {});
       }
@@ -130,7 +130,7 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> {
         onSave: (product) async {
           try {
             final dio = ref.read(apiClientProvider).dio;
-            await dio.post('/products', data: product);
+            await dio.post('/auth/products', data: product);
             Navigator.pop(context);
             _fetchProducts();
             ScaffoldMessenger.of(context).showSnackBar(
@@ -454,7 +454,7 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> {
         onDelete: () async {
           try {
             final dio = ref.read(apiClientProvider).dio;
-            await dio.delete('/products/${product['id']}');
+            await dio.delete('/auth/products/${product['id']}');
             Navigator.pop(context);
             _fetchProducts();
             ScaffoldMessenger.of(context).showSnackBar(
