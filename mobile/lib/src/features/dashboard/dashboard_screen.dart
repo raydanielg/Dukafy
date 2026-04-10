@@ -657,7 +657,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             ],
           ),
           const Divider(height: 32),
-          // Balance Display with Eye Toggle
+          // Balance Display - Label always visible, amount hidden
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -667,40 +667,44 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 'Balance',
                 style: TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w600),
               ),
-              const SizedBox(width: 8),
-              // Eye icon to toggle balance visibility
-              GestureDetector(
-                onTap: () => setState(() => _showBalance = !_showBalance),
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    _showBalance ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                    color: Colors.grey.shade600,
-                    size: 16,
-                  ),
-                ),
-              ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
+          // Amount with Eye Toggle - Hidden by default
           Skeletonizer(
             enabled: _kpiLoading,
             child: GestureDetector(
               onTap: () => setState(() => _showBalance = !_showBalance),
-              child: Text(
-                _kpiLoading
-                    ? 'TZS •••,•••,•••'
-                    : (_showBalance ? formattedBalance : 'TZS •••,•••,•••'),
-                style: const TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.black87,
-                  letterSpacing: -0.5,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Hidden amount or real amount
+                  Text(
+                    _kpiLoading
+                        ? 'TZS •••,•••,•••'
+                        : (_showBalance ? formattedBalance : 'TZS •••,•••,•••'),
+                    style: const TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.black87,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // Eye icon next to amount
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      _showBalance ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                      color: Colors.grey.shade600,
+                      size: 20,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
