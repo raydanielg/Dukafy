@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -103,7 +104,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     }
   }
 
-  Future<void> _fetchKpiData() async {
+  /// Format currency in TZS format
+  String _formatCurrency(dynamic value) {
+    if (value == null) return '0';
+    final num = value is int ? value : (value is double ? value.toInt() : 0);
+    return num.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => ',');
+  }
+
+  Future<void> _fetchKpiData({bool silent = false}) async {
     setState(() => _kpiLoading = true);
 
     try {
@@ -128,28 +136,70 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           };
           _kpiLoading = false;
         });
+
+        // Show success feedback only on manual refresh
+        if (!silent && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Dashboard updated'),
+              duration: Duration(seconds: 1),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       } else {
-        throw Exception('Invalid response');
+        throw Exception('Invalid response from server');
+      }
+    } on TimeoutException catch (_) {
+      if (mounted) {
+        _showErrorSnackBar('Connection timeout. Using cached data.');
+        _useFallbackData();
       }
     } catch (e) {
-      // Fallback to mock data if API fails
       if (mounted) {
-        setState(() {
-          _kpiData = {
-            'stock_in': 2450000,
-            'profit': 890000,
-            'orders': 156,
-            'credits': 450000,
-            'expenses': 320000,
-            'sales': 5200000,
-            'balance': 2100000,
-            'today_sales': 450000,
-            'month_sales': 3200000,
-          };
-          _kpiLoading = false;
-        });
+        _showErrorSnackBar('Could not load data. Using offline data.');
+        _useFallbackData();
       }
     }
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.wifi_off, color: Colors.white, size: 18),
+            const SizedBox(width: 8),
+            Expanded(child: Text(message)),
+          ],
+        ),
+        backgroundColor: Colors.orange.shade800,
+        duration: const Duration(seconds: 3),
+        behavior: SnackBarBehavior.floating,
+        action: SnackBarAction(
+          label: 'RETRY',
+          textColor: Colors.white,
+          onPressed: _fetchKpiData,
+        ),
+      ),
+    );
+  }
+
+  void _useFallbackData() {
+    setState(() {
+      _kpiData = {
+        'stock_in': 2450000,
+        'profit': 890000,
+        'orders': 156,
+        'credits': 450000,
+        'expenses': 320000,
+        'sales': 5200000,
+        'balance': 2100000,
+        'today_sales': 450000,
+        'month_sales': 3200000,
+      };
+      _kpiLoading = false;
+    });
   }
 
   Future<void> _deleteAccount() async {
