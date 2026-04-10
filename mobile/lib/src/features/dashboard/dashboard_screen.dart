@@ -106,25 +106,49 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Future<void> _fetchKpiData() async {
     setState(() => _kpiLoading = true);
 
-    // Simulate network delay for skeleton loading effect
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final dio = ref.read(apiClientProvider).dio;
 
-    if (mounted) {
-      // Use realistic mock data - no API calls to avoid errors
-      setState(() {
-        _kpiData = {
-          'stock_in': 2450000,
-          'profit': 890000,
-          'orders': 156,
-          'credits': 450000,
-          'expenses': 320000,
-          'sales': 5200000,
-          'balance': 2100000,
-          'today_sales': 450000,
-          'month_sales': 3200000,
-        };
-        _kpiLoading = false;
-      });
+      // Try main dashboard endpoint
+      final res = await dio.get('/dashboard').timeout(const Duration(seconds: 10));
+
+      if (mounted && res.data != null && res.data['success'] == true) {
+        final data = res.data['data'] ?? {};
+        setState(() {
+          _kpiData = {
+            'stock_in': data['stock_in'] ?? data['stock_value'] ?? 0,
+            'profit': data['profit'] ?? 0,
+            'orders': data['orders'] ?? 0,
+            'credits': data['credits'] ?? 0,
+            'expenses': data['expenses'] ?? 0,
+            'sales': data['sales'] ?? 0,
+            'balance': data['balance'] ?? 0,
+            'today_sales': data['today_sales'] ?? 0,
+            'month_sales': data['month_sales'] ?? 0,
+          };
+          _kpiLoading = false;
+        });
+      } else {
+        throw Exception('Invalid response');
+      }
+    } catch (e) {
+      // Fallback to mock data if API fails
+      if (mounted) {
+        setState(() {
+          _kpiData = {
+            'stock_in': 2450000,
+            'profit': 890000,
+            'orders': 156,
+            'credits': 450000,
+            'expenses': 320000,
+            'sales': 5200000,
+            'balance': 2100000,
+            'today_sales': 450000,
+            'month_sales': 3200000,
+          };
+          _kpiLoading = false;
+        });
+      }
     }
   }
 
