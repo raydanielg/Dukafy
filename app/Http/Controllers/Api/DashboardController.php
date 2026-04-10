@@ -321,17 +321,25 @@ class DashboardController extends Controller
 
     private function getTodaySales($businessId, $today)
     {
-        return (int) DB::table('sales')
-            ->where('business_id', $businessId)
-            ->whereDate('sold_at', $today)
-            ->sum('total');
+        try {
+            return (int) DB::table('sales')
+                ->where('business_id', $businessId)
+                ->whereDate('sold_at', $today)
+                ->sum('total') ?? 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 
     private function getMonthSales($businessId, $startOfMonth)
     {
-        return (int) DB::table('sales')
-            ->where('business_id', $businessId)
-            ->whereDate('sold_at', '>=', $startOfMonth)
-            ->sum('total');
+        try {
+            return (int) DB::table('sales')
+                ->where('business_id', $businessId)
+                ->whereDate('sold_at', '>=', $startOfMonth)
+                ->sum('total') ?? 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 }
