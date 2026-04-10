@@ -171,9 +171,9 @@
                             <tbody>
                                 @forelse($stats['recent_payments'] as $pay)
                                     <tr>
-                                        <td class="ps-3 py-3 fw-bold">{{ $pay->user_name }}</td>
-                                        <td class="fw-bold text-success">TZS {{ number_format($pay->amount) }}</td>
-                                        <td class="pe-3 py-3 text-end text-muted small">{{ \Carbon\Carbon::parse($pay->paid_at)->format('M d, Y') }}</td>
+                                        <td class="fw-semibold">{{ $pay->user_name }}</td>
+                                        <td class="fw-semibold text-success">TZS {{ number_format($pay->amount) }}</td>
+                                        <td class="text-end text-muted">{{ \Carbon\Carbon::parse($pay->paid_at)->format('M d, Y') }}</td>
                                     </tr>
                                 @empty
                                     <tr><td colspan="3" class="text-center py-4 text-muted">No payments yet.</td></tr>
