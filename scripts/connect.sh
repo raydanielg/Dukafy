@@ -5,7 +5,7 @@
 
 # Server Credentials
 HOST="82.25.120.158"
-PORT="65002"
+PORT="22"
 USER="u689745589"
 
 # Connect via SSH
@@ -15,4 +15,4 @@ echo ""
 
 ssh -p $PORT $USER@$HOST
 
-# ssh -p 65002 u689745589@82.25.120.158
+# ssh -p 22 u689745589@82.25.120.158
