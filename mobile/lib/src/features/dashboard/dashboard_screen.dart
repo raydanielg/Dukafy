@@ -382,16 +382,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             }),
                           ),
                           const SizedBox(height: 24),
-                          // Quick Actions Grid
-                          const Text(
-                            'Quick Actions',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
+                          // Quick Actions & Features Grid
                           _buildFeatureGrid(),
                           const SizedBox(height: 100),
                         ],
