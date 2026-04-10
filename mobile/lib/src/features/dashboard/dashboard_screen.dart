@@ -39,7 +39,7 @@ class DashboardScreen extends ConsumerStatefulWidget {
   ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+class _DashboardScreenState extends ConsumerState<DashboardScreen> with WidgetsBindingObserver {
   final Color primaryGreen = const Color(0xFF2E7D32);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -58,18 +58,28 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchUserData();
-      _fetchKpiData();
+      _fetchKpiData(silent: true); // Silent load on init
       _startAutoScroll();
     });
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _autoScrollTimer?.cancel();
     _kpiPageController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Auto-refresh when app comes to foreground
+    if (state == AppLifecycleState.resumed) {
+      _fetchKpiData(silent: true);
+    }
   }
 
   void _startAutoScroll() {
@@ -842,7 +852,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     _BalanceDropdownItem(
                       icon: Icons.account_balance_wallet,
                       title: 'Main Balance',
-                      value: 'TZS ${formatNumber(_kpiData['balance'])}',
+                      value: 'TZS ${_formatCurrency(_kpiData['balance'])}',
                       color: primaryGreen,
                       isMain: true,
                     ),
@@ -850,42 +860,42 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     _BalanceDropdownItem(
                       icon: Icons.inventory_2,
                       title: 'Stock Value',
-                      value: 'TZS ${formatNumber(_kpiData['stock_in'])}',
+                      value: 'TZS ${_formatCurrency(_kpiData['stock_in'])}',
                       color: Colors.blue,
                     ),
                     const Divider(height: 24),
                     _BalanceDropdownItem(
                       icon: Icons.trending_up,
                       title: 'Profit',
-                      value: 'TZS ${formatNumber(_kpiData['profit'])}',
+                      value: 'TZS ${_formatCurrency(_kpiData['profit'])}',
                       color: Colors.green,
                     ),
                     const Divider(height: 24),
                     _BalanceDropdownItem(
                       icon: Icons.shopping_cart,
                       title: 'Orders',
-                      value: '${formatNumber(_kpiData['orders'])} orders',
+                      value: '${_formatCurrency(_kpiData['orders'])} orders',
                       color: Colors.purple,
                     ),
                     const Divider(height: 24),
                     _BalanceDropdownItem(
                       icon: Icons.credit_card,
                       title: 'Outstanding Credits',
-                      value: 'TZS ${formatNumber(_kpiData['credits'])}',
+                      value: 'TZS ${_formatCurrency(_kpiData['credits'])}',
                       color: Colors.orange,
                     ),
                     const Divider(height: 24),
                     _BalanceDropdownItem(
                       icon: Icons.receipt_long,
                       title: 'Total Expenses',
-                      value: 'TZS ${formatNumber(_kpiData['expenses'])}',
+                      value: 'TZS ${_formatCurrency(_kpiData['expenses'])}',
                       color: Colors.red,
                     ),
                     const Divider(height: 24),
                     _BalanceDropdownItem(
                       icon: Icons.point_of_sale,
                       title: 'Total Sales',
-                      value: 'TZS ${formatNumber(_kpiData['sales'])}',
+                      value: 'TZS ${_formatCurrency(_kpiData['sales'])}',
                       color: Colors.teal,
                     ),
                   ],
