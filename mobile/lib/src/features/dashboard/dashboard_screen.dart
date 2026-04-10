@@ -925,6 +925,205 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   Widget _buildFeatureGrid() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: 4, bottom: 12),
+          child: Text(
+            'Quick Actions',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: Colors.black87,
+            ),
+          ),
+        ),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 4,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: 0.75,
+          children: [
+            _QuickActionIcon(
+              icon: Icons.inventory_2_outlined,
+              label: 'Stock',
+              color: Colors.blue,
+              onTap: () => context.push(ProductsScreen.routePath),
+            ),
+            _QuickActionIcon(
+              icon: Icons.shopping_cart_outlined,
+              label: 'Sales',
+              color: Colors.green,
+              onTap: () => context.push(SaleScreen.routePath),
+            ),
+            _QuickActionIcon(
+              icon: Icons.shopping_bag_outlined,
+              label: 'Purchase',
+              color: Colors.orange,
+              onTap: () => context.push(PurchasesScreen.routePath),
+            ),
+            _QuickActionIcon(
+              icon: Icons.trending_up,
+              label: 'Profit',
+              color: Colors.purple,
+              onTap: () => context.push(ReportsScreen.routePath),
+            ),
+            _QuickActionIcon(
+              icon: Icons.account_balance_wallet_outlined,
+              label: 'Cashflow',
+              color: Colors.teal,
+              onTap: () => context.push(BankingScreen.routePath),
+            ),
+            _QuickActionIcon(
+              icon: Icons.sms_outlined,
+              label: 'SMS',
+              color: Colors.indigo,
+              onTap: () {},
+            ),
+            _QuickActionIcon(
+              icon: Icons.email_outlined,
+              label: 'Email',
+              color: Colors.cyan,
+              onTap: () {},
+            ),
+            _QuickActionIcon(
+              icon: Icons.group_add_outlined,
+              label: 'Team',
+              color: Colors.amber,
+              onTap: () => context.push(MembersScreen.routePath),
+            ),
+            _QuickActionIcon(
+              icon: Icons.bar_chart_outlined,
+              label: 'Reports',
+              color: Colors.deepOrange,
+              onTap: () => context.push(ReportsScreen.routePath),
+            ),
+            _QuickActionIcon(
+              icon: Icons.add_business_outlined,
+              label: 'Business',
+              color: Colors.pink,
+              onTap: () => context.push(ShopsScreen.routePath),
+            ),
+            _QuickActionIcon(
+              icon: Icons.settings_outlined,
+              label: 'Settings',
+              color: Colors.grey.shade700,
+              onTap: () => context.push(ProfileScreen.routePath),
+            ),
+            _QuickActionIcon(
+              icon: Icons.credit_card_outlined,
+              label: 'Payment',
+              color: Colors.red,
+              onTap: () => context.push(PaymentScreen.routePath),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        const Padding(
+          padding: EdgeInsets.only(left: 4, bottom: 12),
+          child: Text(
+            'More Features',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: Colors.black87,
+            ),
+          ),
+        ),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 3,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 0.85,
+          children: [
+            _FeatureCard(
+              title: 'Customers',
+              subtitle: 'Manage Clients',
+              icon: Icons.people_outline,
+              color: Colors.blue,
+              onTap: () => context.push(CustomersScreen.routePath),
+            ),
+            _FeatureCard(
+              title: 'Loans',
+              subtitle: 'Credit & Debts',
+              icon: Icons.account_balance,
+              color: Colors.orange,
+              onTap: () => context.push(LoansScreen.routePath),
+            ),
+            _FeatureCard(
+              title: 'Expenses',
+              subtitle: 'Track Costs',
+              icon: Icons.receipt_long,
+              color: Colors.red,
+              onTap: () => context.push(ExpensesScreen.routePath),
+            ),
+            _FeatureCard(
+              title: 'Suppliers',
+              subtitle: 'Vendors',
+              icon: Icons.local_shipping,
+              color: Colors.teal,
+              onTap: () => context.push(SuppliersScreen.routePath),
+            ),
+            _FeatureCard(
+              title: 'Invoices',
+              subtitle: 'Billing',
+              icon: Icons.description,
+              color: Colors.purple,
+              onTap: () => context.push(InvoicesScreen.routePath),
+            ),
+            _FeatureCard(
+              title: 'Articles',
+              subtitle: 'News & Tips',
+              icon: Icons.article,
+              color: Colors.indigo,
+              onTap: () => context.push(ArticlesScreen.routePath),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuickActionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: primaryGreen.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: primaryGreen.withOpacity(0.2)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: primaryGreen, size: 18),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: primaryGreen,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // OLD FeatureGrid - replaced above
+  Widget __buildOldFeatureGrid() {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
