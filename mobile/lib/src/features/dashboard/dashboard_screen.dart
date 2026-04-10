@@ -195,23 +195,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> with WidgetsB
     );
   }
 
-  void _useFallbackData() {
-    setState(() {
-      _kpiData = {
-        'stock_in': 2450000,
-        'profit': 890000,
-        'orders': 156,
-        'credits': 450000,
-        'expenses': 320000,
-        'sales': 5200000,
-        'balance': 2100000,
-        'today_sales': 450000,
-        'month_sales': 3200000,
-      };
-      _kpiLoading = false;
-    });
-  }
-
   Future<void> _deleteAccount() async {
     final confirmed = await showDialog<bool>(
       context: context,
