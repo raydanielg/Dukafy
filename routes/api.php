@@ -45,13 +45,13 @@ Route::prefix('auth')->group(function () {
         Route::get('/product-categories', [App\Http\Controllers\Api\ProductCategoryController::class, 'index']);
         Route::post('/product-categories', [App\Http\Controllers\Api\ProductCategoryController::class, 'store']);
 
-        // Customers
+        // Customers - NOTE: stats must come before {id} routes!
         Route::get('/customers', [App\Http\Controllers\Api\CustomerController::class, 'index']);
         Route::post('/customers', [App\Http\Controllers\Api\CustomerController::class, 'store']);
+        Route::get('/customers/stats', [App\Http\Controllers\Api\CustomerController::class, 'stats']);
         Route::get('/customers/{id}', [App\Http\Controllers\Api\CustomerController::class, 'show']);
         Route::put('/customers/{id}', [App\Http\Controllers\Api\CustomerController::class, 'update']);
         Route::delete('/customers/{id}', [App\Http\Controllers\Api\CustomerController::class, 'destroy']);
-        Route::get('/customers/stats', [App\Http\Controllers\Api\CustomerController::class, 'stats']);
 
         // Customer Groups
         Route::get('/customer-groups', [App\Http\Controllers\Api\CustomerGroupController::class, 'index']);
