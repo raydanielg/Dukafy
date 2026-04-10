@@ -228,11 +228,15 @@ class DashboardController extends Controller
 
     private function getInventoryValue($businessId)
     {
-        return (int) DB::table('products')
-            ->where('business_id', $businessId)
-            ->where('is_active', true)
-            ->selectRaw('SUM(stock_qty * cost) as value')
-            ->value('value') ?? 0;
+        try {
+            return (int) DB::table('products')
+                ->where('business_id', $businessId)
+                ->where('is_active', true)
+                ->selectRaw('SUM(stock_qty * cost) as value')
+                ->value('value') ?? 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 
     private function getProfit($businessId)
@@ -263,31 +267,47 @@ class DashboardController extends Controller
 
     private function getOrderCount($businessId)
     {
-        return DB::table('sales')
-            ->where('business_id', $businessId)
-            ->count();
+        try {
+            return DB::table('sales')
+                ->where('business_id', $businessId)
+                ->count();
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 
     private function getOutstandingCredits($businessId)
     {
-        return (int) DB::table('sales')
-            ->where('business_id', $businessId)
-            ->where('payment_method', 'credit')
-            ->sum('total');
+        try {
+            return (int) DB::table('sales')
+                ->where('business_id', $businessId)
+                ->where('payment_method', 'credit')
+                ->sum('total') ?? 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 
     private function getTotalExpenses($businessId)
     {
-        return (int) DB::table('expenses')
-            ->where('business_id', $businessId)
-            ->sum('amount');
+        try {
+            return (int) DB::table('expenses')
+                ->where('business_id', $businessId)
+                ->sum('amount') ?? 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 
     private function getTotalSales($businessId)
     {
-        return (int) DB::table('sales')
-            ->where('business_id', $businessId)
-            ->sum('total');
+        try {
+            return (int) DB::table('sales')
+                ->where('business_id', $businessId)
+                ->sum('total') ?? 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 
     private function getCurrentBalance($businessId)
